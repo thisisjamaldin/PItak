@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    tools:context=".register.WhoRegisterActivity">
+
+    <TextView
+        android:id="@+id/who_register_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="42dp"
+        android:fontFamily="@font/raleway_black"
+        android:text="@string/which_are_you"
+        android:textColor="@color/bluish_black"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/who_register_client_btn"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_below="@id/who_register_title_tv"
+        android:layout_margin="20dp"
+        android:background="@drawable/bg_gradient_rounded_client_button"
+        android:drawableStart="@drawable/ic_user"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/raleway_black"
+        android:gravity="start|center_vertical"
+        android:paddingStart="50dp"
+        android:text="@string/client"
+        android:textAllCaps="false"
+        android:textColor="@color/brown"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/who_register_driver_btn"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_below="@id/who_register_client_btn"
+        android:layout_margin="20dp"
+        android:background="@drawable/bg_gradient_round_driver_button"
+        android:drawableStart="@drawable/ic_driver"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/raleway_black"
+        android:gravity="start|center_vertical"
+        android:paddingStart="50dp"
+        android:text="@string/driver"
+        android:textAllCaps="false"
+        android:textColor="@color/bluish_black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/who_register_have_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/who_register_sign_in"
+        android:layout_centerHorizontal="true"
+        android:text="@string/already_have_an_account"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:id="@+id/who_register_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/raleway_black"
+        android:paddingStart="28dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="28dp"
+        android:paddingBottom="28dp"
+        android:text="@string/sign_in"
+        android:textColor="@color/bluish_black"
+        android:textSize="16sp" />
+
+</RelativeLayout>

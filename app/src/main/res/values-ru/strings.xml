@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PItak</string>
+    <string name="already_have_an_account">У вас есть акаунт?</string>
+    <string name="carrying_capacity">Грузоподъемность в тоннах</string>
+    <string name="start">Начать</string>
+    <string name="client">Клиент</string>
+    <string name="driver">Водитель</string>
+    <string name="confirmations_code">Код подтверждения</string>
+    <string name="confirmations_ncode">Код\nподтверждения</string>
+    <string name="name">Имя</string>
+    <string name="next">Далее</string>
+    <string name="phone_nnumber">Номер\nтелефона</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="save">Сохранить</string>
+    <string name="sign_in">Войти</string>
+    <string name="state_number_of_transport">Государственный номер транспорта</string>
+    <string name="upload_your_photo_in_good_quality">Загрузите вашу фотографию в хорошем качестве</string>
+    <string name="which_are_you">Кто вы?</string>
+    <string name="we_send_code_to">Мы отправили код на номер <![CDATA[<b>]]></string>
+    <string name="enter_received_code"><![CDATA[</b>]]> пожалуйста, введите полученный код.</string>
+
+    <string-array name="counties">
+        <item>Страна</item>
+        <item>Кыргызстан</item>
+        <item>Россия</item>
+    </string-array>
+    <string-array name="city_kg">
+        <item>Город</item>
+        <item>Бишкек</item>
+        <item>Ош</item>
+    </string-array>
+    <string-array name="city_ru">
+        <item>Город</item>
+        <item>Москва</item>
+        <item>Санкт-Петербург</item>
+    </string-array>
+    <string-array name="service">
+        <item>Тип услуги</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="car_type">
+        <item>Тип транспорта</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="car_mark">
+        <item>Марка транспорта</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="car_model">
+        <item>Модель транспорта</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>

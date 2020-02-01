@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    tools:context=".register.RegisterDriverActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/register_driver_back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:src="@drawable/ic_back" />
+
+        <ImageView
+            android:id="@+id/register_driver_profile_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/bg_profile" />
+
+        <TextView
+            android:id="@+id/register_driver_profile_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="80dp"
+            android:text="@string/upload_your_photo_in_good_quality"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/register_driver_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_dark_blue_stroke"
+            android:hint="@string/name"
+            android:inputType="textPersonName"
+            android:padding="12dp" />
+
+        <Spinner
+            android:id="@+id/register_driver_service_sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/service"
+            android:paddingEnd="24dp" />
+
+        <Spinner
+            android:id="@+id/register_driver_car_type_sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/car_type"
+            android:paddingEnd="24dp" />
+
+        <Spinner
+            android:id="@+id/register_driver_car_mark_sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/car_mark"
+            android:paddingEnd="24dp" />
+
+        <Spinner
+            android:id="@+id/register_driver_car_model_sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/car_model"
+            android:paddingEnd="24dp" />
+
+        <EditText
+            android:id="@+id/register_driver_car_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_register_edit_fields"
+            android:hint="@string/state_number_of_transport"
+            android:inputType="textPersonName"
+            android:padding="12dp" />
+
+        <EditText
+            android:id="@+id/register_driver_car_capacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_register_edit_fields"
+            android:hint="@string/carrying_capacity"
+            android:inputType="textPersonName"
+            android:padding="12dp" />
+
+        <Spinner
+            android:id="@+id/register_driver_county_sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/counties"
+            android:paddingEnd="24dp" />
+
+        <Spinner
+            android:id="@+id/register_driver_city_sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/city_kg"
+            android:paddingEnd="24dp" />
+
+        <Button
+            android:id="@+id/register_driver_save_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_round_blue_button"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</ScrollView>

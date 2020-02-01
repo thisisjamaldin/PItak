@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">PItak</string>
+    <string name="confirmations_ncode">Confirmations\ncode</string>
+    <string name="confirmations_code">Confirmations code</string>
+    <string name="next">Next</string>
+    <string name="start">Start</string>
+    <string name="skip" translatable="false">Skip</string>
+    <string name="phone_nnumber">Phone\nNumber</string>
+    <string name="phone_number">Phone number</string>
+    <string name="upload_your_photo_in_good_quality">Upload your photo in good quality</string>
+    <string name="name">Name</string>
+    <string name="e_mail" translatable="false">E-mail</string>
+    <string name="save">Save</string>
+    <string name="state_number_of_transport">State number of transport</string>
+    <string name="carrying_capacity">Carrying capacity (Tonnage)</string>
+    <string name="which_are_you">Which are you?</string>
+    <string name="client">Client</string>
+    <string name="driver">Driver</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_in">Sign in</string>
+    <string name="we_send_code_to">We have send code to <![CDATA[<b>]]></string>
+    <string name="enter_received_code"><![CDATA[</b>]]> please, enter received code.</string>
+
+    <string-array name="phone_codes">
+        <item>+996</item>
+        <item>+7</item>
+    </string-array>
+    <string-array name="counties">
+        <item>Country</item>
+        <item>Kyrgyzstan</item>
+        <item>Russia</item>
+    </string-array>
+    <string-array name="city_kg">
+        <item>City</item>
+        <item>Bishkek</item>
+        <item>Osh</item>
+    </string-array>
+    <string-array name="city_ru">
+        <item>City</item>
+        <item>Moscow</item>
+        <item>Saint Petersburg</item>
+    </string-array>
+    <string-array name="service">
+        <item>Service type</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="car_type">
+        <item>Vehicle type</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="car_mark">
+        <item>Vehicle mark</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="car_model">
+        <item>Vehicle model</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>
