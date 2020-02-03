@@ -1,10 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_fragment_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="240dp" />
+
+    <RelativeLayout
+        android:id="@+id/search_layout_rl"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="main"/>
-</LinearLayout>
+        android:background="@color/white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:src="@drawable/bg_gradient_blue" />
+
+        <LinearLayout
+            android:id="@+id/main_search_layout_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edit_fields"
+                android:hint="From"
+                android:inputType="text"
+                android:padding="12dp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edit_fields"
+                android:hint="To"
+                android:inputType="text"
+                android:padding="12dp" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/main_fragment_edit_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_search_layout_ll"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_edit_fields"
+            android:drawableEnd="@drawable/ic_search"
+            android:hint="Search"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <LinearLayout
+            android:id="@+id/main_fragment_edit_search_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_fragment_edit_search"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/main_fragment_filter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_round_stroke"
+                android:drawableStart="@drawable/ic_filter"
+                android:paddingStart="12dp"
+                android:paddingEnd="4dp"
+                android:text="Filter"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/main_fragment_sort"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_round_stroke"
+                android:drawableStart="@drawable/ic_sort"
+                android:paddingStart="12dp"
+                android:paddingEnd="4dp"
+                android:text="Sort"
+                android:textAllCaps="false" />
+
+            <ImageView
+                android:id="@+id/main_fragment_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_round_blue_button"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:src="@drawable/ic_menu" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

@@ -2,12 +2,7 @@ package com.nextinnovation.pitak.register;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.main.MainActivity;
 
 public class CodeAuthenticationActivity extends AppCompatActivity {
 
@@ -59,6 +55,12 @@ public class CodeAuthenticationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.start(CodeAuthenticationActivity.this, false);
             }
         });
     }

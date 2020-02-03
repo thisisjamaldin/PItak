@@ -7,12 +7,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nextinnovation.pitak.R;
@@ -40,17 +37,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         viewPager = findViewById(R.id.main_view_pager);
-        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), driver));
         viewPager.setOffscreenPageLimit(5);
         bottomNavigationView = findViewById(R.id.main_bottom_navigation);
-        if (driver){
-            bottomNavigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_vehicle));
-            bottomNavigationView.getMenu().getItem(1).setTitle(getResources().getString(R.string.driver));
-        } else {
+        if (driver) {
             bottomNavigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_profile));
-            bottomNavigationView.getMenu().getItem(1).setTitle(getResources().getString(R.string.client));
+            bottomNavigationView.getMenu().getItem(1).setTitle(getResources().getString(R.string.clients));
+        } else {
+            bottomNavigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_vehicle));
+            bottomNavigationView.getMenu().getItem(1).setTitle(getResources().getString(R.string.drivers));
         }
-
         add = findViewById(R.id.main_add);
     }
 
@@ -80,14 +76,19 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 if (position == 0) {
                     bottomNavigationView.setSelectedItemId(R.id.menu_main);
+                    add.setBackgroundResource(R.drawable.bg_floating_button);
                 } else if (position == 1) {
                     bottomNavigationView.setSelectedItemId(R.id.menu_role);
+                    add.setBackgroundResource(R.drawable.bg_floating_button);
                 } else if (position == 2) {
                     bottomNavigationView.setSelectedItemId(R.id.menu_add);
+                    add.setBackgroundResource(R.drawable.bg_floating_button_clicked);
                 } else if (position == 3) {
                     bottomNavigationView.setSelectedItemId(R.id.menu_saved);
+                    add.setBackgroundResource(R.drawable.bg_floating_button);
                 } else if (position == 4) {
                     bottomNavigationView.setSelectedItemId(R.id.menu_profile);
+                    add.setBackgroundResource(R.drawable.bg_floating_button);
                 }
             }
 

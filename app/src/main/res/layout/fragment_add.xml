@@ -1,10 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="add"/>
-</LinearLayout>
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:hint="Headline"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:gravity="top"
+            android:hint="Description"
+            android:minHeight="120dp"
+            android:padding="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_semibold"
+            android:padding="4dp"
+            android:text="From"
+            android:textColor="@color/bluish_black" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:gravity="top"
+            android:hint="From"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="2"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="Date"
+                android:textColor="@color/bluish_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="Time"
+                android:textColor="@color/bluish_black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="4dp">
+
+            <Button
+                android:id="@+id/add_fragment_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="2"
+                android:background="@drawable/bg_edit_fields"
+                android:drawableStart="@drawable/ic_date"
+                android:paddingStart="12dp" />
+
+            <Button
+                android:id="@+id/add_fragment_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edit_fields" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_semibold"
+            android:padding="4dp"
+            android:text="To"
+            android:textColor="@color/bluish_black" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:gravity="top"
+            android:hint="To"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="2"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="Date"
+                android:textColor="@color/bluish_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="Time"
+                android:textColor="@color/bluish_black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="4dp">
+
+            <Button
+                android:id="@+id/add_fragment_date_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="2"
+                android:background="@drawable/bg_edit_fields"
+                android:drawableStart="@drawable/ic_date"
+                android:paddingStart="12dp" />
+
+            <Button
+                android:id="@+id/add_fragment_time_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edit_fields" />
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:hint="Price"
+            android:inputType="number"
+            android:padding="12dp" />
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="I have read the terms of publication of the announcement" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_round_blue_button"
+            android:text="Post"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</ScrollView>

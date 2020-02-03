@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.nextinnovation.pitak.R;
-import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 
 public class OnBoardActivity extends AppCompatActivity {

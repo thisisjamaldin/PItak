@@ -1,9 +1,329 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="profile"/>
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/profile_fragment_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/bg_gradient_blue_light" />
+
+    <ImageView
+        android:id="@+id/profile_fragment_profile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="25dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/launch_screen" />
+
+    <TextView
+        android:id="@+id/profile_fragment_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_toRightOf="@id/profile_fragment_profile"
+        android:fontFamily="@font/raleway_semibold"
+        android:text="Морозово Алекс"
+        android:textColor="@color/bluish_black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_fragment_name"
+        android:layout_toRightOf="@id/profile_fragment_profile"
+        android:fontFamily="@font/raleway_semibold"
+        android:text="Frost@gmail.com"
+        android:textColor="@color/bluish_black" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/profile_fragment_background_image"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_order_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
+
+                <ImageView
+                    android:id="@+id/profile_fragment_my_order_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_order" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/profile_fragment_my_order_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:text="My Orders"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_order_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_order"
+                    android:layout_toRightOf="@id/profile_fragment_my_order_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="Trip history" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_address_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
+
+                <ImageView
+                    android:id="@+id/profile_fragment_my_address_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_navigation" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/profile_fragment_my_address_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:text="My addresses"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_address_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_address"
+                    android:layout_toRightOf="@id/profile_fragment_my_address_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="Now 3 addresses" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_pay_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
+
+                <ImageView
+                    android:id="@+id/profile_fragment_my_pay_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_wallet" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/profile_fragment_my_pay_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:text="Pay"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_pay_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_pay"
+                    android:layout_toRightOf="@id/profile_fragment_my_pay_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="Pay24, O! Money" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_sale_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
+
+                <ImageView
+                    android:id="@+id/profile_fragment_my_sale_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_percent" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_sale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/profile_fragment_my_sale_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:text="Promotional code"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_sale_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_sale"
+                    android:layout_toRightOf="@id/profile_fragment_my_sale_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="Discounts, and promotions" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_notification_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
+
+                <ImageView
+                    android:id="@+id/profile_fragment_my_notification_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_notification" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/profile_fragment_my_notification_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:text="Notification"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_notification_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_notification"
+                    android:layout_toRightOf="@id/profile_fragment_my_notification_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="On and off notifications" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_settings_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
+
+                <ImageView
+                    android:id="@+id/profile_fragment_my_settings_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_settings" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/profile_fragment_my_settings_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:text="Settings"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_settings_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_settings"
+                    android:layout_toRightOf="@id/profile_fragment_my_settings_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="Profile settings" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

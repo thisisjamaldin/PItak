@@ -6,6 +6,8 @@
     <string name="start">Начать</string>
     <string name="client">Клиент</string>
     <string name="driver">Водитель</string>
+    <string name="clients">Клиенты</string>
+    <string name="drivers">Водители</string>
     <string name="confirmations_code">Код подтверждения</string>
     <string name="confirmations_ncode">Код\nподтверждения</string>
     <string name="name">Имя</string>
@@ -14,6 +16,7 @@
     <string name="phone_number">Номер телефона</string>
     <string name="save">Сохранить</string>
     <string name="sign_in">Войти</string>
+    <string name="wrong_number">Неправильный номер</string>
     <string name="state_number_of_transport">Государственный номер транспорта</string>
     <string name="upload_your_photo_in_good_quality">Загрузите вашу фотографию в хорошем качестве</string>
     <string name="which_are_you">Кто вы?</string>

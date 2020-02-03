@@ -16,6 +16,9 @@
     <string name="which_are_you">Which are you?</string>
     <string name="client">Client</string>
     <string name="driver">Driver</string>
+    <string name="clients">Clients</string>
+    <string name="drivers">Drivers</string>
+    <string name="wrong_number">Wrong number</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
     <string name="we_send_code_to">We have send code to <![CDATA[<b>]]></string>

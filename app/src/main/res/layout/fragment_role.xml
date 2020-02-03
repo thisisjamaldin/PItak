@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/role_fragment_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="120dp" />
+
+    <RelativeLayout
+        android:id="@+id/role_search_layout_rl"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="role"/>
-</LinearLayout>
+        android:background="@color/white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/bg_gradient_blue" />
+
+        <EditText
+            android:id="@+id/role_fragment_edit_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="74dp"
+            android:background="@drawable/bg_edit_fields"
+            android:drawableEnd="@drawable/ic_search"
+            android:hint="Search"
+            android:inputType="text"
+            android:padding="12dp" />
+    </RelativeLayout>
+</RelativeLayout>

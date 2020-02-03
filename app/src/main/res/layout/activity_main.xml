@@ -22,7 +22,6 @@
             android:id="@+id/main_bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:background="@color/white"
             app:itemIconTint="@drawable/bg_bottom_navigation_icon"
             app:itemTextColor="@drawable/bg_bottom_navigation_icon"

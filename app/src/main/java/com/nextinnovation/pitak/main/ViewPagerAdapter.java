@@ -13,8 +13,11 @@ import com.nextinnovation.pitak.fragment.saved.SavedFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    public ViewPagerAdapter(@NonNull FragmentManager fm) {
+    private boolean driver;
+
+    public ViewPagerAdapter(@NonNull FragmentManager fm, boolean driver) {
         super(fm);
+        this.driver = driver;
     }
 
     @NonNull
@@ -25,7 +28,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 3) {
             return new SavedFragment();
         } else if (position == 2) {
-            return new AddFragment();
+            return new AddFragment(driver);
         } else if (position == 1) {
             return new RoleFragment();
         } else {

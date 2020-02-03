@@ -51,12 +51,12 @@ public class PhoneAuthenticationActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (code.getSelectedItem().equals("+996") && phone.getText().length()==9){
+                if (code.getSelectedItem().equals("+996") && phone.getText().length() == 9) {
                     CodeAuthenticationActivity.start(PhoneAuthenticationActivity.this, code.getSelectedItem() + phone.getText().toString());
-                } else if (code.getSelectedItem().equals("+7") && phone.getText().length()==10){
+                } else if (code.getSelectedItem().equals("+7") && phone.getText().length() == 10) {
                     CodeAuthenticationActivity.start(PhoneAuthenticationActivity.this, code.getSelectedItem() + phone.getText().toString());
                 } else {
-                    Toast.makeText(PhoneAuthenticationActivity.this, "Wrong number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PhoneAuthenticationActivity.this, getResources().getString(R.string.wrong_number), Toast.LENGTH_SHORT).show();
                 }
             }
         });

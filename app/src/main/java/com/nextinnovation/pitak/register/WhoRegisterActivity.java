@@ -40,21 +40,32 @@ public class WhoRegisterActivity extends AppCompatActivity {
         client.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RegisterClientActivity.start(WhoRegisterActivity.this);
+                client.setEnabled(false);
+                PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
             }
         });
 
         driver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RegisterDriverActivity.start(WhoRegisterActivity.this);
+                driver.setEnabled(false);
+                PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
             }
         });
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                signIn.setEnabled(false);
                 PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        client.setEnabled(true);
+        driver.setEnabled(true);
+        signIn.setEnabled(true);
     }
 }
