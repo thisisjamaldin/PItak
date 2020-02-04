@@ -19,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
         } else if (MSharedPreferences.get(this, "register", true)){
             WhoRegisterActivity.start(this);
         } else {
-            MainActivity.start(this, false);
+            MainActivity.start(this);
         }
         finish();
     }

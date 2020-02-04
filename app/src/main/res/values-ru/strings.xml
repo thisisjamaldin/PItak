@@ -62,4 +62,47 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+    <string name="agreement">Я ознакомился с условиями публикации объявления</string>
+    <string name="date">Дата</string>
+    <string name="description">Описание объявление</string>
+    <string name="discounts_and_promotions">Скидки, акции и промокоды</string>
+    <string name="filter">Фильтры поиска</string>
+    <string name="from">Откуда</string>
+    <string name="from_bishkek">Еду из Бишкека</string>
+    <string name="headline">Заголовок объявления</string>
+    <string name="mark_">"Марка: "</string>
+    <string name="my_addresses">Мои адреса</string>
+    <string name="my_orders">Мои заказы</string>
+    <string name="notification">Уведомления</string>
+    <string name="now_addresses">Сейчас 0 адреса</string>
+    <string name="on_and_off_notifications">Вкл и выкл уведомлений</string>
+    <string name="osh">Ош</string>
+    <string name="pay">Методы оплаты</string>
+    <string name="pay24_o_money">Pay24, О! Деньги</string>
+    <string name="post">Опубликовать</string>
+    <string name="price">Стоимость</string>
+    <string name="profile_settings">Настройки вашего профиля</string>
+    <string name="promotional_code">Промокоды</string>
+    <string name="search">Поиск</string>
+    <string name="settings">Настройки</string>
+    <string name="sort">Цена: по убыванию</string>
+    <string name="time">Время</string>
+    <string name="to">Куда</string>
+    <string name="to_">куда:</string>
+    <string name="trip_history">История поездок, доставок</string>
+    <string name="about_app">О приложении</string>
+    <string name="before">Прошлые</string>
+    <string name="canceled">Отмененные</string>
+    <string name="edit_profile">Редактировать профильные данные</string>
+    <string name="money">Деньги</string>
+    <string name="month">Месяц</string>
+    <string name="new_notification">Новые сообщения</string>
+    <string name="notify_when_customers_accept_requests">Уведомлять когда клиенты принимают запросы</string>
+    <string name="notify_when_received_new_message">Уведомлять когда приходят новые сообщения</string>
+    <string name="personal_account">Лицевой счет №: 123456789</string>
+    <string name="replies">Ответы на запросы</string>
+    <string name="send">Отправить</string>
+    <string name="sign_out">Выйти</string>
+    <string name="terms_of_use">Пользовательское соглашение</string>
+    <string name="upload_a_photo_of_your_car_with_the_state_number">Загрузите фото автомобиля с указанием государственного номера</string>
 </resources>

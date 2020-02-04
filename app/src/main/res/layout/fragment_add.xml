@@ -10,12 +10,29 @@
         android:orientation="vertical"
         android:padding="20dp">
 
+        <ImageView
+            android:id="@+id/add_fragment_image"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:padding="34dp"
+            android:src="@drawable/ic_camera"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields" />
+
+        <TextView
+            android:id="@+id/add_fragment_image_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/upload_a_photo_of_your_car_with_the_state_number"
+            android:layout_marginTop="-58dp"
+            android:textAlignment="center"
+            android:layout_marginBottom="28dp"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_edit_fields"
-            android:hint="Headline"
+            android:hint="@string/headline"
             android:inputType="text"
             android:padding="12dp" />
 
@@ -25,7 +42,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_edit_fields"
             android:gravity="top"
-            android:hint="Description"
+            android:hint="@string/description"
             android:minHeight="120dp"
             android:padding="12dp" />
 
@@ -34,7 +51,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/raleway_semibold"
             android:padding="4dp"
-            android:text="From"
+            android:text="@string/from"
             android:textColor="@color/bluish_black" />
 
         <EditText
@@ -43,7 +60,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_edit_fields"
             android:gravity="top"
-            android:hint="From"
+            android:hint="@string/from"
             android:inputType="text"
             android:padding="12dp" />
 
@@ -57,7 +74,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_weight="2"
                 android:fontFamily="@font/raleway_semibold"
-                android:text="Date"
+                android:text="@string/date"
                 android:textColor="@color/bluish_black" />
 
             <TextView
@@ -65,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/raleway_semibold"
-                android:text="Time"
+                android:text="@string/time"
                 android:textColor="@color/bluish_black" />
         </LinearLayout>
 
@@ -98,7 +115,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/raleway_semibold"
             android:padding="4dp"
-            android:text="To"
+            android:text="@string/to"
             android:textColor="@color/bluish_black" />
 
         <EditText
@@ -107,7 +124,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_edit_fields"
             android:gravity="top"
-            android:hint="To"
+            android:hint="@string/to"
             android:inputType="text"
             android:padding="12dp" />
 
@@ -121,7 +138,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_weight="2"
                 android:fontFamily="@font/raleway_semibold"
-                android:text="Date"
+                android:text="@string/date"
                 android:textColor="@color/bluish_black" />
 
             <TextView
@@ -129,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/raleway_semibold"
-                android:text="Time"
+                android:text="@string/time"
                 android:textColor="@color/bluish_black" />
         </LinearLayout>
 
@@ -162,22 +179,30 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_edit_fields"
-            android:hint="Price"
+            android:hint="@string/price"
             android:inputType="number"
             android:padding="12dp" />
 
+        <Spinner
+            android:id="@+id/add_fragment_car_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/car_type"
+            android:layout_marginBottom="16dp"
+            android:padding="14dp"/>
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="I have read the terms of publication of the announcement" />
+            android:text="@string/agreement" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_round_blue_button"
-            android:text="Post"
+            android:text="@string/post"
             android:textColor="@color/white" />
     </LinearLayout>
 </ScrollView>

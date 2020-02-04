@@ -11,15 +11,42 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".register.CodeAuthenticationActivity" />
-        <activity android:name=".register.RegisterClientActivity" />
-        <activity android:name=".register.RegisterDriverActivity" />
-        <activity android:name=".register.PhoneAuthenticationActivity" />
-        <activity android:name=".register.WhoRegisterActivity" />
-        <activity android:name=".start.OnBoardActivity" />
-        <activity android:name=".main.MainActivity" />
+        <activity
+            android:name=".register.CodeAuthenticationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".register.RegisterClientActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".register.RegisterDriverActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".register.PhoneAuthenticationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".register.WhoRegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.NotificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.PayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.PromoCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.HistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.OnBoardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".start.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -14,6 +14,7 @@ import androidx.core.text.HtmlCompat;
 
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.main.MainActivity;
+import com.nextinnovation.pitak.utils.MSharedPreferences;
 
 public class CodeAuthenticationActivity extends AppCompatActivity {
 
@@ -60,7 +61,17 @@ public class CodeAuthenticationActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.start(CodeAuthenticationActivity.this, false);
+                switch (MSharedPreferences.get(CodeAuthenticationActivity.this, "who", "")) {
+                    case "signIn":
+                        MainActivity.start(CodeAuthenticationActivity.this);
+                        break;
+                    case "client":
+                        RegisterClientActivity.start(CodeAuthenticationActivity.this);
+                        break;
+                    case "driver":
+                        RegisterDriverActivity.start(CodeAuthenticationActivity.this);
+                        break;
+                }
             }
         });
     }

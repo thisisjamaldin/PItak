@@ -46,7 +46,7 @@ public class RegisterClientActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.start(RegisterClientActivity.this, false);
+                MainActivity.start(RegisterClientActivity.this);
             }
         });
     }

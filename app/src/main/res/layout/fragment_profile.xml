@@ -71,8 +71,8 @@
                     android:layout_toRightOf="@id/profile_fragment_my_order_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:text="My Orders"
+                    android:paddingTop="10dp"
+                    android:text="@string/my_orders"
                     android:textColor="@color/bluish_black"
                     android:textSize="18sp" />
 
@@ -84,7 +84,7 @@
                     android:layout_toRightOf="@id/profile_fragment_my_order_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:text="Trip history" />
+                    android:text="@string/trip_history" />
 
                 <ImageView
                     android:layout_width="50dp"
@@ -117,8 +117,8 @@
                     android:layout_toRightOf="@id/profile_fragment_my_address_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:text="My addresses"
+                    android:paddingTop="10dp"
+                    android:text="@string/my_addresses"
                     android:textColor="@color/bluish_black"
                     android:textSize="18sp" />
 
@@ -130,7 +130,7 @@
                     android:layout_toRightOf="@id/profile_fragment_my_address_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:text="Now 3 addresses" />
+                    android:text="@string/now_addresses" />
 
                 <ImageView
                     android:layout_width="50dp"
@@ -163,8 +163,8 @@
                     android:layout_toRightOf="@id/profile_fragment_my_pay_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:text="Pay"
+                    android:paddingTop="10dp"
+                    android:text="@string/pay"
                     android:textColor="@color/bluish_black"
                     android:textSize="18sp" />
 
@@ -176,7 +176,7 @@
                     android:layout_toRightOf="@id/profile_fragment_my_pay_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:text="Pay24, O! Money" />
+                    android:text="@string/pay24_o_money" />
 
                 <ImageView
                     android:layout_width="50dp"
@@ -188,7 +188,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/profile_fragment_my_sale_rl"
+                android:id="@+id/profile_fragment_promotional_code_rl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -209,8 +209,8 @@
                     android:layout_toRightOf="@id/profile_fragment_my_sale_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:text="Promotional code"
+                    android:paddingTop="10dp"
+                    android:text="@string/promotional_code"
                     android:textColor="@color/bluish_black"
                     android:textSize="18sp" />
 
@@ -222,7 +222,7 @@
                     android:layout_toRightOf="@id/profile_fragment_my_sale_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:text="Discounts, and promotions" />
+                    android:text="@string/discounts_and_promotions" />
 
                 <ImageView
                     android:layout_width="50dp"
@@ -255,8 +255,8 @@
                     android:layout_toRightOf="@id/profile_fragment_my_notification_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:text="Notification"
+                    android:paddingTop="10dp"
+                    android:text="@string/notification"
                     android:textColor="@color/bluish_black"
                     android:textSize="18sp" />
 
@@ -268,7 +268,7 @@
                     android:layout_toRightOf="@id/profile_fragment_my_notification_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:text="On and off notifications" />
+                    android:text="@string/on_and_off_notifications" />
 
                 <ImageView
                     android:layout_width="50dp"
@@ -301,8 +301,8 @@
                     android:layout_toRightOf="@id/profile_fragment_my_settings_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:paddingTop="8dp"
-                    android:text="Settings"
+                    android:paddingTop="10dp"
+                    android:text="@string/settings"
                     android:textColor="@color/bluish_black"
                     android:textSize="18sp" />
 
@@ -314,7 +314,7 @@
                     android:layout_toRightOf="@id/profile_fragment_my_settings_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:text="Profile settings" />
+                    android:text="@string/profile_settings" />
 
                 <ImageView
                     android:layout_width="50dp"

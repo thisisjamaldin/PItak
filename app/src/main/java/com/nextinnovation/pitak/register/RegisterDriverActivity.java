@@ -49,7 +49,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.start(RegisterDriverActivity.this, true);
+                MainActivity.start(RegisterDriverActivity.this);
             }
         });
     }

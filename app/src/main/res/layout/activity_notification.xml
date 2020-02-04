@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".settings.NotificationActivity">
+
+    <ImageView
+        android:id="@+id/settings_notification_back_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:src="@drawable/ic_back" />
+
+    <TextView
+        android:id="@+id/settings_notification_new_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_notification_back_img"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/raleway_black"
+        android:text="@string/new_notification"
+        android:textColor="@color/bluish_black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/settings_notification_new_notification_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_notification_new_notification"
+        android:layout_marginStart="20dp"
+        android:layout_toStartOf="@id/settings_notification_new_notification_switch"
+        android:fontFamily="@font/raleway_semibold"
+        android:text="@string/notify_when_received_new_message"
+        android:textSize="18sp" />
+
+    <Switch
+        android:id="@+id/settings_notification_new_notification_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/settings_notification_new_notification_desc"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:checked="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/settings_notification_new_notification_desc"
+        android:layout_marginTop="8dp"
+        android:background="@color/default_dots" />
+
+    <TextView
+        android:id="@+id/settings_notification_answers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_notification_new_notification_desc"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/raleway_black"
+        android:text="@string/replies"
+        android:textColor="@color/bluish_black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/settings_notification_answers_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_notification_answers"
+        android:layout_marginStart="20dp"
+        android:layout_toStartOf="@id/settings_notification_answers_switch"
+        android:fontFamily="@font/raleway_semibold"
+        android:text="@string/notify_when_customers_accept_requests"
+        android:textSize="18sp" />
+
+    <Switch
+        android:id="@+id/settings_notification_answers_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/settings_notification_answers_desc"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp" />
+
+    <View
+        android:id="@+id/settings_notification_line"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/settings_notification_answers_desc"
+        android:layout_marginTop="20dp"
+        android:background="@color/default_dots" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_notification_line"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/settings_notification_profile_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_black"
+            android:padding="20dp"
+            android:text="@string/edit_profile"
+            android:textColor="@color/bluish_black"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/default_dots" />
+
+        <TextView
+            android:id="@+id/settings_notification_agreement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_black"
+            android:padding="20dp"
+            android:text="@string/terms_of_use"
+            android:textColor="@color/bluish_black"
+            android:textSize="18dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/default_dots" />
+
+        <TextView
+            android:id="@+id/settings_notification_about_app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_black"
+            android:padding="20dp"
+            android:text="@string/about_app"
+            android:textColor="@color/bluish_black"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/default_dots" />
+
+        <TextView
+            android:id="@+id/settings_notification_sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_black"
+            android:padding="20dp"
+            android:text="@string/sign_out"
+            android:textColor="@color/bluish_black"
+            android:textSize="18sp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -13,16 +13,16 @@ import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.utils.MSharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private BottomNavigationView bottomNavigationView;
     private Button add;
-    private boolean driver;
 
-    public static void start(Context context, boolean driver) {
-        context.startActivity(new Intent(context, MainActivity.class).putExtra("driver", driver));
+    public static void start(Context context) {
+        context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     @Override
@@ -30,17 +30,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        driver = getIntent().getBooleanExtra("driver", false);
         initView();
         listener();
     }
 
     private void initView() {
         viewPager = findViewById(R.id.main_view_pager);
-        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), driver));
+        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
         viewPager.setOffscreenPageLimit(5);
         bottomNavigationView = findViewById(R.id.main_bottom_navigation);
-        if (driver) {
+        if (MSharedPreferences.get(MainActivity.this, "who", "").equals("driver")) {
             bottomNavigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_profile));
             bottomNavigationView.getMenu().getItem(1).setTitle(getResources().getString(R.string.clients));
         } else {

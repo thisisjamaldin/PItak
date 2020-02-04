@@ -30,7 +30,7 @@
             android:layout_marginTop="74dp"
             android:background="@drawable/bg_edit_fields"
             android:drawableEnd="@drawable/ic_search"
-            android:hint="Search"
+            android:hint="@string/search"
             android:inputType="text"
             android:padding="12dp" />
     </RelativeLayout>

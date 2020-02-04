@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
@@ -15,19 +18,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.utils.MSharedPreferences;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddFragment extends Fragment {
 
-    private boolean driver;
+    private ImageView image;
+    private TextView imageText;
     private Button date, time;
     private Button date1, time1;
-
-    public AddFragment(boolean driver) {
-        this.driver = driver;
-    }
+    private Spinner carType;
 
     @Nullable
     @Override
@@ -39,6 +41,9 @@ public class AddFragment extends Fragment {
     }
 
     private void initAllView(View view) {
+        carType = view.findViewById(R.id.add_fragment_car_type);
+        image = view.findViewById(R.id.add_fragment_image);
+        imageText = view.findViewById(R.id.add_fragment_image_text);
         date = view.findViewById(R.id.add_fragment_date);
         date1 = view.findViewById(R.id.add_fragment_date_1);
         time = view.findViewById(R.id.add_fragment_time);
@@ -50,6 +55,11 @@ public class AddFragment extends Fragment {
     }
 
     private void listener() {
+        if (MSharedPreferences.get(getContext(), "who", "").equals("client")) {
+            image.setVisibility(View.GONE);
+            imageText.setVisibility(View.GONE);
+            carType.setVisibility(View.GONE);
+        }
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -34,7 +34,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_edit_fields"
-                android:hint="From"
+                android:hint="@string/from"
                 android:inputType="text"
                 android:padding="12dp" />
 
@@ -45,7 +45,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_edit_fields"
-                android:hint="To"
+                android:hint="@string/to"
                 android:inputType="text"
                 android:padding="12dp" />
         </LinearLayout>
@@ -58,7 +58,7 @@
             android:layout_margin="20dp"
             android:background="@drawable/bg_edit_fields"
             android:drawableEnd="@drawable/ic_search"
-            android:hint="Search"
+            android:hint="@string/search"
             android:inputType="text"
             android:padding="12dp" />
 
@@ -79,7 +79,7 @@
                 android:drawableStart="@drawable/ic_filter"
                 android:paddingStart="12dp"
                 android:paddingEnd="4dp"
-                android:text="Filter"
+                android:text="@string/filter"
                 android:textAllCaps="false" />
 
             <Button
@@ -92,7 +92,7 @@
                 android:drawableStart="@drawable/ic_sort"
                 android:paddingStart="12dp"
                 android:paddingEnd="4dp"
-                android:text="Sort"
+                android:text="@string/sort"
                 android:textAllCaps="false" />
 
             <ImageView
