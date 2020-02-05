@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save));
                         save.setTag(0);
                     }
+                }
+            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ItemDetailActivity.start(itemView.getContext());
                 }
             });
         }
