@@ -47,9 +47,7 @@
     <string name="my_addresses">My addresses</string>
     <string name="trip_history">Trip history</string>
     <string name="my_orders">My Orders</string>
-    <string name="from_bishkek">From Bishkek</string>
-    <string name="to_">To: </string>
-    <string name="osh">Osh</string>
+    <string name="to_">Posted</string>
     <string name="mark_">Mark: </string>
     <string name="personal_account">Personal account №: 123456789</string>
     <string name="money">Money</string>
@@ -65,7 +63,20 @@
     <string name="about_app">About app</string>
     <string name="sign_out">Sign out</string>
     <string name="send">Send</string>
+    <string name="must_fill">Must fill</string>
+    <string name="select_your_vehicle">Select your vehicle</string>
+    <string name="must_agree">Must agree</string>
+    <string name="posted">Posted</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="invalid_phone_number">Invalid phone number</string>
+    <string name="quota_exceeded">Quota exceeded</string>
+    <string name="error">Error</string>
+    <string name="user_not_found">User not found</string>
+    <string name="internet_error">Internet error</string>
+    <string name="are_you_sure_to_sign_out">Are you sure to sign out?</string>
+    <string name="cancel">Cancel</string>
     <string name="upload_a_photo_of_your_car_with_the_state_number">Upload a photo of your car with the state number</string>
+    <string name="car_mark">Vehicle mark</string>
 
     <string-array name="phone_codes">
         <item>+996</item>
@@ -86,28 +97,6 @@
         <item>Moscow</item>
         <item>Saint Petersburg</item>
     </string-array>
-    <string-array name="service">
-        <item>Service type</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="car_type">
-        <item>Vehicle type</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="car_mark">
-        <item>Vehicle mark</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="car_model">
-        <item>Vehicle model</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
+    <string name="car_type">Vehicle type</string>
+    <string name="car_model">Vehicle model</string>
 </resources>

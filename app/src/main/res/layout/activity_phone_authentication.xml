@@ -58,6 +58,13 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/phone_register_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
     <Button
         android:id="@+id/phone_register_next_btn"
         android:layout_width="match_parent"

@@ -2,8 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".register.RegisterDriverActivity">
 
     <LinearLayout
@@ -35,6 +35,40 @@
             android:text="@string/upload_your_photo_in_good_quality"
             android:textAlignment="center" />
 
+        <RelativeLayout
+            android:id="@+id/register_driver_phone_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_edit_fields"
+            android:visibility="gone">
+
+            <Spinner
+                android:id="@+id/register_driver_phone_code_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/register_driver_phone_et"
+                android:layout_alignBottom="@id/register_driver_phone_et"
+                android:background="@drawable/bg_drop_down"
+                android:entries="@array/phone_codes"
+                android:minWidth="80dp"
+                android:paddingEnd="24dp"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/register_driver_phone_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/register_driver_phone_code_sp"
+                android:background="@color/transparent_fully"
+                android:hint="@string/phone_number"
+                android:inputType="phone"
+                android:padding="12dp"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
         <EditText
             android:id="@+id/register_driver_name_et"
             android:layout_width="match_parent"
@@ -47,6 +81,18 @@
             android:inputType="textPersonName"
             android:padding="12dp" />
 
+        <EditText
+            android:id="@+id/register_driver_email_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_dark_blue_stroke"
+            android:hint="@string/e_mail"
+            android:inputType="textEmailAddress"
+            android:padding="12dp" />
+
         <Spinner
             android:id="@+id/register_driver_service_sp"
             android:layout_width="match_parent"
@@ -55,8 +101,8 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_drop_down"
-            android:entries="@array/service"
-            android:paddingEnd="24dp" />
+            android:paddingEnd="24dp"
+            android:visibility="gone" />
 
         <Spinner
             android:id="@+id/register_driver_car_type_sp"
@@ -66,7 +112,6 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_drop_down"
-            android:entries="@array/car_type"
             android:paddingEnd="24dp" />
 
         <Spinner
@@ -77,7 +122,6 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_drop_down"
-            android:entries="@array/car_mark"
             android:paddingEnd="24dp" />
 
         <Spinner
@@ -88,7 +132,6 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_drop_down"
-            android:entries="@array/car_model"
             android:paddingEnd="24dp" />
 
         <EditText
@@ -134,7 +177,6 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_drop_down"
-            android:entries="@array/city_kg"
             android:paddingEnd="24dp" />
 
         <Button
@@ -149,6 +191,12 @@
             android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-80dp" />
 
     </LinearLayout>
 

@@ -1,6 +1,8 @@
 package com.nextinnovation.pitak.fragment.saved;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +14,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.fragment.main.RecyclerViewAdapter;
+import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
+import com.nextinnovation.pitak.model.post.FavouritePostResponse;
+import com.nextinnovation.pitak.utils.MToast;
+import com.nextinnovation.pitak.utils.Statics;
 
-import java.util.ArrayList;
-import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class SavedFragment extends Fragment {
+public class SavedFragment extends Fragment implements RecyclerViewAdapter.onItemClick {
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
-    private List<String> strings = new ArrayList<>();
+    private static RecyclerViewAdapter adapter;
     private View searchLayout;
     private boolean hide;
 
@@ -29,23 +36,15 @@ public class SavedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved, null);
-        strings.add("");
-        strings.add("");
-        strings.add("");
-        strings.add("");
-        strings.add("");
-        strings.add("");
-        strings.add("");
-        strings.add("");
         initAllView(view);
         listener();
+        getData(getContext());
         return view;
     }
 
     private void initAllView(View view) {
         searchLayout = view.findViewById(R.id.saved_search_layout_rl);
-        adapter = new RecyclerViewAdapter();
-        adapter.setList(strings, true);
+        adapter = new RecyclerViewAdapter(this, true, false);
         recyclerView = view.findViewById(R.id.saved_fragment_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
@@ -65,5 +64,68 @@ public class SavedFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onCall(int pos) {
+        Statics.call("+" + adapter.getList().get(pos).getMobileNumber(), getContext());
+    }
+
+    @Override
+    public void onSave(int pos, boolean save) {
+        if (save) {
+            MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    getData(getContext());
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    MToast.showInternetError(getContext());
+                }
+            });
+        } else {
+            MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    getData(getContext());
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    MToast.showInternetError(getContext());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onClick(int pos) {
+        ItemDetailActivity.start(getContext(), adapter.getList().get(pos), true);
+    }
+
+    public static void getData(final Context context) {
+        Log.e("-----------", "get");
+        MainRepository.getService().getFavourite(Statics.getToken(context)).enqueue(new Callback<FavouritePostResponse>() {
+            @Override
+            public void onResponse(Call<FavouritePostResponse> call, Response<FavouritePostResponse> response) {
+                adapter.clear();
+                if (response.isSuccessful() && response.body() != null && response.body().getResult() != null && !response.body().getResult().isEmpty()) {
+                    adapter.addList(response.body().getResult());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FavouritePostResponse> call, Throwable t) {
+                MToast.showInternetError(context);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData(getContext());
     }
 }

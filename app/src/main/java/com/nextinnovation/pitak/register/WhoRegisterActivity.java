@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
+import com.nextinnovation.pitak.utils.Statics;
 
 public class WhoRegisterActivity extends AppCompatActivity {
 
@@ -42,8 +44,12 @@ public class WhoRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 client.setEnabled(false);
-                PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
-                MSharedPreferences.set(WhoRegisterActivity.this, "who", "client");
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
+                } else {
+                    RegisterClientActivity.start(WhoRegisterActivity.this, false);
+                }
+                MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.PASSENGER);
             }
         });
 
@@ -51,8 +57,12 @@ public class WhoRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 driver.setEnabled(false);
-                PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
-                MSharedPreferences.set(WhoRegisterActivity.this, "who", "driver");
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
+                } else {
+                    RegisterDriverActivity.start(WhoRegisterActivity.this, false);
+                }
+                MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.DRIVER);
             }
         });
         signIn.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +70,7 @@ public class WhoRegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 signIn.setEnabled(false);
                 PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
-                MSharedPreferences.set(WhoRegisterActivity.this, "who", "signIn");
+                MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.UNAUTHORIZED);
             }
         });
     }

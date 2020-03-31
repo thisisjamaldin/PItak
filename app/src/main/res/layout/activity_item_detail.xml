@@ -46,24 +46,25 @@
         android:src="@drawable/bg_launch_screen" />
 
     <TextView
+        android:id="@+id/item_detail_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:fontFamily="@font/raleway_black"
-        android:text="600 сом"
         android:textColor="@color/bluish_black"
         android:textSize="24sp" />
 
     <TextView
+        android:id="@+id/item_detail_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:fontFamily="@font/raleway_semibold"
-        android:text="Грузоперевозки Бишкек Любой из грузов по городу и по Кыргызстану Мы работаем круглосуточно  Porter taxi"
         android:textColor="@color/bluish_black" />
 
     <Button
+        android:id="@+id/item_detail_save_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
@@ -75,6 +76,7 @@
         android:textColor="@color/white" />
 
     <LinearLayout
+        android:id="@+id/item_detail_call"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -82,12 +84,12 @@
         android:background="@drawable/bg_edit_fields">
 
         <TextView
+            android:id="@+id/item_detail_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_call_black"
             android:drawablePadding="8dp"
-            android:padding="16dp"
-            android:text="+996559011376" />
+            android:padding="16dp" />
 
         <View
             android:layout_width="0dp"
@@ -104,6 +106,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/item_detail_share_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

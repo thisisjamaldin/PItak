@@ -12,7 +12,7 @@ public class MSharedPreferences {
         } else if (value instanceof Boolean) {
             context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit().putBoolean(key, (Boolean) value).apply();
         } else {
-            //TODO: Add other types;
+
         }
     }
 
@@ -27,5 +27,9 @@ public class MSharedPreferences {
             return null;
             //TODO: Add other types;
         }
+    }
+
+    public static void clear(Context context) {
+        context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit().clear().apply();
     }
 }

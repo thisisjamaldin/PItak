@@ -35,28 +35,20 @@
             android:id="@+id/item_main_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/item_main_close"
             android:padding="8dp"
             android:text="@string/name"
             android:textColor="@color/black" />
-
-        <ImageView
-            android:id="@+id/item_main_close"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_close" />
 
         <TextView
             android:id="@+id/item_main_from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/item_main_close"
+            android:layout_below="@id/item_main_name"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/bg_edit_fields"
             android:padding="4dp"
-            android:text="@string/from_bishkek"
+            android:text="@string/from"
             android:textColor="@color/black" />
 
         <TextView
@@ -75,8 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/item_main_from"
             android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/item_main_to_text"
-            android:text="@string/osh"
+            android:layout_toEndOf="@id/item_main_to_text"
             android:textColor="@color/black" />
 
         <TextView
@@ -98,6 +89,7 @@
             android:textColor="@color/black" />
 
         <TextView
+            android:id="@+id/item_main_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/item_main_mark_text"
@@ -124,6 +116,7 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/item_main_call"
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:layout_alignParentEnd="true"

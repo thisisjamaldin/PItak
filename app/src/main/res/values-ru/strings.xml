@@ -44,31 +44,14 @@
         <item>2</item>
         <item>3</item>
     </string-array>
-    <string-array name="car_type">
-        <item>Тип транспорта</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="car_mark">
-        <item>Марка транспорта</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="car_model">
-        <item>Модель транспорта</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
+    <string name="car_type">Тип транспорта</string>
+    <string name="car_model">Модель транспорта</string>
     <string name="agreement">Я ознакомился с условиями публикации объявления</string>
     <string name="date">Дата</string>
     <string name="description">Описание объявление</string>
     <string name="discounts_and_promotions">Скидки, акции и промокоды</string>
     <string name="filter">Фильтры поиска</string>
     <string name="from">Откуда</string>
-    <string name="from_bishkek">Еду из Бишкека</string>
     <string name="headline">Заголовок объявления</string>
     <string name="mark_">"Марка: "</string>
     <string name="my_addresses">Мои адреса</string>
@@ -76,7 +59,6 @@
     <string name="notification">Уведомления</string>
     <string name="now_addresses">Сейчас 0 адреса</string>
     <string name="on_and_off_notifications">Вкл и выкл уведомлений</string>
-    <string name="osh">Ош</string>
     <string name="pay">Методы оплаты</string>
     <string name="pay24_o_money">Pay24, О! Деньги</string>
     <string name="post">Опубликовать</string>
@@ -105,4 +87,17 @@
     <string name="sign_out">Выйти</string>
     <string name="terms_of_use">Пользовательское соглашение</string>
     <string name="upload_a_photo_of_your_car_with_the_state_number">Загрузите фото автомобиля с указанием государственного номера</string>
+    <string name="must_fill">Должен заполнить</string>
+    <string name="must_agree">Должны согласиться</string>
+    <string name="posted">Опубликовано</string>
+    <string name="quota_exceeded">Запрос превышен</string>
+    <string name="nothing_found">Ничего не найдено</string>
+    <string name="invalid_phone_number">Неправильный номер телефона</string>
+    <string name="error">Ошибка</string>
+    <string name="user_not_found">Пользователь не найден</string>
+    <string name="internet_error">Ошибка интернета</string>
+    <string name="are_you_sure_to_sign_out">Вы уверены, что хотите выйти?</string>
+    <string name="cancel">Отменить</string>
+    <string name="car_mark">Марка транспорта</string>
+    <string name="select_your_vehicle">Выберите свой автомобиль</string>
 </resources>

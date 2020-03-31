@@ -10,6 +10,14 @@
         android:clipToPadding="false"
         android:paddingTop="120dp" />
 
+    <ProgressBar
+        android:id="@+id/role_fragment_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="42dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+
     <RelativeLayout
         android:id="@+id/role_search_layout_rl"
         android:layout_width="match_parent"

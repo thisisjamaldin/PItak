@@ -2,18 +2,40 @@ package com.nextinnovation.pitak.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.fragment.saved.SavedFragment;
+import com.nextinnovation.pitak.model.location.Country;
+import com.nextinnovation.pitak.model.user.User;
+import com.nextinnovation.pitak.model.user.UserSignIn;
+import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
+import com.nextinnovation.pitak.register.PhoneAuthenticationActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
+import com.nextinnovation.pitak.utils.Statics;
+
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        Log.e("----------main2", new Gson().fromJson(getResources().getString(R.string.world_cities), Country[].class).toString());
+
         initView();
         listener();
     }
@@ -39,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
         viewPager.setOffscreenPageLimit(5);
         bottomNavigationView = findViewById(R.id.main_bottom_navigation);
-        if (MSharedPreferences.get(MainActivity.this, "who", "").equals("driver")) {
+        if (MSharedPreferences.get(MainActivity.this, "who", "").equals(Statics.DRIVER)) {
             bottomNavigationView.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.ic_profile));
             bottomNavigationView.getMenu().getItem(1).setTitle(getResources().getString(R.string.clients));
         } else {
@@ -58,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (menuItem.getItemId() == R.id.menu_role) {
                     viewPager.setCurrentItem(1, false);
                 } else if (menuItem.getItemId() == R.id.menu_saved) {
+                    SavedFragment.getData(MainActivity.this);
                     viewPager.setCurrentItem(3, false);
                 } else if (menuItem.getItemId() == R.id.menu_profile) {
                     viewPager.setCurrentItem(4, false);
@@ -73,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                hideKeyboard(MainActivity.this, viewPager);
                 if (position == 0) {
                     bottomNavigationView.setSelectedItemId(R.id.menu_main);
                     add.setBackgroundResource(R.drawable.bg_floating_button);
@@ -83,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     bottomNavigationView.setSelectedItemId(R.id.menu_add);
                     add.setBackgroundResource(R.drawable.bg_floating_button_clicked);
                 } else if (position == 3) {
+                    new SavedFragment();
                     bottomNavigationView.setSelectedItemId(R.id.menu_saved);
                     add.setBackgroundResource(R.drawable.bg_floating_button);
                 } else if (position == 4) {
@@ -103,4 +130,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() != 0) {
+            viewPager.setCurrentItem(0, false);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void openMain() {
+        viewPager.setCurrentItem(0, false);
+    }
+
+    public static void hideKeyboard(Activity activity, View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+
 }

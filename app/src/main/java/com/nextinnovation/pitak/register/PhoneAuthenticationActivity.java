@@ -10,9 +10,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.model.user.UserSignIn;
+import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
+import com.nextinnovation.pitak.utils.MSharedPreferences;
+import com.nextinnovation.pitak.utils.MToast;
+import com.nextinnovation.pitak.utils.Statics;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PhoneAuthenticationActivity extends AppCompatActivity {
 
@@ -51,12 +61,42 @@ public class PhoneAuthenticationActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (code.getSelectedItem().equals("+996") && phone.getText().length() == 9) {
-                    CodeAuthenticationActivity.start(PhoneAuthenticationActivity.this, code.getSelectedItem() + phone.getText().toString());
-                } else if (code.getSelectedItem().equals("+7") && phone.getText().length() == 10) {
-                    CodeAuthenticationActivity.start(PhoneAuthenticationActivity.this, code.getSelectedItem() + phone.getText().toString());
+                if (phone.getText().length() > 8) {
+                    final String fullPhone = code.getSelectedItem() + phone.getText().toString();
+                    if (MSharedPreferences.get(PhoneAuthenticationActivity.this, "who", "").equals(Statics.UNAUTHORIZED)) {
+                        next.setVisibility(View.GONE);
+                        UserSignIn signIn = new UserSignIn(fullPhone.replace("+", ""), fullPhone.replace("+", ""));
+                        MainRepository.getService().signIn(signIn).enqueue(new Callback<UserWhenSignedIn>() {
+                            @Override
+                            public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
+                                if (response.isSuccessful()) {
+                                    MSharedPreferences.set(PhoneAuthenticationActivity.this, "phone", fullPhone);
+                                    if (response.body().getRoles()[0].equals("ROLE_DRIVER")){
+                                        MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.DRIVER);
+                                    }
+                                    if (response.body().getRoles()[0].equals("ROLE_PASSENGER")){
+                                        MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.PASSENGER);
+                                    }
+                                    MSharedPreferences.set(PhoneAuthenticationActivity.this, Statics.USER, new Gson().toJson(response.body()));
+                                    MSharedPreferences.set(PhoneAuthenticationActivity.this, Statics.REGISTERED, true);
+                                    CodeAuthenticationActivity.start(PhoneAuthenticationActivity.this, null);
+                                } else {
+                                    MToast.show(PhoneAuthenticationActivity.this, getResources().getString(R.string.user_not_found));
+                                    next.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<UserWhenSignedIn> call, Throwable t) {
+                                MToast.showInternetError(PhoneAuthenticationActivity.this);
+                            }
+                        });
+                    } else {
+                        MSharedPreferences.set(PhoneAuthenticationActivity.this, "phone", fullPhone);
+                        CodeAuthenticationActivity.start(PhoneAuthenticationActivity.this, null);
+                    }
                 } else {
-                    Toast.makeText(PhoneAuthenticationActivity.this, getResources().getString(R.string.wrong_number), Toast.LENGTH_SHORT).show();
+                    MToast.show(PhoneAuthenticationActivity.this, getResources().getString(R.string.wrong_number));
                 }
             }
         });

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <ImageView
@@ -23,19 +24,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_toRightOf="@id/profile_fragment_profile"
+        android:layout_toEndOf="@id/profile_fragment_profile"
         android:fontFamily="@font/raleway_semibold"
-        android:text="Морозово Алекс"
+        tools:text="Морозово Алекс"
         android:textColor="@color/bluish_black"
         android:textSize="18sp" />
 
     <TextView
+        android:id="@+id/profile_fragment_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/profile_fragment_name"
-        android:layout_toRightOf="@id/profile_fragment_profile"
+        android:layout_toEndOf="@id/profile_fragment_profile"
         android:fontFamily="@font/raleway_semibold"
-        android:text="Frost@gmail.com"
+        tools:text="Frost@gmail.com"
         android:textColor="@color/bluish_black" />
 
     <ScrollView
@@ -68,7 +70,7 @@
                     android:id="@+id/profile_fragment_my_order"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/profile_fragment_my_order_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_order_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:paddingTop="10dp"
@@ -114,7 +116,7 @@
                     android:id="@+id/profile_fragment_my_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/profile_fragment_my_address_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_address_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:paddingTop="10dp"
@@ -127,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/profile_fragment_my_address"
-                    android:layout_toRightOf="@id/profile_fragment_my_address_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_address_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:text="@string/now_addresses" />
@@ -160,7 +162,7 @@
                     android:id="@+id/profile_fragment_my_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/profile_fragment_my_pay_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_pay_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:paddingTop="10dp"
@@ -173,7 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/profile_fragment_my_pay"
-                    android:layout_toRightOf="@id/profile_fragment_my_pay_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_pay_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:text="@string/pay24_o_money" />
@@ -206,7 +208,7 @@
                     android:id="@+id/profile_fragment_my_sale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/profile_fragment_my_sale_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_sale_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:paddingTop="10dp"
@@ -219,7 +221,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/profile_fragment_my_sale"
-                    android:layout_toRightOf="@id/profile_fragment_my_sale_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_sale_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:text="@string/discounts_and_promotions" />
@@ -265,7 +267,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/profile_fragment_my_notification"
-                    android:layout_toRightOf="@id/profile_fragment_my_notification_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_notification_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:text="@string/on_and_off_notifications" />
@@ -298,7 +300,7 @@
                     android:id="@+id/profile_fragment_my_settings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/profile_fragment_my_settings_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_settings_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:paddingTop="10dp"
@@ -311,7 +313,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/profile_fragment_my_settings"
-                    android:layout_toRightOf="@id/profile_fragment_my_settings_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_settings_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:text="@string/profile_settings" />

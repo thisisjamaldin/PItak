@@ -1,98 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".register.RegisterClientActivity">
 
-    <ImageView
-        android:id="@+id/register_client_back_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:src="@drawable/ic_back" />
-
-    <ImageView
-        android:id="@+id/register_client_profile_img"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_below="@id/register_client_back_img"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/bg_profile" />
-
-    <TextView
-        android:id="@+id/register_client_profile_text"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/register_client_profile_img"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="80dp"
-        android:text="@string/upload_your_photo_in_good_quality"
-        android:textAlignment="center" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/register_client_name_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/register_client_profile_text"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:inputType="textPersonName"
-        android:background="@drawable/bg_dark_blue_stroke"
-        android:hint="@string/name"
-        android:padding="12dp" />
+        <ImageView
+            android:id="@+id/register_client_back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:src="@drawable/ic_back" />
 
-    <EditText
-        android:id="@+id/register_client_email_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/register_client_name_et"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:inputType="textEmailAddress"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/bg_edit_fields"
-        android:hint="@string/e_mail"
-        android:padding="12dp" />
+        <ImageView
+            android:id="@+id/register_client_profile_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@id/register_client_back_img"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/bg_profile" />
 
-    <Spinner
-        android:id="@+id/register_client_county_sp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/register_client_email_et"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/bg_drop_down"
-        android:entries="@array/counties"
-        android:paddingEnd="24dp" />
+        <TextView
+            android:id="@+id/register_client_profile_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_client_profile_img"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="80dp"
+            android:text="@string/upload_your_photo_in_good_quality"
+            android:textAlignment="center" />
 
-    <Spinner
-        android:id="@+id/register_client_city_sp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/register_client_county_sp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/bg_drop_down"
-        android:entries="@array/city_kg"
-        android:paddingEnd="24dp" />
 
-    <Button
-        android:id="@+id/register_client_save_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/bg_round_blue_button"
-        android:text="@string/save"
-        android:textAllCaps="false"
-        android:textColor="@color/white" />
+        <RelativeLayout
+            android:id="@+id/register_client_phone_layout"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_client_profile_text"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_edit_fields">
 
-</RelativeLayout>
+            <Spinner
+                android:id="@+id/register_client_phone_code_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/register_client_phone_et"
+                android:layout_alignBottom="@id/register_client_phone_et"
+                android:background="@drawable/bg_drop_down"
+                android:entries="@array/phone_codes"
+                android:minWidth="80dp"
+                android:paddingEnd="24dp"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/register_client_phone_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/register_client_phone_code_sp"
+                android:background="@color/transparent_fully"
+                android:hint="@string/phone_number"
+                android:inputType="phone"
+                android:padding="12dp"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/register_client_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_client_phone_layout"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_dark_blue_stroke"
+            android:hint="@string/name"
+            android:inputType="textPersonName"
+            android:padding="12dp" />
+
+        <EditText
+            android:id="@+id/register_client_email_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_client_name_et"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_edit_fields"
+            android:hint="@string/e_mail"
+            android:inputType="textEmailAddress"
+            android:padding="12dp" />
+
+        <Spinner
+            android:id="@+id/register_client_county_sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/register_client_email_et"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/counties"
+            android:paddingEnd="24dp" />
+
+        <Spinner
+            android:id="@+id/register_client_city_sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/register_client_county_sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/city_kg"
+            android:paddingEnd="24dp" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_client_city_sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/register_client_save_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/register_client_city_sp"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_round_blue_button"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+</ScrollView>
