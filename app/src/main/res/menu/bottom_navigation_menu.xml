@@ -3,11 +3,11 @@
     <item
         android:id="@+id/menu_main"
         android:icon="@drawable/ic_home"
-        android:title="main" />
+        android:title="@string/main" />
     <item
         android:id="@+id/menu_role"
         android:icon="@drawable/ic_home"
-        android:title="role" />
+        android:title=""/>
     <item
         android:id="@+id/menu_add"
         android:title=""
@@ -15,9 +15,9 @@
     <item
         android:id="@+id/menu_saved"
         android:icon="@drawable/ic_save"
-        android:title="saved" />
+        android:title="@string/saved" />
     <item
         android:id="@+id/menu_profile"
         android:icon="@drawable/ic_profile"
-        android:title="profile" />
+        android:title="@string/profile" />
 </menu>

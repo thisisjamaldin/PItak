@@ -100,4 +100,7 @@
     <string name="cancel">Отменить</string>
     <string name="car_mark">Марка транспорта</string>
     <string name="select_your_vehicle">Выберите свой автомобиль</string>
+    <string name="main">ГЛАВНАЯ</string>
+    <string name="saved">СОХРАНЕННЫЕ</string>
+    <string name="profile">ПРОФИЛЬ</string>
 </resources>

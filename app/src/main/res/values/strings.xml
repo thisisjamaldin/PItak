@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PItak</string>
+    <string name="app_name">PITAK</string>
     <string name="confirmations_ncode">Confirmations\ncode</string>
     <string name="confirmations_code">Confirmations code</string>
     <string name="next">Next</string>
@@ -99,4 +99,7 @@
     </string-array>
     <string name="car_type">Vehicle type</string>
     <string name="car_model">Vehicle model</string>
+    <string name="main">MAIN</string>
+    <string name="saved">SAVED</string>
+    <string name="profile">PROFILE</string>
 </resources>
