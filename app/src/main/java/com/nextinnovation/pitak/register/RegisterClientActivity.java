@@ -23,10 +23,6 @@ import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -111,8 +107,9 @@ public class RegisterClientActivity extends AppCompatActivity {
                         MSharedPreferences.set(RegisterClientActivity.this, "userToEdit", userWhenSignedIn);
                         CodeAuthenticationActivity.start(RegisterClientActivity.this, Statics.PASSENGER);
                     }
-                } else {
-                    User user = new User(phone, email.getText().toString().trim(), phone, "surname", name.getText().toString().trim(), "patronymic", Statics.PASSENGER, "", "", "");
+                }
+                else {
+                    User user = new User(phone, Statics.getString(email), phone, "surname", Statics.getString(name), "patronymic", Statics.PASSENGER, "");
                     MainRepository.getService().signUp(user).enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {

@@ -20,6 +20,7 @@ import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
 import com.nextinnovation.pitak.model.post.PostResponse;
 import com.nextinnovation.pitak.model.post.PostSearch;
 import com.nextinnovation.pitak.model.user.User;
+import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
@@ -115,7 +116,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
     }
 
     private void getData(final boolean search) {
-        String token = "Bearer " + new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), User.class).getAccessToken();
+        String token = "Bearer " + new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), UserWhenSignedIn.class).getAccessToken();
         PostSearch postSearch = new PostSearch();
         if (size != 0 && size == adapter.getList().size() && !search) {
             return;

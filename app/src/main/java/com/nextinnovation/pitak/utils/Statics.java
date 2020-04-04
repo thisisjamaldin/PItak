@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.model.user.User;
+import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 
 import org.json.JSONObject;
 
@@ -54,7 +55,7 @@ public class Statics {
     }
 
     public static String getToken(Context context) {
-        return "Bearer " + new Gson().fromJson(MSharedPreferences.get(context, Statics.USER, ""), User.class).getAccessToken();
+        return "Bearer " + new Gson().fromJson(MSharedPreferences.get(context, Statics.USER, ""), UserWhenSignedIn.class).getAccessToken();
     }
 
 }

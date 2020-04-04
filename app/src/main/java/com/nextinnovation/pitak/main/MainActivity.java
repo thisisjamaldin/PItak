@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Log.e("----------main2", new Gson().fromJson(getResources().getString(R.string.world_cities), Country[].class).toString());
+        Log.e("----------user", new Gson().fromJson(MSharedPreferences.get(this, Statics.USER, ""), UserWhenSignedIn.class).toString());
 
         initView();
         listener();

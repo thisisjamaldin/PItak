@@ -97,9 +97,10 @@
         <item>Moscow</item>
         <item>Saint Petersburg</item>
     </string-array>
+
     <string name="car_type">Vehicle type</string>
     <string name="car_model">Vehicle model</string>
-    <string name="main">MAIN</string>
-    <string name="saved">SAVED</string>
-    <string name="profile">PROFILE</string>
+    <string name="main">Main</string>
+    <string name="saved">Saved</string>
+    <string name="profile">Profile</string>
 </resources>

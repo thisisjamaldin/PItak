@@ -22,6 +22,7 @@
             android:id="@+id/register_driver_profile_img"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:scaleType="centerCrop"
             android:layout_gravity="center"
             android:src="@drawable/bg_profile" />
 

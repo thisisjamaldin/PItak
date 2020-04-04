@@ -10,24 +10,27 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_camera" />
+        <TextView
+            android:id="@+id/add_fragment_image_text"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/upload_a_photo_of_your_car_with_the_state_number"
+            android:textAlignment="center" />
 
         <ImageView
             android:id="@+id/add_fragment_image"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:padding="34dp"
-            android:src="@drawable/ic_camera"
+            android:layout_marginTop="-142dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_edit_fields" />
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_upload_image" />
 
-        <TextView
-            android:id="@+id/add_fragment_image_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/upload_a_photo_of_your_car_with_the_state_number"
-            android:layout_marginTop="-58dp"
-            android:textAlignment="center"
-            android:layout_marginBottom="32dp"/>
 
         <EditText
             android:id="@+id/add_fragment_title"
@@ -194,9 +197,10 @@
             android:id="@+id/add_fragment_car_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_drop_down"
             android:layout_marginBottom="16dp"
-            android:padding="14dp"/>
+            android:background="@drawable/bg_drop_down"
+            android:padding="14dp" />
+
         <CheckBox
             android:id="@+id/add_fragment_agreement"
             android:layout_width="match_parent"
@@ -212,10 +216,11 @@
             android:background="@drawable/bg_round_blue_button"
             android:text="@string/post"
             android:textColor="@color/white" />
+
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="-64dp"/>
+            android:layout_marginTop="-64dp" />
     </LinearLayout>
 </ScrollView>

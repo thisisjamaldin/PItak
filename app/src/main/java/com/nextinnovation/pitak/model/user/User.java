@@ -8,12 +8,10 @@ public class User {
     private String name;
     private String patronymic;
     private String userType;
-    private String smsCode;
-    private String carBrand;
-    private String carNumber;
-    private String accessToken;
+    private String profilePhoto;
+    private UserCar carCommonModel;
 
-    public User(String username, String email, String password, String surname, String name, String patronymic, String userType, String smsCode, String carBrand, String carNumber) {
+    public User(String username, String email, String password, String surname, String name, String patronymic, String userType, String profilePhoto, UserCar carCommonModel) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -21,9 +19,18 @@ public class User {
         this.name = name;
         this.patronymic = patronymic;
         this.userType = userType;
-        this.smsCode = smsCode;
-        this.carBrand = carBrand;
-        this.carNumber = carNumber;
+        this.profilePhoto = profilePhoto;
+        this.carCommonModel = carCommonModel;
+    }
+    public User(String username, String email, String password, String surname, String name, String patronymic, String userType, String profilePhoto) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.surname = surname;
+        this.name = name;
+        this.patronymic = patronymic;
+        this.userType = userType;
+        this.profilePhoto = profilePhoto;
     }
 
     public String getUsername() {
@@ -82,51 +89,34 @@ public class User {
         this.userType = userType;
     }
 
-    public String getSmsCode() {
-        return smsCode;
+    public String getProfilePhoto() {
+        return profilePhoto;
     }
 
-    public void setSmsCode(String smsCode) {
-        this.smsCode = smsCode;
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
     }
 
-    public String getCarBrand() {
-        return carBrand;
+    public UserCar getCarCommonModel() {
+        return carCommonModel;
     }
 
-    public void setCarBrand(String carBrand) {
-        this.carBrand = carBrand;
-    }
-
-    public String getCarNumber() {
-        return carNumber;
-    }
-
-    public void setCarNumber(String carNumber) {
-        this.carNumber = carNumber;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setCarCommonModel(UserCar carCommonModel) {
+        this.carCommonModel = carCommonModel;
     }
 
     @Override
     public String toString() {
-        return "{" +
-                "\"username\":\"" + username + '\"' +
-                ", \"email\":\"" + email + '\"' +
-                ", \"password\":\"" + password + '\"' +
-                ", \"surname\":\"" + surname + '\"' +
-                ", \"name\":\"" + name + '\"' +
-                ", \"patronymic\":\"" + patronymic + '\"' +
-                ", \"userType\":\"" + userType + '\"' +
-                ", \"smsCode\":\"" + smsCode + '\"' +
-                ", \"carBrand\":\"" + carBrand + '\"' +
-                ", \"carNumber\":\"" + carNumber + '\"' +
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", surname='" + surname + '\'' +
+                ", name='" + name + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", userType='" + userType + '\'' +
+                ", profilePhoto='" + profilePhoto + '\'' +
+                ", carCommonModel=" + carCommonModel +
                 '}';
     }
 }

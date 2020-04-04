@@ -9,6 +9,9 @@ public class CarResponse {
         this.result = result;
     }
 
+    public CarResponse() {
+    }
+
     public List<Car> getResult() {
         return result;
     }

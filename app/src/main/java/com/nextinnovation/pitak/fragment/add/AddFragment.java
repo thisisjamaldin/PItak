@@ -2,6 +2,7 @@ package com.nextinnovation.pitak.fragment.add;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
@@ -31,6 +33,7 @@ import com.nextinnovation.pitak.model.car.Car;
 import com.nextinnovation.pitak.model.car.CarResponse;
 import com.nextinnovation.pitak.model.post.PostCreate;
 import com.nextinnovation.pitak.model.user.User;
+import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
@@ -43,6 +46,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.app.Activity.RESULT_OK;
 
 public class AddFragment extends Fragment {
 
@@ -76,7 +81,6 @@ public class AddFragment extends Fragment {
         post = view.findViewById(R.id.add_fragment_post_btn);
         carType = view.findViewById(R.id.add_fragment_car_type);
         image = view.findViewById(R.id.add_fragment_image);
-        imageText = view.findViewById(R.id.add_fragment_image_text);
         date = view.findViewById(R.id.add_fragment_date);
         date1 = view.findViewById(R.id.add_fragment_date_1);
         time = view.findViewById(R.id.add_fragment_time);
@@ -89,8 +93,6 @@ public class AddFragment extends Fragment {
 
     private void listener() {
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
-            image.setVisibility(View.GONE);
-            imageText.setVisibility(View.GONE);
             carType.setVisibility(View.GONE);
         }
         date.setOnClickListener(new View.OnClickListener() {
@@ -196,7 +198,7 @@ public class AddFragment extends Fragment {
 
                 PostCreate postCreate = new PostCreate(Statics.getString(title), Statics.getString(desc), Statics.getString(payment), 0, Statics.getString(fromPlace), Statics.getString(toPlace), MSharedPreferences.get(getContext(), "who", ""), date.getText().toString() + "" + time.getText().toString());
                 MainActivity.hideKeyboard(getActivity(), post);
-                MainRepository.getService().createPost(postCreate, "Bearer " + new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), User.class).getAccessToken()).enqueue(new Callback<Object>() {
+                MainRepository.getService().createPost(postCreate, "Bearer " + new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), UserWhenSignedIn.class).getAccessToken()).enqueue(new Callback<Object>() {
                     @Override
                     public void onResponse(Call<Object> call, Response<Object> response) {
                         if (response.isSuccessful()) {
@@ -222,6 +224,7 @@ public class AddFragment extends Fragment {
                 fromPlace.setText("");
                 toPlace.setText("");
                 payment.setText("");
+                image.setImageDrawable(null);
                 agreement.setChecked(false);
                 ((MainActivity) getActivity()).openMain();
             }
@@ -247,5 +250,22 @@ public class AddFragment extends Fragment {
 
             }
         });
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 23);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 23 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Glide.with(image.getContext()).load(data.getData()).into(image);
+        }
     }
 }

@@ -15,13 +15,18 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.model.car.Car;
 import com.nextinnovation.pitak.model.car.CarResponse;
+import com.nextinnovation.pitak.model.user.ProfileRequest;
+import com.nextinnovation.pitak.model.user.ProfileResponse;
 import com.nextinnovation.pitak.model.user.User;
+import com.nextinnovation.pitak.model.user.UserCar;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
@@ -30,6 +35,7 @@ import com.nextinnovation.pitak.utils.Statics;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,14 +52,18 @@ public class RegisterDriverActivity extends AppCompatActivity {
     private Button save;
     private Spinner carMark, carModel, carType;
     private Spinner countySp, citySp;
-    private String phone;
-    private boolean edit;
     private View editPhoneView;
     private EditText phoneEdit;
+    private ImageView profile;
     private Spinner codeEdit;
 
-    private CarResponse carResponse;
+    private String phone;
+    private boolean edit;
+    private String profileUri;
 
+    private CarResponse carResponse;
+    private CarResponse carTypeResponse = new CarResponse();
+    private CarResponse modelResponse = new CarResponse();
     private UserWhenSignedIn userToEdit;
 
     public static void start(Context context, boolean edit) {
@@ -72,6 +82,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        profile = findViewById(R.id.register_driver_profile_img);
         phoneEdit = findViewById(R.id.register_driver_phone_et);
         editPhoneView = findViewById(R.id.register_driver_phone_layout);
         codeEdit = findViewById(R.id.register_driver_phone_code_sp);
@@ -115,13 +126,32 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     return;
                 }
                 save.setVisibility(View.GONE);
+                Car car = new Car(carResponse.getResult().get(carMark.getSelectedItemPosition() - 1).getId(), carResponse.getResult().get(carMark.getSelectedItemPosition() - 1).getName());
+                Car model = new Car(modelResponse.getResult().get(carModel.getSelectedItemPosition() - 1).getId(), modelResponse.getResult().get(carModel.getSelectedItemPosition() - 1).getName());
+                Car type = new Car(carTypeResponse.getResult().get(carType.getSelectedItemPosition() - 1).getId(), carTypeResponse.getResult().get(carType.getSelectedItemPosition() - 1).getName());
+                UserCar userCar = new UserCar(car.getId(), car.getName(), model.getId(), model.getName(), Statics.getString(carNumber), type.getId(), type.getName());
                 if (edit) {
-                    final UserWhenSignedIn userWhenSignedIn = new UserWhenSignedIn(userToEdit.getId(), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "surname", "patronymic", Statics.getString(name), Statics.getString(email), null, null, null, codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit));
+                    final UserWhenSignedIn userWhenSignedIn = new UserWhenSignedIn(userToEdit.getId(), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "surname", "patronymic", Statics.getString(name), Statics.getString(email), null, null, null, codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), userCar);
                     if (userToEdit.getUsername().equals(userWhenSignedIn.getUsername())) {
                         MainRepository.getService().editDriver(userWhenSignedIn, Statics.getToken(RegisterDriverActivity.this)).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
+//                                    MainRepository.getService().setUserProfile(new ProfileRequest(profileUri), Statics.getToken(RegisterDriverActivity.this)).enqueue(new Callback<ProfileResponse>() {
+//                                        @Override
+//                                        public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+//                                            if (response.isSuccessful()) {
+//                                                finish();
+//                                            } else {
+//                                                MToast.show(RegisterDriverActivity.this, Statics.getResponseError(response.errorBody()));
+//                                            }
+//                                        }
+//
+//                                        @Override
+//                                        public void onFailure(Call<ProfileResponse> call, Throwable t) {
+//                                            MToast.showInternetError(RegisterDriverActivity.this);
+//                                        }
+//                                    });
                                     MSharedPreferences.set(RegisterDriverActivity.this, Statics.USER, new Gson().toJson(userWhenSignedIn));
                                     finish();
                                 } else {
@@ -142,7 +172,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
                         CodeAuthenticationActivity.start(RegisterDriverActivity.this, Statics.DRIVER);
                     }
                 } else {
-                    User user = new User(phone, email.getText().toString().trim(), phone, "surname", Statics.getString(name), "patronymic", Statics.DRIVER, "", carMark.getSelectedItem().toString() + " " + carModel.getSelectedItem().toString(), Statics.getString(carNumber));
+                    User user = new User(phone, email.getText().toString().trim(), phone, "surname", Statics.getString(name), "patronymic", Statics.DRIVER, "", userCar);
                     MainRepository.getService().signUp(user).enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
@@ -189,6 +219,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    carTypeResponse = response.body();
                     List<String> types = new ArrayList<>();
                     types.add(getResources().getString(R.string.car_type));
                     for (Car car : response.body().getResult()) {
@@ -237,6 +268,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
+                            modelResponse = response.body();
                             List<String> model = new ArrayList<>();
                             model.add(getResources().getString(R.string.car_model));
                             for (Car car : response.body().getResult()) {
@@ -290,6 +322,15 @@ public class RegisterDriverActivity extends AppCompatActivity {
             }
         });
 
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 22);
+            }
+        });
+
     }
 
     private void setValues(UserWhenSignedIn user) {
@@ -298,5 +339,14 @@ public class RegisterDriverActivity extends AppCompatActivity {
         name.setText(user.getName());
         email.setText(user.getEmail());
         phoneEdit.setText(userPhone.replace("+7", "+996").replace("+996", ""));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 22 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            profileUri = data.getData().toString();
+            Glide.with(profile.getContext()).load(data.getData()).apply(RequestOptions.circleCropTransform()).into(profile);
+        }
     }
 }

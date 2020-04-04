@@ -15,7 +15,21 @@ public class UserWhenSignedIn {
     private String tokenType;
     private String accessToken;
     private String newPassword;
+    private UserCar carCommonModel;
 
+    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String tokenType, String accessToken, String newPassword, UserCar carCommonModel) {
+        this.id = id;
+        this.username = username;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.name = name;
+        this.email = email;
+        this.roles = roles;
+        this.tokenType = tokenType;
+        this.accessToken = accessToken;
+        this.newPassword = newPassword;
+        this.carCommonModel = carCommonModel;
+    }
     public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String tokenType, String accessToken, String newPassword) {
         this.id = id;
         this.username = username;
@@ -43,6 +57,22 @@ public class UserWhenSignedIn {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
     public String getName() {
@@ -85,28 +115,20 @@ public class UserWhenSignedIn {
         this.accessToken = accessToken;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
     public String getNewPassword() {
         return newPassword;
     }
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public UserCar getCarCommonModel() {
+        return carCommonModel;
+    }
+
+    public void setCarCommonModel(UserCar carCommonModel) {
+        this.carCommonModel = carCommonModel;
     }
 
     @Override
@@ -122,6 +144,7 @@ public class UserWhenSignedIn {
                 ", tokenType='" + tokenType + '\'' +
                 ", accessToken='" + accessToken + '\'' +
                 ", newPassword='" + newPassword + '\'' +
+                ", carCommonModel=" + carCommonModel +
                 '}';
     }
 }

@@ -5,6 +5,8 @@ import com.nextinnovation.pitak.model.post.FavouritePostResponse;
 import com.nextinnovation.pitak.model.post.PostCreate;
 import com.nextinnovation.pitak.model.post.PostResponse;
 import com.nextinnovation.pitak.model.post.PostSearch;
+import com.nextinnovation.pitak.model.user.ProfileRequest;
+import com.nextinnovation.pitak.model.user.ProfileResponse;
 import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
@@ -25,6 +27,9 @@ public interface IMainRepository {
 
     @POST("api/auth/signin")
     Call<UserWhenSignedIn> signIn(@Body UserSignIn userSignIn);
+
+    @POST("api/user/upload/profile/photo")
+    Call<ProfileResponse> setUserProfile(@Body ProfileRequest profileRequest, @Header("Authorization") String token);
 
     @POST("api/user/driver/edit")
     Call<Void> editDriver(@Body UserWhenSignedIn userWhenSignedIn, @Header("Authorization") String token);
