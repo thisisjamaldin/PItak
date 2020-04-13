@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.main.MainActivity;
-import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.register.RegisterClientActivity;
@@ -48,6 +47,7 @@ public class SplashActivity extends AppCompatActivity {
             WhoRegisterActivity.start(this);
         } else {
             UserWhenSignedIn user = new Gson().fromJson(MSharedPreferences.get(this, Statics.USER, ""), UserWhenSignedIn.class);
+            Log.e("-----splash", user.getUsername());
             MainRepository.getService().signIn(new UserSignIn(user.getUsername(), user.getUsername())).enqueue(new Callback<UserWhenSignedIn>() {
                 @Override
                 public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
@@ -72,6 +72,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UserWhenSignedIn> call, Throwable t) {
+                    Log.e("---------splashFail", t.getMessage() + call.request());
                     startActivity(new Intent(SplashActivity.this, NoInternetActivity.class));
                     finish();
                 }

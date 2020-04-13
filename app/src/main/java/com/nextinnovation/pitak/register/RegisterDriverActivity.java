@@ -3,7 +3,6 @@ package com.nextinnovation.pitak.register;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,13 +31,22 @@ import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,12 +67,13 @@ public class RegisterDriverActivity extends AppCompatActivity {
 
     private String phone;
     private boolean edit;
-    private String profileUri;
+    private File profileFile;
 
     private CarResponse carResponse;
     private CarResponse carTypeResponse = new CarResponse();
     private CarResponse modelResponse = new CarResponse();
     private UserWhenSignedIn userToEdit;
+    private Context context;
 
     public static void start(Context context, boolean edit) {
         context.startActivity(new Intent(context, RegisterDriverActivity.class).putExtra("edit", edit));
@@ -75,8 +84,9 @@ public class RegisterDriverActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_driver);
 
+        context = this;
         edit = getIntent().getBooleanExtra("edit", false);
-        phone = MSharedPreferences.get(RegisterDriverActivity.this, "phone", "").replace("+", "");
+        phone = MSharedPreferences.get(this, "phone", "").replace("+", "");
         initView();
         listener();
     }
@@ -100,7 +110,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
 
     private void listener() {
         if (edit) {
-            userToEdit = new Gson().fromJson(MSharedPreferences.get(RegisterDriverActivity.this, Statics.USER, ""), UserWhenSignedIn.class);
+            userToEdit = new Gson().fromJson(MSharedPreferences.get(this, Statics.USER, ""), UserWhenSignedIn.class);
             setValues(userToEdit);
         }
         back.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +132,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     carNumber.setError(getResources().getString(R.string.must_fill));
                     return;
                 } else if (carMark.getSelectedItemPosition() == 0 || carModel.getSelectedItemPosition() == 0 || carType.getSelectedItemPosition() == 0) {
-                    MToast.show(RegisterDriverActivity.this, getResources().getString(R.string.select_your_vehicle));
+                    MToast.show(context, getResources().getString(R.string.select_your_vehicle));
                     return;
                 }
                 save.setVisibility(View.GONE);
@@ -131,83 +141,97 @@ public class RegisterDriverActivity extends AppCompatActivity {
                 Car type = new Car(carTypeResponse.getResult().get(carType.getSelectedItemPosition() - 1).getId(), carTypeResponse.getResult().get(carType.getSelectedItemPosition() - 1).getName());
                 UserCar userCar = new UserCar(car.getId(), car.getName(), model.getId(), model.getName(), Statics.getString(carNumber), type.getId(), type.getName());
                 if (edit) {
-                    final UserWhenSignedIn userWhenSignedIn = new UserWhenSignedIn(userToEdit.getId(), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "surname", "patronymic", Statics.getString(name), Statics.getString(email), null, null, null, codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), userCar);
+                    final UserWhenSignedIn userWhenSignedIn = new UserWhenSignedIn(userToEdit.getId(), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "surname", "patronymic", Statics.getString(name), Statics.getString(email), null, null, codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), userCar);
                     if (userToEdit.getUsername().equals(userWhenSignedIn.getUsername())) {
-                        MainRepository.getService().editDriver(userWhenSignedIn, Statics.getToken(RegisterDriverActivity.this)).enqueue(new Callback<Void>() {
+                        MainRepository.getService().editDriver(userWhenSignedIn, Statics.getToken(context)).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
-//                                    MainRepository.getService().setUserProfile(new ProfileRequest(profileUri), Statics.getToken(RegisterDriverActivity.this)).enqueue(new Callback<ProfileResponse>() {
-//                                        @Override
-//                                        public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
-//                                            if (response.isSuccessful()) {
-//                                                finish();
-//                                            } else {
-//                                                MToast.show(RegisterDriverActivity.this, Statics.getResponseError(response.errorBody()));
-//                                            }
-//                                        }
-//
-//                                        @Override
-//                                        public void onFailure(Call<ProfileResponse> call, Throwable t) {
-//                                            MToast.showInternetError(RegisterDriverActivity.this);
-//                                        }
-//                                    });
-                                    MSharedPreferences.set(RegisterDriverActivity.this, Statics.USER, new Gson().toJson(userWhenSignedIn));
-                                    finish();
+                                    MainRepository.getService().setUserProfile(getBody(profileFile), Statics.getToken(context)).enqueue(new Callback<ProfileResponse>() {
+                                        @Override
+                                        public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                                            if (response.isSuccessful()) {
+                                                userWhenSignedIn.setProfilePhoto(new ProfileRequest(response.body().getResult().getContent()));
+                                                MSharedPreferences.set(context, Statics.USER, new Gson().toJson(userWhenSignedIn));
+                                                finish();
+                                            } else {
+                                                MToast.show(context, Statics.getResponseError(response.errorBody()));
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                                            MToast.showInternetError(context);
+                                        }
+                                    });
                                 } else {
-                                    MToast.showResponseError(RegisterDriverActivity.this, response.errorBody());
+                                    MToast.showResponseError(context, response.errorBody());
                                     save.setVisibility(View.VISIBLE);
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<Void> call, Throwable t) {
-                                MToast.showInternetError(RegisterDriverActivity.this);
+                                MToast.showInternetError(context);
                                 save.setVisibility(View.VISIBLE);
                             }
                         });
                     } else {
-                        MSharedPreferences.set(RegisterDriverActivity.this, "phone", userWhenSignedIn.getUsername());
-                        MSharedPreferences.set(RegisterDriverActivity.this, "userToEdit", userWhenSignedIn);
-                        CodeAuthenticationActivity.start(RegisterDriverActivity.this, Statics.DRIVER);
+                        MSharedPreferences.set(context, "phone", userWhenSignedIn.getUsername());
+                        MSharedPreferences.set(context, "userToEdit", userWhenSignedIn);
+                        CodeAuthenticationActivity.start(context, Statics.DRIVER);
                     }
                 } else {
-                    User user = new User(phone, email.getText().toString().trim(), phone, "surname", Statics.getString(name), "patronymic", Statics.DRIVER, "", userCar);
-                    MainRepository.getService().signUp(user).enqueue(new Callback<User>() {
+                    MainRepository.getService().signUp(
+                            getBody(profileFile),
+                            RequestBody.create(MediaType.parse("text/plain"), phone),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(email)),
+                            RequestBody.create(MediaType.parse("text/plain"), phone),
+                            RequestBody.create(MediaType.parse("text/plain"), "username"),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(name)),
+                            RequestBody.create(MediaType.parse("text/plain"), "patronymic"),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.PASSENGER),
+                            RequestBody.create(MediaType.parse("text/plain"), car.getId() + ""),
+                            RequestBody.create(MediaType.parse("text/plain"), car.getName()),
+                            RequestBody.create(MediaType.parse("text/plain"), model.getId() + ""),
+                            RequestBody.create(MediaType.parse("text/plain"), model.getName()),
+                            RequestBody.create(MediaType.parse("text/plain"), userCar.getCarNumber()),
+                            RequestBody.create(MediaType.parse("text/plain"), type.getId() + ""),
+                            RequestBody.create(MediaType.parse("text/plain"), type.getName())).enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             if (response.isSuccessful()) {
-                                MSharedPreferences.set(RegisterDriverActivity.this, Statics.REGISTERED, true);
+                                MSharedPreferences.set(context, Statics.REGISTERED, true);
                                 MainRepository.getService().signIn(new UserSignIn(phone, phone)).enqueue(new Callback<UserWhenSignedIn>() {
                                     @Override
                                     public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
                                         if (response.isSuccessful()) {
                                             if (response.body().getRoles()[0].equals("ROLE_DRIVER")) {
-                                                MSharedPreferences.set(RegisterDriverActivity.this, "who", Statics.DRIVER);
+                                                MSharedPreferences.set(context, "who", Statics.DRIVER);
                                             }
                                             if (response.body().getRoles()[0].equals("ROLE_PASSENGER")) {
-                                                MSharedPreferences.set(RegisterDriverActivity.this, "who", Statics.PASSENGER);
+                                                MSharedPreferences.set(context, "who", Statics.PASSENGER);
                                             }
-                                            MSharedPreferences.set(RegisterDriverActivity.this, Statics.USER, new Gson().toJson(response.body()));
-                                            MainActivity.start(RegisterDriverActivity.this);
+                                            MSharedPreferences.set(context, Statics.USER, new Gson().toJson(response.body()));
+                                            MainActivity.start(context);
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<UserWhenSignedIn> call, Throwable t) {
-                                        MToast.showInternetError(RegisterDriverActivity.this);
+                                        MToast.showInternetError(context);
                                         save.setVisibility(View.VISIBLE);
                                     }
                                 });
                             } else {
-                                MToast.show(RegisterDriverActivity.this, Statics.getResponseError(response.errorBody()));
+                                MToast.show(context, Statics.getResponseError(response.errorBody()));
                             }
                             save.setVisibility(View.VISIBLE);
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            MToast.showInternetError(RegisterDriverActivity.this);
+                            MToast.showInternetError(context);
                             save.setVisibility(View.VISIBLE);
                         }
                     });
@@ -225,7 +249,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     for (Car car : response.body().getResult()) {
                         types.add(car.getName());
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(RegisterDriverActivity.this, android.R.layout.simple_spinner_item, types);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, types);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     carType.setAdapter(adapter);
                 }
@@ -246,7 +270,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     for (Car car : response.body().getResult()) {
                         mark.add(car.getName());
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(RegisterDriverActivity.this, android.R.layout.simple_spinner_item, mark);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, mark);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     carMark.setAdapter(adapter);
                 }
@@ -274,7 +298,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
                             for (Car car : response.body().getResult()) {
                                 model.add(car.getName());
                             }
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(RegisterDriverActivity.this, android.R.layout.simple_spinner_item, model);
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, model);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             carModel.setAdapter(adapter);
                         }
@@ -302,13 +326,13 @@ public class RegisterDriverActivity extends AppCompatActivity {
                         break;
                     case 1:
                         String[] city = getResources().getStringArray(R.array.city_kg);
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(RegisterDriverActivity.this, android.R.layout.simple_spinner_item, city);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         citySp.setAdapter(adapter);
                         break;
                     case 2:
                         city = getResources().getStringArray(R.array.city_ru);
-                        adapter = new ArrayAdapter<>(RegisterDriverActivity.this, android.R.layout.simple_spinner_item, city);
+                        adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         citySp.setAdapter(adapter);
                         break;
@@ -325,9 +349,11 @@ public class RegisterDriverActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, 22);
+                CropImage.activity()
+                        .setMaxCropResultSize(1500, 1500)
+                        .setCropShape(CropImageView.CropShape.OVAL)
+                        .setFixAspectRatio(true)
+                        .start(RegisterDriverActivity.this);
             }
         });
 
@@ -344,9 +370,16 @@ public class RegisterDriverActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 22 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            profileUri = data.getData().toString();
-            Glide.with(profile.getContext()).load(data.getData()).apply(RequestOptions.circleCropTransform()).into(profile);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            Glide.with(profile.getContext()).load(result.getUri()).apply(RequestOptions.circleCropTransform()).into(profile);
+            profileFile = new File(result.getUri().getPath());
         }
+    }
+
+    private MultipartBody.Part getBody(File file) {
+        if (file == null) return null;
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+        return MultipartBody.Part.createFormData("file", file.getName(), requestFile);
     }
 }

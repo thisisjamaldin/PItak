@@ -1,15 +1,15 @@
 package com.nextinnovation.pitak.model.user;
 
 public class ProfileResponse {
-    private String result;
+    private ProfileRequest result;
     private String resultCode;
     private String detail;
 
-    public String getResult() {
+    public ProfileRequest getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(ProfileRequest result) {
         this.result = result;
     }
 

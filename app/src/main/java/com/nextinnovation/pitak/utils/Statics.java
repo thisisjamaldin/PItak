@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 
 import org.json.JSONObject;
@@ -30,6 +28,7 @@ public class Statics {
         String error = "";
         try {
             error = responseBody.string();
+            Log.e("-----ErrorBody", error);
             JSONObject jObjError = new JSONObject(error);
             return jObjError.getString("details");
         } catch (Exception e) {
@@ -55,7 +54,7 @@ public class Statics {
     }
 
     public static String getToken(Context context) {
-        return "Bearer " + new Gson().fromJson(MSharedPreferences.get(context, Statics.USER, ""), UserWhenSignedIn.class).getAccessToken();
+        return "Bearer " + new Gson().fromJson(MSharedPreferences.get(context, Statics.USER, ""), UserWhenSignedIn.class).getToken();
     }
 
 }

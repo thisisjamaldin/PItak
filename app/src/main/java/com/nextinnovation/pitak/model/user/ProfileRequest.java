@@ -1,17 +1,17 @@
 package com.nextinnovation.pitak.model.user;
 
 public class ProfileRequest {
-    private String profilePhoto;
+    private String content;
 
-    public ProfileRequest(String profilePhoto) {
-        this.profilePhoto = profilePhoto;
+    public ProfileRequest(String content) {
+        this.content = content;
     }
 
-    public String getProfilePhoto() {
-        return profilePhoto;
+    public String getContent() {
+        return content;
     }
 
-    public void setProfilePhoto(String profilePhoto) {
-        this.profilePhoto = profilePhoto;
+    public void setContent(String content) {
+        this.content = content;
     }
 }

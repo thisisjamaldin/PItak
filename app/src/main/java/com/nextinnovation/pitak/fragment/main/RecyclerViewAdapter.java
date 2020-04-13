@@ -1,6 +1,8 @@
 package com.nextinnovation.pitak.fragment.main;
 
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.nextinnovation.pitak.R;
-import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
 import com.nextinnovation.pitak.model.post.Post;
-import com.nextinnovation.pitak.utils.MToast;
-import com.nextinnovation.pitak.utils.Statics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +36,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void clear() {
-        for (int i = 0; i < list.size(); i++) {
-            notifyItemRemoved(i);
-        }
         list.clear();
+        notifyDataSetChanged();
     }
 
     public void addList(List<Post> list) {
@@ -129,11 +126,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 save.setVisibility(View.VISIBLE);
                 call.setVisibility(View.VISIBLE);
             }
-            Glide.with(profile.getContext()).load(R.drawable.launch_screen).transform(new CenterCrop(), new RoundedCorners(36)).into(profile);
+            if (post.getImgFileList().isEmpty()) {
+                Glide.with(profile.getContext()).load(R.drawable.launch_screen).transform(new CenterCrop(), new RoundedCorners(36)).into(profile);
+            } else {
+                Glide.with(profile.getContext()).load(setImage(post.getImgFileList().get(0).getContent())).transform(new CenterCrop(), new RoundedCorners(36)).into(profile);
+            }
             fromPlace.setText(fromPlace.getContext().getResources().getString(R.string.from) + " " + post.getFromPlace());
             toPlace.setText(post.getToPlace());
             price.setText(post.getAmountPayment() + " сом");
         }
+    }
+
+    private Bitmap setImage(String encoded) {
+        byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
     public interface onItemClick {

@@ -2,9 +2,12 @@ package com.nextinnovation.pitak.item_detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.bumptech.glide.Glide;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.model.post.Post;
@@ -32,6 +36,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     private TextView title, price, phone;
     private Button save, share;
     private ImageView saveImg, shareImg;
+    private ImageView mainImg;
     private View call;
     private MutableLiveData<Boolean> saved = new MutableLiveData<>();
 
@@ -61,6 +66,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         share = findViewById(R.id.item_detail_share_2);
         shareImg = findViewById(R.id.item_detail_share);
         saveImg = findViewById(R.id.item_detail_save);
+        mainImg = findViewById(R.id.item_detail_main_img);
     }
 
     private void listener() {
@@ -125,6 +131,9 @@ public class ItemDetailActivity extends AppCompatActivity {
         title.setText(Html.fromHtml("<h2>" + post.getTitle() + "</h2>" + "<br>" + post.getText()));
         price.setText(post.getAmountPayment() + " сом");
         phone.setText("+" + post.getMobileNumber());
+        if (!post.getImgFileList().isEmpty()) {
+            setImage(post.getImgFileList().get(0).getContent());
+        }
     }
 
     private void addToFavourite(Boolean mSave) {
@@ -172,5 +181,13 @@ public class ItemDetailActivity extends AppCompatActivity {
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, text);
         startActivity(intent);
+    }
+
+    private void setImage(String encoded) {
+        if (encoded != null) {
+            byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Glide.with(this).load(decodedByte).into(mainImg);
+        }
     }
 }

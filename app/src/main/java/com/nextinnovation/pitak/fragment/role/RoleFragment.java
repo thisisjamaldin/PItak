@@ -12,15 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.fragment.main.RecyclerViewAdapter;
 import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
 import com.nextinnovation.pitak.model.post.PostResponse;
 import com.nextinnovation.pitak.model.post.PostSearch;
-import com.nextinnovation.pitak.model.user.User;
-import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
@@ -116,14 +113,13 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
     }
 
     private void getData(final boolean search) {
-        String token = "Bearer " + new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), UserWhenSignedIn.class).getAccessToken();
         PostSearch postSearch = new PostSearch();
         if (size != 0 && size == adapter.getList().size() && !search) {
             return;
         }
         loading.setVisibility(View.VISIBLE);
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
-            MainRepository.getService().searchDriver(postSearch, token, page).enqueue(new Callback<PostResponse>() {
+            MainRepository.getService().searchDriver(postSearch, Statics.getToken(getContext()), page).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
@@ -150,7 +146,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
             });
         }
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
-            MainRepository.getService().searchPassenger(new PostSearch(), token, page).enqueue(new Callback<PostResponse>() {
+            MainRepository.getService().searchPassenger(new PostSearch(), Statics.getToken(getContext()), page).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {

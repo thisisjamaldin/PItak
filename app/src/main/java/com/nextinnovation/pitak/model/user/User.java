@@ -8,10 +8,10 @@ public class User {
     private String name;
     private String patronymic;
     private String userType;
-    private String profilePhoto;
+    private ProfileRequest profilePhoto;
     private UserCar carCommonModel;
 
-    public User(String username, String email, String password, String surname, String name, String patronymic, String userType, String profilePhoto, UserCar carCommonModel) {
+    public User(String username, String email, String password, String surname, String name, String patronymic, String userType, UserCar carCommonModel) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -19,18 +19,7 @@ public class User {
         this.name = name;
         this.patronymic = patronymic;
         this.userType = userType;
-        this.profilePhoto = profilePhoto;
         this.carCommonModel = carCommonModel;
-    }
-    public User(String username, String email, String password, String surname, String name, String patronymic, String userType, String profilePhoto) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.surname = surname;
-        this.name = name;
-        this.patronymic = patronymic;
-        this.userType = userType;
-        this.profilePhoto = profilePhoto;
     }
 
     public String getUsername() {
@@ -89,11 +78,11 @@ public class User {
         this.userType = userType;
     }
 
-    public String getProfilePhoto() {
+    public ProfileRequest getProfilePhoto() {
         return profilePhoto;
     }
 
-    public void setProfilePhoto(String profilePhoto) {
+    public void setProfilePhoto(ProfileRequest profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 

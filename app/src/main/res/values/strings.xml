@@ -75,7 +75,6 @@
     <string name="internet_error">Internet error</string>
     <string name="are_you_sure_to_sign_out">Are you sure to sign out?</string>
     <string name="cancel">Cancel</string>
-    <string name="upload_a_photo_of_your_car_with_the_state_number">Upload a photo of your car with the state number</string>
     <string name="car_mark">Vehicle mark</string>
 
     <string-array name="phone_codes">

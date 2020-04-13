@@ -1,6 +1,7 @@
 package com.nextinnovation.pitak.fragment.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -173,6 +174,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                         if (search) {
                             adapter.clear();
                         }
+                        Log.e("-----response", response.body().getResult().getContent().get(0).toString());
                         adapter.addList(response.body().getResult().getContent());
                         page++;
                         loading.setVisibility(View.GONE);

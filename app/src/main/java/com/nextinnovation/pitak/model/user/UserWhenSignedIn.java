@@ -1,7 +1,5 @@
 package com.nextinnovation.pitak.model.user;
 
-import androidx.annotation.NonNull;
-
 import java.util.Arrays;
 
 public class UserWhenSignedIn {
@@ -12,12 +10,12 @@ public class UserWhenSignedIn {
     private String name;
     private String email;
     private String[] roles;
-    private String tokenType;
-    private String accessToken;
+    private String token;
     private String newPassword;
     private UserCar carCommonModel;
+    private ProfileRequest profilePhoto;
 
-    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String tokenType, String accessToken, String newPassword, UserCar carCommonModel) {
+    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String token, String newPassword, UserCar carCommonModel) {
         this.id = id;
         this.username = username;
         this.surname = surname;
@@ -25,12 +23,11 @@ public class UserWhenSignedIn {
         this.name = name;
         this.email = email;
         this.roles = roles;
-        this.tokenType = tokenType;
-        this.accessToken = accessToken;
+        this.token = token;
         this.newPassword = newPassword;
         this.carCommonModel = carCommonModel;
     }
-    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String tokenType, String accessToken, String newPassword) {
+    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String token, String newPassword) {
         this.id = id;
         this.username = username;
         this.surname = surname;
@@ -38,8 +35,7 @@ public class UserWhenSignedIn {
         this.name = name;
         this.email = email;
         this.roles = roles;
-        this.tokenType = tokenType;
-        this.accessToken = accessToken;
+        this.token = token;
         this.newPassword = newPassword;
     }
 
@@ -99,20 +95,12 @@ public class UserWhenSignedIn {
         this.roles = roles;
     }
 
-    public String getTokenType() {
-        return tokenType;
+    public String getToken() {
+        return token;
     }
 
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getNewPassword() {
@@ -131,6 +119,14 @@ public class UserWhenSignedIn {
         this.carCommonModel = carCommonModel;
     }
 
+    public ProfileRequest getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(ProfileRequest profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
     @Override
     public String toString() {
         return "UserWhenSignedIn{" +
@@ -141,10 +137,10 @@ public class UserWhenSignedIn {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", roles=" + Arrays.toString(roles) +
-                ", tokenType='" + tokenType + '\'' +
-                ", accessToken='" + accessToken + '\'' +
+                ", accessToken='" + token + '\'' +
                 ", newPassword='" + newPassword + '\'' +
                 ", carCommonModel=" + carCommonModel +
+                ", profilePhoto='" + profilePhoto + '\'' +
                 '}';
     }
 }

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
@@ -31,18 +29,24 @@ import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.model.car.Car;
 import com.nextinnovation.pitak.model.car.CarResponse;
-import com.nextinnovation.pitak.model.post.PostCreate;
-import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,8 +55,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddFragment extends Fragment {
 
-    private ImageView image;
-    private TextView imageText;
+    private ImageView image, image1, image2, image3, image4;
     private Button date, time;
     private Button date1, time1;
     private Button post;
@@ -60,6 +63,7 @@ public class AddFragment extends Fragment {
     private EditText title, desc, fromPlace, toPlace, payment;
     private CheckBox agreement;
     private ScrollView mainView;
+    private File imageFile, image1File, image2File, image3File, image4File;
 
     @Nullable
     @Override
@@ -81,6 +85,10 @@ public class AddFragment extends Fragment {
         post = view.findViewById(R.id.add_fragment_post_btn);
         carType = view.findViewById(R.id.add_fragment_car_type);
         image = view.findViewById(R.id.add_fragment_image);
+        image1 = view.findViewById(R.id.add_fragment_image_1);
+        image2 = view.findViewById(R.id.add_fragment_image_2);
+        image3 = view.findViewById(R.id.add_fragment_image_3);
+        image4 = view.findViewById(R.id.add_fragment_image_4);
         date = view.findViewById(R.id.add_fragment_date);
         date1 = view.findViewById(R.id.add_fragment_date_1);
         time = view.findViewById(R.id.add_fragment_time);
@@ -195,10 +203,24 @@ public class AddFragment extends Fragment {
                     return;
                 }
                 post.setVisibility(View.GONE);
-
-                PostCreate postCreate = new PostCreate(Statics.getString(title), Statics.getString(desc), Statics.getString(payment), 0, Statics.getString(fromPlace), Statics.getString(toPlace), MSharedPreferences.get(getContext(), "who", ""), date.getText().toString() + "" + time.getText().toString());
+                UserWhenSignedIn user = new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), UserWhenSignedIn.class);
                 MainActivity.hideKeyboard(getActivity(), post);
-                MainRepository.getService().createPost(postCreate, "Bearer " + new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), UserWhenSignedIn.class).getAccessToken()).enqueue(new Callback<Object>() {
+
+                MainRepository.getService().createPost(
+                        getBody(imageFile),
+                        getBody(image1File),
+                        getBody(image2File),
+                        getBody(image3File),
+                        getBody(image4File),
+                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(title)),
+                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(desc)),
+                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(payment)),
+                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(fromPlace)),
+                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(toPlace)),
+                        RequestBody.create(MediaType.parse("text/plain"), MSharedPreferences.get(getContext(), "who", "")),
+                        RequestBody.create(MediaType.parse("text/plain"), "1"),
+                        RequestBody.create(MediaType.parse("text/plain"), convertDate(date.getText().toString() + "" + time.getText().toString())),
+                        Statics.getToken(getContext())).enqueue(new Callback<Object>() {
                     @Override
                     public void onResponse(Call<Object> call, Response<Object> response) {
                         if (response.isSuccessful()) {
@@ -212,6 +234,8 @@ public class AddFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<Object> call, Throwable t) {
+                        Log.e("----postFail", call.request().body() + "");
+                        Log.e("----postFail", t.getMessage());
                         MToast.showInternetError(getContext());
                         post.setVisibility(View.VISIBLE);
                     }
@@ -254,18 +278,92 @@ public class AddFragment extends Fragment {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
+                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
                 startActivityForResult(intent, 23);
             }
         });
+        image1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
+                startActivityForResult(intent, 24);
+            }
+        });
+        image2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
+                startActivityForResult(intent, 25);
+            }
+        });
+        image3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
+                startActivityForResult(intent, 26);
+            }
+        });
+        image4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
+                startActivityForResult(intent, 27);
+            }
+        });
+    }
+
+    private MultipartBody.Part getBody(File file) {
+        if (file == null) return null;
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+        return MultipartBody.Part.createFormData("fileList", file.getName(), requestFile);
+    }
+
+    private String convertDate(String dateString) {
+        SimpleDateFormat sdfIn = new SimpleDateFormat("EEE, dd MMM yyyyHH:mm", Locale.getDefault());
+        Date date = new Date();
+        try {
+            date = sdfIn.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat sdfOut = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+        return sdfOut.format(date);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 23 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Glide.with(image.getContext()).load(data.getData()).into(image);
+        if (resultCode == RESULT_OK && data != null) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            switch (requestCode) {
+                case 23:
+                    Glide.with(image.getContext()).load(result.getUri()).into(image);
+                    imageFile = new File(result.getUri().getPath());
+                    break;
+                case 24:
+                    Glide.with(image1.getContext()).load(result.getUri()).into(image1);
+                    image1File = new File(result.getUri().getPath());
+                    break;
+                case 25:
+                    Glide.with(image2.getContext()).load(result.getUri()).into(image2);
+                    image2File = new File(result.getUri().getPath());
+                    break;
+                case 26:
+                    Glide.with(image3.getContext()).load(result.getUri()).into(image3);
+                    image3File = new File(result.getUri().getPath());
+                    break;
+                case 27:
+                    Glide.with(image4.getContext()).load(result.getUri()).into(image4);
+                    image4File = new File(result.getUri().getPath());
+                    break;
+            }
         }
     }
+
+//    private String encodeImage(Bitmap bm) {
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+//        byte[] b = baos.toByteArray();
+//        return Base64.encodeToString(b, Base64.DEFAULT);
+//    }
 }

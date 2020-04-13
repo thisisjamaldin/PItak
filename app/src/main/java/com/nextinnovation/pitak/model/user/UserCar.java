@@ -19,6 +19,9 @@ public class UserCar {
         this.carTypeName = carTypeName;
     }
 
+    public UserCar() {
+    }
+
     public long getCarBrandId() {
         return carBrandId;
     }

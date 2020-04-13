@@ -17,7 +17,7 @@
         android:layout_height="100dp"
         android:layout_margin="25dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/launch_screen" />
+        android:src="@drawable/ic_profile" />
 
     <TextView
         android:id="@+id/profile_fragment_name"

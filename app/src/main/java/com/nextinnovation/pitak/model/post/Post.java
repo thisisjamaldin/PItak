@@ -3,6 +3,7 @@ package com.nextinnovation.pitak.model.post;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Post implements Serializable {
     private long id;
@@ -14,11 +15,11 @@ public class Post implements Serializable {
     private String fromPlace;
     private String toPlace;
     private String advertType;
-    private String sendDateTime;
     private long createdBy;
     private String mobileNumber;
+    private List<PostImage> appFiles;
 
-    public Post(long id, String title, String text, String amountPayment, int numberOfSeat, String fromPlace, String toPlace, String advertType, String sendDateTime, long createdBy, String mobileNumber) {
+    public Post(long id, String title, String text, String amountPayment, int numberOfSeat, String fromPlace, String toPlace, String advertType, long createdBy, String mobileNumber) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -27,7 +28,6 @@ public class Post implements Serializable {
         this.fromPlace = fromPlace;
         this.toPlace = toPlace;
         this.advertType = advertType;
-        this.sendDateTime = sendDateTime;
         this.createdBy = createdBy;
         this.mobileNumber = mobileNumber;
     }
@@ -96,14 +96,6 @@ public class Post implements Serializable {
         this.advertType = advertType;
     }
 
-    public String getSendDateTime() {
-        return sendDateTime;
-    }
-
-    public void setSendDateTime(String sendDateTime) {
-        this.sendDateTime = sendDateTime;
-    }
-
     public long getCreatedBy() {
         return createdBy;
     }
@@ -120,6 +112,13 @@ public class Post implements Serializable {
         this.mobileNumber = mobileNumber;
     }
 
+    public List<PostImage> getImgFileList() {
+        return appFiles;
+    }
+
+    public void setImgFileList(List<PostImage> appFiles) {
+        this.appFiles = appFiles;
+    }
 
     @Override
     public String toString() {
@@ -132,7 +131,6 @@ public class Post implements Serializable {
                 ", fromPlace='" + fromPlace + '\'' +
                 ", toPlace='" + toPlace + '\'' +
                 ", advertType='" + advertType + '\'' +
-                ", sendDateTime='" + sendDateTime + '\'' +
                 ", createdBy=" + createdBy +
                 ", mobilePhone='" + mobileNumber + '\'' +
                 '}';
