@@ -3,7 +3,10 @@ package com.nextinnovation.pitak.fragment.add;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +36,10 @@ import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
-import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -278,35 +282,40 @@ public class AddFragment extends Fragment {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
                 startActivityForResult(intent, 23);
             }
         });
         image1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
                 startActivityForResult(intent, 24);
             }
         });
         image2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
                 startActivityForResult(intent, 25);
             }
         });
         image3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
                 startActivityForResult(intent, 26);
             }
         });
         image4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = CropImage.activity().setMaxCropResultSize(2000, 2000).getIntent(getContext());
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
                 startActivityForResult(intent, 27);
             }
         });
@@ -333,37 +342,61 @@ public class AddFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+        if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Bitmap bitmap = resizeImage(data.getData());
+            if (bitmap==null) return;
             switch (requestCode) {
                 case 23:
-                    Glide.with(image.getContext()).load(result.getUri()).into(image);
-                    imageFile = new File(result.getUri().getPath());
+                    Glide.with(image.getContext()).load(bitmap).into(image);
+                    imageFile = createFile(bitmap);
                     break;
                 case 24:
-                    Glide.with(image1.getContext()).load(result.getUri()).into(image1);
-                    image1File = new File(result.getUri().getPath());
+                    Glide.with(image1.getContext()).load(bitmap).into(image1);
+                    image1File = createFile(bitmap);
                     break;
                 case 25:
-                    Glide.with(image2.getContext()).load(result.getUri()).into(image2);
-                    image2File = new File(result.getUri().getPath());
+                    Glide.with(image2.getContext()).load(bitmap).into(image2);
+                    image2File = createFile(bitmap);
                     break;
                 case 26:
-                    Glide.with(image3.getContext()).load(result.getUri()).into(image3);
-                    image3File = new File(result.getUri().getPath());
+                    Glide.with(image3.getContext()).load(bitmap).into(image3);
+                    image3File = createFile(bitmap);
                     break;
                 case 27:
-                    Glide.with(image4.getContext()).load(result.getUri()).into(image4);
-                    image4File = new File(result.getUri().getPath());
+                    Glide.with(image4.getContext()).load(bitmap).into(image4);
+                    image4File =createFile(bitmap);
                     break;
             }
         }
     }
 
-//    private String encodeImage(Bitmap bm) {
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-//        byte[] b = baos.toByteArray();
-//        return Base64.encodeToString(b, Base64.DEFAULT);
-//    }
+    private Bitmap resizeImage(Uri uri) {
+        try {
+            return Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri), 800, 600, true);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private File createFile(Bitmap bitmap) {
+        try {
+            File f = new File(getContext().getCacheDir(), "filename");
+            f.createNewFile();
+
+//Convert bitmap to byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 10, bos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+            return f;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

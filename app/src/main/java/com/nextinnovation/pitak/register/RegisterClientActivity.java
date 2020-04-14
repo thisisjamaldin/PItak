@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -30,10 +32,10 @@ import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -209,11 +211,9 @@ public class RegisterClientActivity extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CropImage.activity()
-                        .setMaxCropResultSize(1500, 1500)
-                        .setCropShape(CropImageView.CropShape.OVAL)
-                        .setFixAspectRatio(true)
-                        .start(RegisterClientActivity.this);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 29);
             }
         });
     }
@@ -233,10 +233,9 @@ public class RegisterClientActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            Glide.with(profile.getContext()).load(result.getUri()).apply(RequestOptions.circleCropTransform()).into(profile);
-            profileFile = new File(result.getUri().getPath());
+        if (requestCode == 29 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Glide.with(profile.getContext()).load(resizeImage(data.getData())).apply(RequestOptions.circleCropTransform()).into(profile);
+            profileFile = createFile(resizeImage(data.getData()));
         }
     }
 
@@ -252,5 +251,35 @@ public class RegisterClientActivity extends AppCompatActivity {
         if (file == null) return null;
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
         return MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+    }
+
+    private Bitmap resizeImage(Uri uri) {
+        try {
+            return Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri), 300, 300, true);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private File createFile(Bitmap bitmap) {
+        try {
+            File f = new File(this.getCacheDir(), "filename");
+            f.createNewFile();
+
+//Convert bitmap to byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 10, bos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+            return f;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
