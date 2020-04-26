@@ -1,6 +1,8 @@
 package com.nextinnovation.pitak.model.post;
 
-public class PostImage {
+import java.io.Serializable;
+
+public class PostImage implements Serializable {
     private String content;
     private String path;
     private String name;

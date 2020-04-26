@@ -129,6 +129,5 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setView();
-        Log.e("-------profileResume", "resume");
     }
 }

@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -13,7 +15,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.register.RegisterClientActivity;
 import com.nextinnovation.pitak.register.RegisterDriverActivity;
 import com.nextinnovation.pitak.register.WhoRegisterActivity;
@@ -25,6 +29,7 @@ public class NotificationActivity extends AppCompatActivity {
     private TextView editProfile;
     private TextView signOut;
     private ImageView back;
+    private Switch notifyNewPost;
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, NotificationActivity.class));
@@ -34,11 +39,13 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        initAllView();
+        findView();
         listener();
+        initView();
     }
 
-    private void initAllView() {
+    private void findView() {
+        notifyNewPost = findViewById(R.id.settings_notification_new_notification_switch);
         editProfile = findViewById(R.id.settings_notification_profile_edit);
         back = findViewById(R.id.settings_notification_back_img);
         signOut = findViewById(R.id.settings_notification_sign_out);
@@ -80,5 +87,20 @@ public class NotificationActivity extends AppCompatActivity {
                 alert.show();
             }
         });
+        notifyNewPost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                MSharedPreferences.set(NotificationActivity.this, "newPostNotification", isChecked);
+                if (isChecked) {
+                    FirebaseMessaging.getInstance().subscribeToTopic(MSharedPreferences.get(NotificationActivity.this, "who", ""));
+                } else {
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(MSharedPreferences.get(NotificationActivity.this, "who", ""));
+                }
+            }
+        });
+    }
+
+    private void initView() {
+        notifyNewPost.setChecked(MSharedPreferences.get(NotificationActivity.this, "newPostNotification", true));
     }
 }

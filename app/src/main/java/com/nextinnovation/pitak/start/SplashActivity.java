@@ -47,7 +47,6 @@ public class SplashActivity extends AppCompatActivity {
             WhoRegisterActivity.start(this);
         } else {
             UserWhenSignedIn user = new Gson().fromJson(MSharedPreferences.get(this, Statics.USER, ""), UserWhenSignedIn.class);
-            Log.e("-----splash", user.getUsername());
             MainRepository.getService().signIn(new UserSignIn(user.getUsername(), user.getUsername())).enqueue(new Callback<UserWhenSignedIn>() {
                 @Override
                 public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {

@@ -158,7 +158,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
 
     @Override
     public void onClick(int pos) {
-        ItemDetailActivity.start(getContext(), adapter.getList().get(pos), false);
+        ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getId(), false);
     }
 
     private void getData(final boolean search) {

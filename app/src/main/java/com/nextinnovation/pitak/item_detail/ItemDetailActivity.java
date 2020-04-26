@@ -1,5 +1,6 @@
 package com.nextinnovation.pitak.item_detail;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,8 +23,11 @@ import com.bumptech.glide.Glide;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.model.post.Post;
+import com.nextinnovation.pitak.model.post.PostSingle;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
+
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,16 +36,16 @@ import retrofit2.Response;
 public class ItemDetailActivity extends AppCompatActivity {
 
     private ImageView back;
-    private Post post;
     private TextView title, price, phone;
     private Button save, share;
     private ImageView saveImg, shareImg;
     private ImageView mainImg;
     private View call;
+    private Post post;
     private MutableLiveData<Boolean> saved = new MutableLiveData<>();
 
-    public static void start(Context context, Post post, Boolean saved) {
-        context.startActivity(new Intent(context, ItemDetailActivity.class).putExtra("post", post).putExtra("saved", saved));
+    public static void start(Context context, long id, Boolean saved) {
+        context.startActivity(new Intent(context, ItemDetailActivity.class).putExtra("id", id).putExtra("saved", saved));
     }
 
     @Override
@@ -50,10 +54,27 @@ public class ItemDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item_detail);
 
         saved.setValue(getIntent().getBooleanExtra("saved", false));
-        post = (Post) getIntent().getSerializableExtra("post");
+
+        getData(getIntent().getLongExtra("id", 0));
         initView();
         listener();
-        setView();
+    }
+
+    private void getData(long id) {
+        MainRepository.getService().getAdvert(id, Statics.getToken(this)).enqueue(new Callback<PostSingle>() {
+            @Override
+            public void onResponse(Call<PostSingle> call, Response<PostSingle> response) {
+                if (response.isSuccessful() && response.body().getResult() != null) {
+                    post = response.body().getResult();
+                    setView();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostSingle> call, Throwable t) {
+
+            }
+        });
     }
 
     private void initView() {
@@ -131,8 +152,10 @@ public class ItemDetailActivity extends AppCompatActivity {
         title.setText(Html.fromHtml("<h2>" + post.getTitle() + "</h2>" + "<br>" + post.getText()));
         price.setText(post.getAmountPayment() + " сом");
         phone.setText("+" + post.getMobileNumber());
-        if (!post.getImgFileList().isEmpty()) {
+        if (!post.getImgFileList().isEmpty() && post.getImgFileList().get(0) != null && post.getImgFileList().get(0).getContent() != null) {
             setImage(post.getImgFileList().get(0).getContent());
+        } else {
+            Glide.with(this).load(getResources().getDrawable(R.drawable.bg_launch_screen)).into(mainImg);
         }
     }
 
@@ -184,10 +207,8 @@ public class ItemDetailActivity extends AppCompatActivity {
     }
 
     private void setImage(String encoded) {
-        if (encoded != null) {
-            byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Glide.with(this).load(decodedByte).into(mainImg);
-        }
+        byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        Glide.with(this).load(decodedByte).into(mainImg);
     }
 }

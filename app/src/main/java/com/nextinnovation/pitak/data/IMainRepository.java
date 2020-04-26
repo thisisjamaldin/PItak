@@ -4,10 +4,13 @@ import com.nextinnovation.pitak.model.car.CarResponse;
 import com.nextinnovation.pitak.model.post.FavouritePostResponse;
 import com.nextinnovation.pitak.model.post.PostResponse;
 import com.nextinnovation.pitak.model.post.PostSearch;
+import com.nextinnovation.pitak.model.post.PostSingle;
 import com.nextinnovation.pitak.model.user.ProfileResponse;
 import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
+
+import org.json.JSONObject;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -100,4 +103,7 @@ public interface IMainRepository {
 
     @GET("api/dictionary/cartype/get/all")
     Call<CarResponse> getCarTypes();
+
+    @GET("api/advert/get/{advertId}")
+    Call<PostSingle> getAdvert(@Path("advertId") long advertId, @Header("Authorization") String token);
 }

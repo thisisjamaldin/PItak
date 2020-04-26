@@ -19,8 +19,7 @@ public class Post implements Serializable {
     private String mobileNumber;
     private List<PostImage> appFiles;
 
-    public Post(long id, String title, String text, String amountPayment, int numberOfSeat, String fromPlace, String toPlace, String advertType, long createdBy, String mobileNumber) {
-        this.id = id;
+    public Post(String title, String text, String amountPayment, int numberOfSeat, String fromPlace, String toPlace, String advertType, long createdBy, String mobileNumber) {
         this.title = title;
         this.text = text;
         this.amountPayment = amountPayment;

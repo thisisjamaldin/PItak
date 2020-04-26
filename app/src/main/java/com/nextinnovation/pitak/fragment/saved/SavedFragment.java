@@ -102,11 +102,10 @@ public class SavedFragment extends Fragment implements RecyclerViewAdapter.onIte
 
     @Override
     public void onClick(int pos) {
-        ItemDetailActivity.start(getContext(), adapter.getList().get(pos), true);
+        ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getId(), true);
     }
 
     public static void getData(final Context context) {
-        Log.e("-----------", "get");
         MainRepository.getService().getFavourite(Statics.getToken(context)).enqueue(new Callback<FavouritePostResponse>() {
             @Override
             public void onResponse(Call<FavouritePostResponse> call, Response<FavouritePostResponse> response) {

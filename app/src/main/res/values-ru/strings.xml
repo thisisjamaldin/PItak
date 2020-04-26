@@ -97,4 +97,6 @@
     <string name="main">Главная</string>
     <string name="saved">Сохраненные</string>
     <string name="profile">Профиль</string>
+    <string name="share">Поделиться</string>
+    <string name="call">Позвонить</string>
 </resources>

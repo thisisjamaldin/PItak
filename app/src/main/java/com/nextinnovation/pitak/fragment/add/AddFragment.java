@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.asksira.bsimagepicker.BSImagePicker;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
@@ -57,7 +58,7 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AddFragment extends Fragment {
+public class AddFragment extends Fragment implements BSImagePicker.OnSingleImageSelectedListener, BSImagePicker.ImageLoaderDelegate {
 
     private ImageView image, image1, image2, image3, image4;
     private Button date, time;
@@ -282,41 +283,31 @@ public class AddFragment extends Fragment {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, 23);
+                imagePicker("23");
             }
         });
         image1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, 24);
+                imagePicker("24");
             }
         });
         image2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, 25);
+                imagePicker("25");
             }
         });
         image3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, 26);
+                imagePicker("26");
             }
         });
         image4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, 27);
+                imagePicker("27");
             }
         });
     }
@@ -343,30 +334,7 @@ public class AddFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Bitmap bitmap = resizeImage(data.getData());
-            if (bitmap==null) return;
-            switch (requestCode) {
-                case 23:
-                    Glide.with(image.getContext()).load(bitmap).into(image);
-                    imageFile = createFile(bitmap);
-                    break;
-                case 24:
-                    Glide.with(image1.getContext()).load(bitmap).into(image1);
-                    image1File = createFile(bitmap);
-                    break;
-                case 25:
-                    Glide.with(image2.getContext()).load(bitmap).into(image2);
-                    image2File = createFile(bitmap);
-                    break;
-                case 26:
-                    Glide.with(image3.getContext()).load(bitmap).into(image3);
-                    image3File = createFile(bitmap);
-                    break;
-                case 27:
-                    Glide.with(image4.getContext()).load(bitmap).into(image4);
-                    image4File =createFile(bitmap);
-                    break;
-            }
+
         }
     }
 
@@ -398,5 +366,46 @@ public class AddFragment extends Fragment {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public void loadImage(Uri imageUri, ImageView ivImage) {
+        Glide.with(getContext()).load(imageUri).into(ivImage);
+    }
+
+    @Override
+    public void onSingleImageSelected(Uri uri, String tag) {
+        Bitmap bitmap = resizeImage(uri);
+        if (bitmap == null) return;
+        switch (tag) {
+            case "23":
+                Glide.with(image.getContext()).load(bitmap).into(image);
+                imageFile = createFile(bitmap);
+                break;
+            case "24":
+                Glide.with(image1.getContext()).load(bitmap).into(image1);
+                image1File = createFile(bitmap);
+                break;
+            case "25":
+                Glide.with(image2.getContext()).load(bitmap).into(image2);
+                image2File = createFile(bitmap);
+                break;
+            case "26":
+                Glide.with(image3.getContext()).load(bitmap).into(image3);
+                image3File = createFile(bitmap);
+                break;
+            case "27":
+                Glide.with(image4.getContext()).load(bitmap).into(image4);
+                image4File = createFile(bitmap);
+                break;
+        }
+    }
+
+    private void imagePicker(String requestCode) {
+        new BSImagePicker.Builder("com.nextinnovation.pitak.fileProvider")
+                .hideGalleryTile()
+                .setTag(requestCode)
+                .build()
+                .show(getChildFragmentManager(), "picker");
     }
 }

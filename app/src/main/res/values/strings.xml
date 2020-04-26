@@ -102,4 +102,6 @@
     <string name="main">Main</string>
     <string name="saved">Saved</string>
     <string name="profile">Profile</string>
+    <string name="share">Share</string>
+    <string name="call">Call</string>
 </resources>

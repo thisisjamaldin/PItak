@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -58,7 +57,7 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
 
     @Override
     public void onClick(int pos) {
-        ItemDetailActivity.start(MyOrdersActivity.this, adapter.getList().get(pos), null);
+        ItemDetailActivity.start(MyOrdersActivity.this, adapter.getList().get(pos).getId(), null);
     }
 
     private void getData() {
