@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic(MSharedPreferences.get(MainActivity.this, "who", ""));
         initView();
         listener();
+        Log.e("----token", Statics.getToken(this));
     }
 
     private void initView() {

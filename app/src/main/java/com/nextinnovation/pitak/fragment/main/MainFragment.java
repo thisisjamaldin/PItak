@@ -94,10 +94,10 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    if (searchFrom.getText().toString().trim().length() == 0) {
+                    if (Statics.getString(searchFrom).length() == 0) {
                         postSearch.setFromPlace(null);
                     } else {
-                        postSearch.setFromPlace(searchFrom.getText().toString().trim());
+                        postSearch.setFromPlace(Statics.getString(searchFrom));
                     }
                     MainActivity.hideKeyboard(getActivity(), searchFrom);
                     page = 0;
@@ -112,12 +112,30 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    if (searchTo.getText().toString().trim().length() == 0) {
+                    if (Statics.getString(searchTo).length() == 0) {
                         postSearch.setToPlace(null);
                     } else {
-                        postSearch.setToPlace(searchTo.getText().toString().trim());
+                        postSearch.setToPlace(Statics.getString(searchTo));
                     }
                     MainActivity.hideKeyboard(getActivity(), searchTo);
+                    page = 0;
+                    getData(true);
+                    return true;
+                }
+                return false;
+            }
+        });
+        search.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (Statics.getString(search).length() == 0) {
+                        postSearch.setTitle(null);
+                    } else {
+                        postSearch.setToPlace(Statics.getString(search));
+                    }
+                    MainActivity.hideKeyboard(getActivity(), search);
                     page = 0;
                     getData(true);
                     return true;
@@ -174,7 +192,6 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                         if (search) {
                             adapter.clear();
                         }
-                        Log.e("-----response", response.body().getResult().getContent().get(0).toString());
                         adapter.addList(response.body().getResult().getContent());
                         page++;
                         loading.setVisibility(View.GONE);

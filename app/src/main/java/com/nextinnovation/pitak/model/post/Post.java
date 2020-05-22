@@ -18,8 +18,9 @@ public class Post implements Serializable {
     private long createdBy;
     private String mobileNumber;
     private List<PostImage> appFiles;
+    private boolean isFavorite;
 
-    public Post(String title, String text, String amountPayment, int numberOfSeat, String fromPlace, String toPlace, String advertType, long createdBy, String mobileNumber) {
+    public Post(String title, String text, String amountPayment, int numberOfSeat, String fromPlace, String toPlace, String advertType, long createdBy, String mobileNumber, boolean isFavorite) {
         this.title = title;
         this.text = text;
         this.amountPayment = amountPayment;
@@ -29,6 +30,7 @@ public class Post implements Serializable {
         this.advertType = advertType;
         this.createdBy = createdBy;
         this.mobileNumber = mobileNumber;
+        this.isFavorite = isFavorite;
     }
 
     public long getId() {
@@ -117,6 +119,14 @@ public class Post implements Serializable {
 
     public void setImgFileList(List<PostImage> appFiles) {
         this.appFiles = appFiles;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 
     @Override

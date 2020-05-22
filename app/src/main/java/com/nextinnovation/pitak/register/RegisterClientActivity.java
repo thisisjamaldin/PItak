@@ -225,7 +225,7 @@ public class RegisterClientActivity extends AppCompatActivity {
         email.setText(user.getEmail());
         phoneEdit.setText(userPhone.replace("+7", "+996").replace("+996", ""));
         setProfile(user.getProfilePhoto());
-        if (userPhone.startsWith("+7")){
+        if (userPhone.startsWith("+7")) {
             codeEdit.setSelection(1);
         }
     }

@@ -3,31 +3,17 @@ package com.nextinnovation.pitak.model.post;
 import java.util.Arrays;
 
 public class PostSearch {
-    private Long byCreatedUserId;
     private String fromPlace;
     private String toPlace;
-    private String fromDateTime;
-    private String toDateTime;
-    private String[] type;
+    private String title;
 
-    public PostSearch(Long byCreatedUserId, String fromPlace, String toPlace, String fromDateTime, String toDateTime, String[] type) {
-        this.byCreatedUserId = byCreatedUserId;
+    public PostSearch(String fromPlace, String toPlace, String title) {
         this.fromPlace = fromPlace;
         this.toPlace = toPlace;
-        this.fromDateTime = fromDateTime;
-        this.toDateTime = toDateTime;
-        this.type = type;
+        this.title = title;
     }
 
     public PostSearch() {
-    }
-
-    public Long getByCreatedUserId() {
-        return byCreatedUserId;
-    }
-
-    public void setByCreatedUserId(Long byCreatedUserId) {
-        this.byCreatedUserId = byCreatedUserId;
     }
 
     public String getFromPlace() {
@@ -46,39 +32,20 @@ public class PostSearch {
         this.toPlace = toPlace;
     }
 
-    public String getFromDateTime() {
-        return fromDateTime;
+    public String getTitle() {
+        return title;
     }
 
-    public void setFromDateTime(String fromDateTime) {
-        this.fromDateTime = fromDateTime;
-    }
-
-    public String getToDateTime() {
-        return toDateTime;
-    }
-
-    public void setToDateTime(String toDateTime) {
-        this.toDateTime = toDateTime;
-    }
-
-    public String[] getType() {
-        return type;
-    }
-
-    public void setType(String[] type) {
-        this.type = type;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
     public String toString() {
         return "PostSearch{" +
-                "byCreatedUserId=" + byCreatedUserId +
                 ", fromPlace='" + fromPlace + '\'' +
                 ", toPlace='" + toPlace + '\'' +
-                ", fromDateTime='" + fromDateTime + '\'' +
-                ", toDateTime='" + toDateTime + '\'' +
-                ", type=" + Arrays.toString(type) +
+                ", title='" + title + '\'' +
                 '}';
     }
 }

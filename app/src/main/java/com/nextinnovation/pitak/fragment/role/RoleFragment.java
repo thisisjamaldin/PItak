@@ -1,9 +1,11 @@
 package com.nextinnovation.pitak.fragment.role;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.fragment.main.RecyclerViewAdapter;
 import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
+import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.model.post.PostResponse;
 import com.nextinnovation.pitak.model.post.PostSearch;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
@@ -35,8 +38,10 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private View searchLayout;
+    private EditText search;
     private ProgressBar loading;
     private boolean hide;
+    private PostSearch postSearch = new PostSearch();
 
     @Nullable
     @Override
@@ -52,6 +57,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
     private void initAllView(View view) {
         loading = view.findViewById(R.id.role_fragment_loading);
         searchLayout = view.findViewById(R.id.role_search_layout_rl);
+        search = view.findViewById(R.id.role_fragment_edit_search);
         adapter = new RecyclerViewAdapter(this, false, false);
         recyclerView = view.findViewById(R.id.role_fragment_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -73,6 +79,25 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
                 if (!recyclerView.canScrollVertically(1) && loading.getVisibility() == View.GONE) {
                     getData(false);
                 }
+            }
+        });
+
+        search.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (Statics.getString(search).length() == 0) {
+                        postSearch.setTitle(null);
+                    } else {
+                        postSearch.setToPlace(Statics.getString(search));
+                    }
+                    MainActivity.hideKeyboard(getActivity(), search);
+                    page = 0;
+                    getData(true);
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -113,7 +138,6 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
     }
 
     private void getData(final boolean search) {
-        PostSearch postSearch = new PostSearch();
         if (size != 0 && size == adapter.getList().size() && !search) {
             return;
         }

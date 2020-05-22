@@ -115,9 +115,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         void bind(Post post) {
-            if (saved) {
+            if (saved || post.isFavorite()) {
                 save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save_checked));
                 save.setTag(1);
+            } else {
+                save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save));
+                save.setTag(0);
             }
             if (mine) {
                 save.setVisibility(View.GONE);

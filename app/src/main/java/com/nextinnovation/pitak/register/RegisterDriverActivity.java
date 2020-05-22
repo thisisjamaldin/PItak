@@ -122,9 +122,6 @@ public class RegisterDriverActivity extends AppCompatActivity {
                 if (Statics.getString(name).length() < 1) {
                     name.setError(getResources().getString(R.string.must_fill));
                     return;
-                } else if (Statics.getString(email).length() < 3) {
-                    email.setError(getResources().getString(R.string.must_fill));
-                    return;
                 } else if (Statics.getString(carNumber).length() < 2) {
                     carNumber.setError(getResources().getString(R.string.must_fill));
                     return;
@@ -365,7 +362,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 28 && resultCode == RESULT_OK && data != null && data.getData()!=null) {
+        if (requestCode == 28 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Glide.with(profile.getContext()).load(resizeImage(data.getData())).apply(RequestOptions.circleCropTransform()).into(profile);
             profileFile = createFile(resizeImage(data.getData()));
         }

@@ -14,9 +14,9 @@
         android:id="@+id/role_fragment_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="42dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_marginBottom="42dp" />
 
     <RelativeLayout
         android:id="@+id/role_search_layout_rl"
@@ -34,11 +34,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="74dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/bg_edit_fields"
             android:drawableEnd="@drawable/ic_search"
             android:hint="@string/search"
+            android:imeOptions="actionSearch"
             android:inputType="text"
             android:padding="12dp" />
     </RelativeLayout>
