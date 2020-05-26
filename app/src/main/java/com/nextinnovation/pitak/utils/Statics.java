@@ -24,11 +24,12 @@ public class Statics {
         return editText.getText().toString().trim();
     }
 
-    public static String getResponseError(ResponseBody responseBody) {
+    public static String getResponseError(ResponseBody responseBody, String className) {
         String error = "";
         try {
             error = responseBody.string();
             Log.e("-----ErrorBody", error);
+            Log.e("-----ErrorClass", className);
             JSONObject jObjError = new JSONObject(error);
             return jObjError.getString("details");
         } catch (Exception e) {

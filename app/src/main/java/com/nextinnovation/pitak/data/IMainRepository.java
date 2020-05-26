@@ -37,13 +37,12 @@ public interface IMainRepository {
                       @Part ("name") RequestBody name,
                       @Part ("patronymic") RequestBody patronymic,
                       @Part ("userType") RequestBody userType,
-                      @Part ("carCommonModel.carBrandId") RequestBody carBrandId,
-                      @Part ("carCommonModel.carBrandName") RequestBody carBrandName,
-                      @Part ("carCommonModel.carModelId") RequestBody carModelId,
-                      @Part ("carCommonModel.carModelName") RequestBody carModelName,
+                      @Part ("carCommonModel.carBrand.id") RequestBody carBrandId,
+                      @Part ("carCommonModel.carModel.id") RequestBody carModelId,
                       @Part ("carCommonModel.carNumber") RequestBody carNumber,
-                      @Part ("carCommonModel.carTypeId") RequestBody carTypeId,
-                      @Part ("carCommonModel.carTypeName") RequestBody carTypeName
+                      @Part ("carCommonModel.carType.id") RequestBody carTypeId,
+                      @Part ("countryModel.id") RequestBody countryId,
+                      @Part ("cityModel.id") RequestBody cityId
     );
 
     @POST("api/auth/signin")
@@ -53,6 +52,8 @@ public interface IMainRepository {
     @POST("api/user/upload/profile/photo")
     Call<ProfileResponse> setUserProfile(@Part MultipartBody.Part profile,
                                          @Header("Authorization") String token);
+    @POST("api/user/remove/profile/photo")
+    Call<Void> removeProfile(@Header("Authorization") String token);
 
     @POST("api/user/driver/edit")
     Call<Void> editDriver(@Body UserWhenSignedIn userWhenSignedIn, @Header("Authorization") String token);
@@ -103,6 +104,12 @@ public interface IMainRepository {
 
     @GET("api/dictionary/cartype/get/all")
     Call<CarResponse> getCarTypes();
+
+    @GET("api/dictionary/country/get/all")
+    Call<CarResponse> getCountry();
+
+    @GET("api/dictionary/city/get/byParent")
+    Call<CarResponse> getCity(@Query("parentId") long parentId);
 
     @GET("api/advert/get/{advertId}")
     Call<PostSingle> getAdvert(@Path("advertId") long advertId, @Header("Authorization") String token);

@@ -232,7 +232,7 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                             MToast.show(getContext(), getResources().getString(R.string.posted));
                             clearFields();
                         } else {
-                            MToast.show(getContext(), Statics.getResponseError(response.errorBody()));
+                            MToast.showResponseError(getContext(), response.errorBody());
                         }
                         post.setVisibility(View.VISIBLE);
                     }

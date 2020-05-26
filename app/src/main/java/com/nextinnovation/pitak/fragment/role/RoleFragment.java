@@ -158,7 +158,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
                             MToast.show(getContext(), getResources().getString(R.string.nothing_found));
                         }
                     } else {
-                        MToast.show(getContext(), Statics.getResponseError(response.errorBody()));
+                        MToast.showResponseError(getContext(), response.errorBody());
                     }
                 }
 
@@ -185,7 +185,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
                             MToast.show(getContext(), getResources().getString(R.string.nothing_found));
                         }
                     } else {
-                        MToast.show(getContext(), Statics.getResponseError(response.errorBody()));
+                        MToast.showResponseError(getContext(), response.errorBody());
                     }
                 }
 

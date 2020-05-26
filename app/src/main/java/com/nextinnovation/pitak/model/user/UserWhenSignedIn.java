@@ -1,5 +1,8 @@
 package com.nextinnovation.pitak.model.user;
 
+import com.nextinnovation.pitak.model.car.Car;
+import com.nextinnovation.pitak.model.car.CarResponse;
+
 import java.util.Arrays;
 
 public class UserWhenSignedIn {
@@ -14,8 +17,9 @@ public class UserWhenSignedIn {
     private String newPassword;
     private UserCar carCommonModel;
     private ProfileRequest profilePhoto;
+    private Car countryModel, cityModel;
 
-    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String token, String newPassword, UserCar carCommonModel) {
+    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String token, String newPassword, UserCar carCommonModel, Car countryModel, Car cityModel) {
         this.id = id;
         this.username = username;
         this.surname = surname;
@@ -26,8 +30,10 @@ public class UserWhenSignedIn {
         this.token = token;
         this.newPassword = newPassword;
         this.carCommonModel = carCommonModel;
+        this.countryModel = countryModel;
+        this.cityModel = cityModel;
     }
-    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String token, String newPassword) {
+    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String token, String newPassword, Car countryModel, Car cityModel) {
         this.id = id;
         this.username = username;
         this.surname = surname;
@@ -37,6 +43,8 @@ public class UserWhenSignedIn {
         this.roles = roles;
         this.token = token;
         this.newPassword = newPassword;
+        this.countryModel = countryModel;
+        this.cityModel = cityModel;
     }
 
     public long getId() {

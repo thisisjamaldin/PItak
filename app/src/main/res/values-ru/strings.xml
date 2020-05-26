@@ -23,22 +23,6 @@
     <string name="we_send_code_to">Мы отправили код на номер <![CDATA[<b>]]></string>
     <string name="enter_received_code"><![CDATA[</b>]]> пожалуйста, введите полученный код.</string>
 
-    <string-array name="counties">
-        <item>Страна</item>
-        <item>Кыргызстан</item>
-        <item>Россия</item>
-    </string-array>
-    <string-array name="city_kg">
-        <item>Город</item>
-        <item>Бишкек</item>
-        <item>Ош</item>
-    </string-array>
-    <string-array name="city_ru">
-        <item>Город</item>
-        <item>Москва</item>
-        <item>Санкт-Петербург</item>
-    </string-array>
-
     <string name="car_type">Тип транспорта</string>
     <string name="car_model">Модель транспорта</string>
     <string name="agreement">Я ознакомился с условиями публикации объявления</string>

@@ -1,57 +1,37 @@
 package com.nextinnovation.pitak.model.user;
 
-public class UserCar {
-    private long carBrandId;
-    private String carBrandName;
-    private long carModelId;
-    private String carModelName;
-    private String carNumber;
-    private long carTypeId;
-    private String carTypeName;
+import com.nextinnovation.pitak.model.car.Car;
 
-    public UserCar(long carBrandId, String carBrandName, long carModelId, String carModelName, String carNumber, long carTypeId, String carTypeName) {
-        this.carBrandId = carBrandId;
-        this.carBrandName = carBrandName;
-        this.carModelId = carModelId;
-        this.carModelName = carModelName;
+public class UserCar {
+    private Car carBrand;
+    private Car carModel;
+    private String carNumber;
+    private Car carType;
+
+    public UserCar(Car carBrand, Car carModel, String carNumber, Car carType) {
+        this.carBrand = carBrand;
+        this.carModel = carModel;
         this.carNumber = carNumber;
-        this.carTypeId = carTypeId;
-        this.carTypeName = carTypeName;
+        this.carType = carType;
     }
 
     public UserCar() {
     }
 
-    public long getCarBrandId() {
-        return carBrandId;
+    public Car getCarBrand() {
+        return carBrand;
     }
 
-    public void setCarBrandId(long carBrandId) {
-        this.carBrandId = carBrandId;
+    public void setCarBrand(Car carBrand) {
+        this.carBrand = carBrand;
     }
 
-    public String getCarBrandName() {
-        return carBrandName;
+    public Car getCarModel() {
+        return carModel;
     }
 
-    public void setCarBrandName(String carBrandName) {
-        this.carBrandName = carBrandName;
-    }
-
-    public long getCarModelId() {
-        return carModelId;
-    }
-
-    public void setCarModelId(long carModelId) {
-        this.carModelId = carModelId;
-    }
-
-    public String getCarModelName() {
-        return carModelName;
-    }
-
-    public void setCarModelName(String carModelName) {
-        this.carModelName = carModelName;
+    public void setCarModel(Car carModel) {
+        this.carModel = carModel;
     }
 
     public String getCarNumber() {
@@ -62,32 +42,21 @@ public class UserCar {
         this.carNumber = carNumber;
     }
 
-    public long getCarTypeId() {
-        return carTypeId;
+    public Car getCarType() {
+        return carType;
     }
 
-    public void setCarTypeId(long carTypeId) {
-        this.carTypeId = carTypeId;
-    }
-
-    public String getCarTypeName() {
-        return carTypeName;
-    }
-
-    public void setCarTypeName(String carTypeName) {
-        this.carTypeName = carTypeName;
+    public void setCarType(Car carType) {
+        this.carType = carType;
     }
 
     @Override
     public String toString() {
         return "UserCar{" +
-                "carBrandId=" + carBrandId +
-                ", carBrandName='" + carBrandName + '\'' +
-                ", carModelId=" + carModelId +
-                ", carModelName='" + carModelName + '\'' +
+                "carBrand=" + carBrand +
+                ", carModel=" + carModel +
                 ", carNumber='" + carNumber + '\'' +
-                ", carTypeId=" + carTypeId +
-                ", carTypeName='" + carTypeName + '\'' +
+                ", carType=" + carType +
                 '}';
     }
 }

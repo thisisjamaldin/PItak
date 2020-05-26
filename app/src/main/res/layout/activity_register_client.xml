@@ -107,7 +107,6 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_drop_down"
-            android:entries="@array/counties"
             android:paddingEnd="24dp" />
 
         <Spinner
@@ -119,7 +118,6 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_drop_down"
-            android:entries="@array/city_kg"
             android:paddingEnd="24dp" />
 
         <ProgressBar

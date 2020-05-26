@@ -81,21 +81,6 @@
         <item>+996</item>
         <item>+7</item>
     </string-array>
-    <string-array name="counties">
-        <item>Country</item>
-        <item>Kyrgyzstan</item>
-        <item>Russia</item>
-    </string-array>
-    <string-array name="city_kg">
-        <item>City</item>
-        <item>Bishkek</item>
-        <item>Osh</item>
-    </string-array>
-    <string-array name="city_ru">
-        <item>City</item>
-        <item>Moscow</item>
-        <item>Saint Petersburg</item>
-    </string-array>
 
     <string name="car_type">Vehicle type</string>
     <string name="car_model">Vehicle model</string>

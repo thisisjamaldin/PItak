@@ -104,7 +104,6 @@ public class User {
                 ", name='" + name + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 ", userType='" + userType + '\'' +
-                ", profilePhoto='" + profilePhoto + '\'' +
                 ", carCommonModel=" + carCommonModel +
                 '}';
     }

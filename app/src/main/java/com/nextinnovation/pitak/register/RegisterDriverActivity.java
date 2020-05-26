@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,6 +41,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -67,8 +70,10 @@ public class RegisterDriverActivity extends AppCompatActivity {
     private File profileFile;
 
     private CarResponse carResponse;
+    private CarResponse countryResponse;
     private CarResponse carTypeResponse = new CarResponse();
     private CarResponse modelResponse = new CarResponse();
+    private CarResponse cityResponse = new CarResponse();
     private UserWhenSignedIn userToEdit;
     private Context context;
 
@@ -133,31 +138,59 @@ public class RegisterDriverActivity extends AppCompatActivity {
                 Car car = new Car(carResponse.getResult().get(carMark.getSelectedItemPosition() - 1).getId(), carResponse.getResult().get(carMark.getSelectedItemPosition() - 1).getName());
                 Car model = new Car(modelResponse.getResult().get(carModel.getSelectedItemPosition() - 1).getId(), modelResponse.getResult().get(carModel.getSelectedItemPosition() - 1).getName());
                 Car type = new Car(carTypeResponse.getResult().get(carType.getSelectedItemPosition() - 1).getId(), carTypeResponse.getResult().get(carType.getSelectedItemPosition() - 1).getName());
-                UserCar userCar = new UserCar(car.getId(), car.getName(), model.getId(), model.getName(), Statics.getString(carNumber), type.getId(), type.getName());
+                Car country;
+                Car city;
+                if (countryResponse != null && !countryResponse.getResult().isEmpty()) {
+                    country = new Car(countryResponse.getResult().get(countySp.getSelectedItemPosition()).getId(), countryResponse.getResult().get(countySp.getSelectedItemPosition()).getName());
+                } else {
+                    country = new Car(null, null);
+                }
+                if (cityResponse != null && !cityResponse.getResult().isEmpty()) {
+                    city = new Car(cityResponse.getResult().get(citySp.getSelectedItemPosition()).getId(), cityResponse.getResult().get(citySp.getSelectedItemPosition()).getName());
+                } else {
+                    city = new Car(null, null);
+                }
+                UserCar userCar = new UserCar(car, model, Statics.getString(carNumber), type);
                 if (edit) {
-                    final UserWhenSignedIn userWhenSignedIn = new UserWhenSignedIn(userToEdit.getId(), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "surname", "patronymic", Statics.getString(name), Statics.getString(email), null, null, codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), userCar);
+                    final UserWhenSignedIn userWhenSignedIn = new UserWhenSignedIn(userToEdit.getId(), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "surname", "patronymic", Statics.getString(name), Statics.getString(email), null, Statics.getToken(context).substring(7), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), userCar, country, city);
+                    Log.e("------------res", Statics.getToken(context));
                     if (userToEdit.getUsername().equals(userWhenSignedIn.getUsername())) {
                         MainRepository.getService().editDriver(userWhenSignedIn, Statics.getToken(context)).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
-                                    MainRepository.getService().setUserProfile(getBody(profileFile), Statics.getToken(context)).enqueue(new Callback<ProfileResponse>() {
-                                        @Override
-                                        public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
-                                            if (response.isSuccessful()) {
-                                                userWhenSignedIn.setProfilePhoto(new ProfileRequest(response.body().getResult().getContent()));
-                                                MSharedPreferences.set(context, Statics.USER, new Gson().toJson(userWhenSignedIn));
-                                                finish();
-                                            } else {
-                                                MToast.show(context, Statics.getResponseError(response.errorBody()));
+                                    if (profileFile != null) {
+                                        MainRepository.getService().setUserProfile(getBody(profileFile), Statics.getToken(context)).enqueue(new Callback<ProfileResponse>() {
+                                            @Override
+                                            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                                                if (response.isSuccessful()) {
+                                                    userWhenSignedIn.setProfilePhoto(new ProfileRequest(response.body().getResult().getContent()));
+                                                    MSharedPreferences.set(context, Statics.USER, new Gson().toJson(userWhenSignedIn));
+                                                    finish();
+                                                } else {
+                                                    MToast.showResponseError(context, response.errorBody());
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onFailure(Call<ProfileResponse> call, Throwable t) {
-                                            MToast.showInternetError(context);
-                                        }
-                                    });
+                                            @Override
+                                            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                                                MToast.showInternetError(context);
+                                                save.setVisibility(View.VISIBLE);
+                                            }
+                                        });
+                                    } else {
+                                        MSharedPreferences.set(context, Statics.USER, new Gson().toJson(userWhenSignedIn));
+                                        MainRepository.getService().removeProfile(Statics.getToken(context)).enqueue(new Callback<Void>() {
+                                            @Override
+                                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<Void> call, Throwable t) {
+                                            }
+                                        });
+                                        finish();
+                                    }
                                 } else {
                                     MToast.showResponseError(context, response.errorBody());
                                     save.setVisibility(View.VISIBLE);
@@ -184,22 +217,22 @@ public class RegisterDriverActivity extends AppCompatActivity {
                             RequestBody.create(MediaType.parse("text/plain"), "username"),
                             RequestBody.create(MediaType.parse("text/plain"), Statics.getString(name)),
                             RequestBody.create(MediaType.parse("text/plain"), "patronymic"),
-                            RequestBody.create(MediaType.parse("text/plain"), Statics.PASSENGER),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.DRIVER),
                             RequestBody.create(MediaType.parse("text/plain"), car.getId() + ""),
-                            RequestBody.create(MediaType.parse("text/plain"), car.getName()),
                             RequestBody.create(MediaType.parse("text/plain"), model.getId() + ""),
-                            RequestBody.create(MediaType.parse("text/plain"), model.getName()),
                             RequestBody.create(MediaType.parse("text/plain"), userCar.getCarNumber()),
                             RequestBody.create(MediaType.parse("text/plain"), type.getId() + ""),
-                            RequestBody.create(MediaType.parse("text/plain"), type.getName())).enqueue(new Callback<User>() {
+                            RequestBody.create(MediaType.parse("text/plain"), country.getId() + ""),
+                            RequestBody.create(MediaType.parse("text/plain"), city.getId() + "")
+                    ).enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             if (response.isSuccessful()) {
-                                MSharedPreferences.set(context, Statics.REGISTERED, true);
                                 MainRepository.getService().signIn(new UserSignIn(phone, phone)).enqueue(new Callback<UserWhenSignedIn>() {
                                     @Override
                                     public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
                                         if (response.isSuccessful()) {
+                                            MSharedPreferences.set(context, Statics.REGISTERED, true);
                                             if (response.body().getRoles()[0].equals("ROLE_DRIVER")) {
                                                 MSharedPreferences.set(context, "who", Statics.DRIVER);
                                             }
@@ -218,7 +251,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
                                     }
                                 });
                             } else {
-                                MToast.show(context, Statics.getResponseError(response.errorBody()));
+                                MToast.showResponseError(context, response.errorBody());
                             }
                             save.setVisibility(View.VISIBLE);
                         }
@@ -275,13 +308,32 @@ public class RegisterDriverActivity extends AppCompatActivity {
 
             }
         });
+        MainRepository.getService().getCountry().enqueue(new Callback<CarResponse>() {
+            @Override
+            public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    countryResponse = new CarResponse(response.body().getResult());
+                    Collections.sort(countryResponse.getResult());
+                    List<String> country = new ArrayList<>();
+                    for (Car car : countryResponse.getResult()) {
+                        country.add(car.getName());
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, country);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    countySp.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CarResponse> call, Throwable t) {
+
+            }
+        });
 
         carMark.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    return;
-                }
+                if (position == 0) return;
                 MainRepository.getService().getCarsModel(carResponse.getResult().get(--position).getId()).enqueue(new Callback<CarResponse>() {
                     @Override
                     public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
@@ -314,24 +366,26 @@ public class RegisterDriverActivity extends AppCompatActivity {
         countySp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        citySp.setSelection(0);
-                        break;
-                    case 1:
-                        String[] city = getResources().getStringArray(R.array.city_kg);
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        citySp.setAdapter(adapter);
-                        break;
-                    case 2:
-                        city = getResources().getStringArray(R.array.city_ru);
-                        adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        citySp.setAdapter(adapter);
-                        break;
+                MainRepository.getService().getCity(countryResponse.getResult().get(position).getId()).enqueue(new Callback<CarResponse>() {
+                    @Override
+                    public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            cityResponse = response.body();
+                            List<String> city = new ArrayList<>();
+                            for (Car car : response.body().getResult()) {
+                                city.add(car.getName());
+                            }
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            citySp.setAdapter(adapter);
+                        }
+                    }
 
-                }
+                    @Override
+                    public void onFailure(Call<CarResponse> call, Throwable t) {
+
+                    }
+                });
             }
 
             @Override
@@ -357,6 +411,8 @@ public class RegisterDriverActivity extends AppCompatActivity {
         name.setText(user.getName());
         email.setText(user.getEmail());
         phoneEdit.setText(userPhone.replace("+7", "+996").replace("+996", ""));
+        Glide.with(profile.getContext()).load(Base64.decode(user.getProfilePhoto().getContent(), Base64.DEFAULT)).apply(RequestOptions.circleCropTransform()).into(profile);
+        createFile(null, Base64.decode(user.getProfilePhoto().getContent(), Base64.DEFAULT));
     }
 
     @Override
@@ -364,7 +420,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 28 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Glide.with(profile.getContext()).load(resizeImage(data.getData())).apply(RequestOptions.circleCropTransform()).into(profile);
-            profileFile = createFile(resizeImage(data.getData()));
+            createFile(resizeImage(data.getData()), null);
         }
     }
 
@@ -382,25 +438,33 @@ public class RegisterDriverActivity extends AppCompatActivity {
         }
     }
 
-    private File createFile(Bitmap bitmap) {
+    private void createFile(Bitmap bitmap, byte[] base64) {
         try {
+
             File f = new File(this.getCacheDir(), "filename");
             f.createNewFile();
-
+            if (bitmap != null) {
 //Convert bitmap to byte array
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 10, bos);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, bos);
-            byte[] bitmapdata = bos.toByteArray();
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 10, bos);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 10, bos);
+                byte[] bitmapdata = bos.toByteArray();
 
 //write the bytes in file
-            FileOutputStream fos = new FileOutputStream(f);
-            fos.write(bitmapdata);
-            fos.flush();
-            fos.close();
-            return f;
+                FileOutputStream fos = new FileOutputStream(f);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+                profileFile = f;
+            } else if (base64 != null) {
+                FileOutputStream fos = new FileOutputStream(f);
+                fos.write(base64);
+                fos.flush();
+                fos.close();
+                profileFile = f;
+            }
         } catch (Exception e) {
-            return null;
+            profileFile = null;
         }
     }
 }
