@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,7 +65,7 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
     private Button date, time;
     private Button date1, time1;
     private Button post;
-    private Spinner carType;
+    private Spinner carType, serviceType;
     private EditText title, desc, fromPlace, toPlace, payment;
     private CheckBox agreement;
     private ScrollView mainView;
@@ -81,6 +82,7 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
 
     private void initAllView(View view) {
         mainView = view.findViewById(R.id.add_fragment_main_scroll_view);
+        serviceType = view.findViewById(R.id.add_fragment_service_type);
         title = view.findViewById(R.id.add_fragment_title);
         desc = view.findViewById(R.id.add_fragment_desc);
         fromPlace = view.findViewById(R.id.add_fragment_from_place);
@@ -207,8 +209,12 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                     agreement.setError(getResources().getString(R.string.must_agree));
                     return;
                 }
+                if (serviceType.getSelectedItemPosition()==0) {
+                    MToast.show(getContext(), getResources().getString(R.string.choose_service_type));
+                    return;
+                }
                 post.setVisibility(View.GONE);
-                UserWhenSignedIn user = new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), UserWhenSignedIn.class);
+//                UserWhenSignedIn user = new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), UserWhenSignedIn.class);
                 MainActivity.hideKeyboard(getActivity(), post);
 
                 MainRepository.getService().createPost(
@@ -225,6 +231,7 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                         RequestBody.create(MediaType.parse("text/plain"), MSharedPreferences.get(getContext(), "who", "")),
                         RequestBody.create(MediaType.parse("text/plain"), "1"),
                         RequestBody.create(MediaType.parse("text/plain"), convertDate(date.getText().toString() + "" + time.getText().toString())),
+                        RequestBody.create(MediaType.parse("text/plain"), convertDate(date1.getText().toString() + "" + time1.getText().toString())),
                         Statics.getToken(getContext())).enqueue(new Callback<Object>() {
                     @Override
                     public void onResponse(Call<Object> call, Response<Object> response) {
@@ -239,8 +246,6 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
 
                     @Override
                     public void onFailure(Call<Object> call, Throwable t) {
-                        Log.e("----postFail", call.request().body() + "");
-                        Log.e("----postFail", t.getMessage());
                         MToast.showInternetError(getContext());
                         post.setVisibility(View.VISIBLE);
                     }

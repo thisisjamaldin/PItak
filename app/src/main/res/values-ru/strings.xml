@@ -83,4 +83,14 @@
     <string name="profile">Профиль</string>
     <string name="share">Поделиться</string>
     <string name="call">Позвонить</string>
+
+    <string-array name="service_types">
+        <item>Тип услуги</item>
+        <item>PASSENGER</item>
+        <item>DRIVER</item>
+        <item>PACKAGE</item>
+        <item>SPECIAL_TECH</item>
+    </string-array>
+    <string name="choose_service_type">Выберите тип услуги</string>
+
 </resources>

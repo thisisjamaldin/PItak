@@ -70,12 +70,13 @@ public interface IMainRepository {
                             @Part MultipartBody.Part image4,
                             @Part("title") RequestBody title,
                             @Part("text") RequestBody text,
-                            @Part("amount_payment") RequestBody amountPayment,
+                            @Part("amountPayment") RequestBody amountPayment,
                             @Part("fromPlace") RequestBody fromPlace,
                             @Part("toPlace") RequestBody toPlace,
                             @Part("advertType") RequestBody advertType,
                             @Part("numberOfSeat") RequestBody numberOfSeat,
                             @Part("sendDateTime") RequestBody sendDateTime,
+                            @Part("arrivalDateTime") RequestBody arrivalDateTime,
                             @Header("Authorization") String token);
 
     @POST("api/advert/driver/search")

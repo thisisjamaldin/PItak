@@ -81,6 +81,13 @@
         <item>+996</item>
         <item>+7</item>
     </string-array>
+    <string-array name="service_types">
+        <item>Service type</item>
+        <item>PASSENGER</item>
+        <item>DRIVER</item>
+        <item>PACKAGE</item>
+        <item>SPECIAL_TECH</item>
+    </string-array>
 
     <string name="car_type">Vehicle type</string>
     <string name="car_model">Vehicle model</string>
@@ -89,4 +96,5 @@
     <string name="profile">Profile</string>
     <string name="share">Share</string>
     <string name="call">Call</string>
+    <string name="choose_service_type">Choose service type</string>
 </resources>

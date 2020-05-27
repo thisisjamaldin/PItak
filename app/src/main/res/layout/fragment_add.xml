@@ -231,6 +231,15 @@
             android:background="@drawable/bg_drop_down"
             android:padding="14dp" />
 
+        <Spinner
+            android:id="@+id/add_fragment_service_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_drop_down"
+            android:padding="14dp"
+            android:entries="@array/service_types"/>
+
         <CheckBox
             android:id="@+id/add_fragment_agreement"
             android:layout_width="match_parent"
