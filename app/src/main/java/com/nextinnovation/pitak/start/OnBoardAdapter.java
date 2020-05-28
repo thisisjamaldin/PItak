@@ -9,6 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.nextinnovation.pitak.R;
 
 public class OnBoardAdapter extends PagerAdapter {
@@ -37,17 +41,17 @@ public class OnBoardAdapter extends PagerAdapter {
         TextView title = view.findViewById(R.id.item_on_board_title_tv);
         TextView desc = view.findViewById(R.id.item_on_board_desc_tv);
         if (position==0){
-            img.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.im_on_board_1));
-            title.setText("Lorem ipsum");
-            desc.setText("Небольшой текст для туториала изображени подберу под текста");
+            Glide.with(img.getContext()).load(img.getContext().getResources().getDrawable(R.mipmap.on_board_one)).transform(new FitCenter(), new RoundedCorners(24)).into(img);
+            title.setText("Размещайте Ваши посылки и грузы");
+            desc.setText("Нужно срочно доставить посылку, документы, груз? Или купить и доставить нужную вещь? Теперь это сделать стало еще проще!");
         } else if (position==1){
-            img.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.im_on_board_2));
-            title.setText("Lorem ipsum");
-            desc.setText("Небольшой текст для туториала изображени подберу под текста");
+            Glide.with(img.getContext()).load(img.getContext().getResources().getDrawable(R.mipmap.on_board_two)).transform(new FitCenter(), new RoundedCorners(24)).into(img);
+            title.setText("Надежная доставка!");
+            desc.setText("Pitak - это удобный и надежный сервис, для доставки любых грузов и посыл по территории Кыргызстана и Казахстана.");
         }else if (position==2){
-            img.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.im_on_board_3));
-            title.setText("Lorem ipsum");
-            desc.setText("Небольшой текст для туториала изображени подберу под текста");
+            Glide.with(img.getContext()).load(img.getContext().getResources().getDrawable(R.mipmap.on_board_three)).transform(new FitCenter(), new RoundedCorners(24)).into(img);
+            title.setText("Предоставление услуг спец. техники");
+            desc.setText("Мы готовы сделать все возможное, чтобы обеспечить для Вас максимально комфортные условия доставки.");
         }
         container.addView(view);
         return view;

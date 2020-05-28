@@ -32,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         if (MSharedPreferences.get(this, "first", true)) {
             OnBoardActivity.start(this);
+            finish();
         } else if (FirebaseAuth.getInstance().getCurrentUser() != null && !MSharedPreferences.get(this, Statics.REGISTERED, false)) {
             switch (MSharedPreferences.get(SplashActivity.this, "who", "")) {
                 case "PASSENGER":

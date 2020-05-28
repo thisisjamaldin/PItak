@@ -9,10 +9,9 @@
     <ImageView
         android:id="@+id/item_on_board_img"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@id/item_on_board_title_tv"
-        android:layout_marginBottom="16dp"
-        android:scaleType="fitCenter"/>
+        android:layout_marginBottom="16dp"/>
 
     <TextView
         android:id="@+id/item_on_board_title_tv"
