@@ -6,52 +6,52 @@ import com.nextinnovation.pitak.model.car.CarResponse;
 import java.util.Arrays;
 
 public class UserWhenSignedIn {
-    private long id;
+    private int id;
     private String username;
     private String surname;
     private String patronymic;
     private String name;
     private String email;
-    private String[] roles;
+    private String userType;
     private String token;
     private String newPassword;
     private UserCar carCommonModel;
     private ProfileRequest profilePhoto;
     private Car countryModel, cityModel;
 
-    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String token, String newPassword, UserCar carCommonModel, Car countryModel, Car cityModel) {
+    public UserWhenSignedIn(int id, String username, String surname, String patronymic, String name, String email, String userType, String token, String newPassword, UserCar carCommonModel, Car countryModel, Car cityModel) {
         this.id = id;
         this.username = username;
         this.surname = surname;
         this.patronymic = patronymic;
         this.name = name;
         this.email = email;
-        this.roles = roles;
+        this.userType = userType;
         this.token = token;
         this.newPassword = newPassword;
         this.carCommonModel = carCommonModel;
         this.countryModel = countryModel;
         this.cityModel = cityModel;
     }
-    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String[] roles, String token, String newPassword, Car countryModel, Car cityModel) {
+    public UserWhenSignedIn(int id, String username, String surname, String patronymic, String name, String email, String userType, String token, String newPassword, Car countryModel, Car cityModel) {
         this.id = id;
         this.username = username;
         this.surname = surname;
         this.patronymic = patronymic;
         this.name = name;
         this.email = email;
-        this.roles = roles;
+        this.userType = userType;
         this.token = token;
         this.newPassword = newPassword;
         this.countryModel = countryModel;
         this.cityModel = cityModel;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -95,12 +95,12 @@ public class UserWhenSignedIn {
         this.email = email;
     }
 
-    public String[] getRoles() {
-        return roles;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setRoles(String[] roles) {
-        this.roles = roles;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public String getToken() {
@@ -135,6 +135,22 @@ public class UserWhenSignedIn {
         this.profilePhoto = profilePhoto;
     }
 
+    public Car getCountryModel() {
+        return countryModel;
+    }
+
+    public void setCountryModel(Car countryModel) {
+        this.countryModel = countryModel;
+    }
+
+    public Car getCityModel() {
+        return cityModel;
+    }
+
+    public void setCityModel(Car cityModel) {
+        this.cityModel = cityModel;
+    }
+
     @Override
     public String toString() {
         return "UserWhenSignedIn{" +
@@ -144,7 +160,7 @@ public class UserWhenSignedIn {
                 ", patronymic='" + patronymic + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", roles=" + Arrays.toString(roles) +
+                ", userType=" + userType +
                 ", accessToken='" + token + '\'' +
                 ", newPassword='" + newPassword + '\'' +
                 ", carCommonModel=" + carCommonModel +

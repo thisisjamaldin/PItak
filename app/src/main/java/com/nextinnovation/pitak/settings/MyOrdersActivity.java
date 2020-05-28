@@ -60,6 +60,11 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
         ItemDetailActivity.start(MyOrdersActivity.this, adapter.getList().get(pos).getId(), null);
     }
 
+    @Override
+    public void openWhatsapp(int pos) {
+        Statics.openWhatsapp(adapter.getList().get(pos).getMobileNumber(), MyOrdersActivity.this);
+    }
+
     private void getData() {
         MainRepository.getService().getMyPosts(Statics.getToken(MyOrdersActivity.this)).enqueue(new Callback<PostResponse>() {
             @Override

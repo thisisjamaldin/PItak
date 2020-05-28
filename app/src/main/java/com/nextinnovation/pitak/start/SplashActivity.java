@@ -11,12 +11,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.main.MainActivity;
+import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.register.RegisterClientActivity;
 import com.nextinnovation.pitak.register.RegisterDriverActivity;
 import com.nextinnovation.pitak.register.WhoRegisterActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
+import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
 
 import java.io.IOException;
@@ -52,21 +54,27 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
                     if (response.isSuccessful()) {
-                        if (response.body().getRoles()[0].equals("ROLE_DRIVER")) {
-                            MSharedPreferences.set(SplashActivity.this, "who", Statics.DRIVER);
-                        }
-                        if (response.body().getRoles()[0].equals("ROLE_PASSENGER")) {
-                            MSharedPreferences.set(SplashActivity.this, "who", Statics.PASSENGER);
-                        }
-                        MSharedPreferences.set(SplashActivity.this, Statics.USER, new Gson().toJson(response.body()));
-                        MSharedPreferences.set(SplashActivity.this, "phone", response.body().getUsername());
-                        MainActivity.start(SplashActivity.this);
+                        Statics.setToken(SplashActivity.this, response.body().getToken());
+                        MainRepository.getService().getMe(Statics.getToken(SplashActivity.this)).enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                if (response.body().getResult().getUserType().equals("DRIVER")) {
+                                    MSharedPreferences.set(SplashActivity.this, "who", Statics.DRIVER);
+                                }
+                                if (response.body().getResult().getUserType().equals("PASSENGER")) {
+                                    MSharedPreferences.set(SplashActivity.this, "who", Statics.PASSENGER);
+                                }
+                                MSharedPreferences.set(SplashActivity.this, Statics.USER, new Gson().toJson(response.body().getResult()));
+                                MSharedPreferences.set(SplashActivity.this, "phone", response.body().getResult().getUsername());
+                                MainActivity.start(SplashActivity.this);
+                            }
+
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+                            }
+                        });
                     } else {
-                        try {
-                            Log.e("----------splash", response.errorBody().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        MToast.showResponseError(SplashActivity.this, response.errorBody());
                     }
                 }
 

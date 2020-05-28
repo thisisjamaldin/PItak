@@ -71,6 +71,7 @@ public class ProfileFragment extends Fragment {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.e("-----who", MSharedPreferences.get(getContext(), "who", ""));
                 if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
                     RegisterClientActivity.start(getContext(), true);
                 } else if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {

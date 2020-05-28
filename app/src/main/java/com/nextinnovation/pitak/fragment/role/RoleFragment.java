@@ -137,6 +137,11 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
         ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getId(), false);
     }
 
+    @Override
+    public void openWhatsapp(int pos) {
+        Statics.openWhatsapp(adapter.getList().get(pos).getMobileNumber(), getContext());
+    }
+
     private void getData(final boolean search) {
         if (size != 0 && size == adapter.getList().size() && !search) {
             return;

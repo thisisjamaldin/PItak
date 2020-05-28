@@ -83,10 +83,10 @@
     </string-array>
     <string-array name="service_types">
         <item>Service type</item>
-        <item>PASSENGER</item>
-        <item>DRIVER</item>
-        <item>PACKAGE</item>
-        <item>SPECIAL_TECH</item>
+        <item>Passenger</item>
+        <item>Driver</item>
+        <item>Package</item>
+        <item>Special tech</item>
     </string-array>
 
     <string name="car_type">Vehicle type</string>
@@ -97,4 +97,5 @@
     <string name="share">Share</string>
     <string name="call">Call</string>
     <string name="choose_service_type">Choose service type</string>
+    <string name="passenger">Passenger</string>
 </resources>

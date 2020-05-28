@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.main.MainActivity;
+import com.nextinnovation.pitak.model.user.EditUser;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
@@ -175,7 +176,7 @@ public class CodeAuthenticationActivity extends AppCompatActivity {
                                     });
                                 }
                                 if (edit != null && edit.equals(Statics.PASSENGER)) {
-                                    UserWhenSignedIn user = new Gson().fromJson(MSharedPreferences.get(CodeAuthenticationActivity.this, "userToEdit", ""), UserWhenSignedIn.class);
+                                    EditUser user = new Gson().fromJson(MSharedPreferences.get(CodeAuthenticationActivity.this, "userToEdit", ""), EditUser.class);
                                     MainRepository.getService().editClient(user, Statics.getToken(CodeAuthenticationActivity.this)).enqueue(new Callback<Void>() {
                                         @Override
                                         public void onResponse(Call<Void> call, Response<Void> response) {

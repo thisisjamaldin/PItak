@@ -5,6 +5,7 @@ import com.nextinnovation.pitak.model.post.FavouritePostResponse;
 import com.nextinnovation.pitak.model.post.PostResponse;
 import com.nextinnovation.pitak.model.post.PostSearch;
 import com.nextinnovation.pitak.model.post.PostSingle;
+import com.nextinnovation.pitak.model.user.EditUser;
 import com.nextinnovation.pitak.model.user.ProfileResponse;
 import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
@@ -29,7 +30,7 @@ public interface IMainRepository {
 
     @Multipart
     @POST("api/auth/signup")
-    Call<User> signUp(@Part MultipartBody.Part profile,
+    Call<UserWhenSignedIn> signUp(@Part MultipartBody.Part profile,
                       @Part ("username") RequestBody username,
                       @Part ("email") RequestBody email,
                       @Part ("password") RequestBody password,
@@ -59,7 +60,7 @@ public interface IMainRepository {
     Call<Void> editDriver(@Body UserWhenSignedIn userWhenSignedIn, @Header("Authorization") String token);
 
     @POST("api/user/passenger/edit")
-    Call<Void> editClient(@Body UserWhenSignedIn userWhenSignedIn, @Header("Authorization") String token);
+    Call<Void> editClient(@Body EditUser editUser, @Header("Authorization") String token);
 
     @Multipart
     @POST("api/advert/create")
@@ -114,4 +115,7 @@ public interface IMainRepository {
 
     @GET("api/advert/get/{advertId}")
     Call<PostSingle> getAdvert(@Path("advertId") long advertId, @Header("Authorization") String token);
+
+    @GET("api/user/me")
+    Call<User> getMe(@Header("Authorization") String token);
 }

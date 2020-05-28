@@ -53,9 +53,18 @@ public class Statics {
         intent.setData(Uri.parse(number));
         context.startActivity(intent);
     }
+    public static void openWhatsapp(String number, Context context) {
+        String url = "https://api.whatsapp.com/send?phone="+number;
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        context.startActivity(i);
+    }
 
+    public static void setToken(Context context, String token) {
+        MSharedPreferences.set(context, "Token", token);
+    }
     public static String getToken(Context context) {
-        return "Bearer " + new Gson().fromJson(MSharedPreferences.get(context, Statics.USER, ""), UserWhenSignedIn.class).getToken();
+        return "Bearer " + MSharedPreferences.get(context, "Token", "");
     }
 
 }

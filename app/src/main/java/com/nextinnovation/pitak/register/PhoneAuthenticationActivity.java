@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
@@ -70,16 +71,27 @@ public class PhoneAuthenticationActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
                                 if (response.isSuccessful()) {
-                                    MSharedPreferences.set(PhoneAuthenticationActivity.this, "phone", fullPhone);
-                                    if (response.body().getRoles()[0].equals("ROLE_DRIVER")){
-                                        MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.DRIVER);
-                                    }
-                                    if (response.body().getRoles()[0].equals("ROLE_PASSENGER")){
-                                        MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.PASSENGER);
-                                    }
-                                    MSharedPreferences.set(PhoneAuthenticationActivity.this, Statics.USER, new Gson().toJson(response.body()));
-                                    MSharedPreferences.set(PhoneAuthenticationActivity.this, Statics.REGISTERED, true);
-                                    CodeAuthenticationActivity.start(PhoneAuthenticationActivity.this, null);
+                                    Statics.setToken(PhoneAuthenticationActivity.this, response.body().getToken());
+                                    MainRepository.getService().getMe(Statics.getToken(PhoneAuthenticationActivity.this)).enqueue(new Callback<User>() {
+                                        @Override
+                                        public void onResponse(Call<User> call, Response<User> response) {
+                                            MSharedPreferences.set(PhoneAuthenticationActivity.this, "phone", fullPhone);
+                                            if (response.body().getResult().getUserType().equals("DRIVER")){
+                                                MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.DRIVER);
+                                            }
+                                            if (response.body().getResult().getUserType().equals("PASSENGER")){
+                                                MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.PASSENGER);
+                                            }
+                                            MSharedPreferences.set(PhoneAuthenticationActivity.this, Statics.USER, new Gson().toJson(response.body().getResult()));
+                                            MSharedPreferences.set(PhoneAuthenticationActivity.this, Statics.REGISTERED, true);
+                                            CodeAuthenticationActivity.start(PhoneAuthenticationActivity.this, null);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<User> call, Throwable t) {
+
+                                        }
+                                    });
                                 } else {
                                     MToast.show(PhoneAuthenticationActivity.this, getResources().getString(R.string.user_not_found));
                                     next.setVisibility(View.VISIBLE);

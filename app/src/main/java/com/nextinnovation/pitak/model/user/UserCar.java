@@ -15,9 +15,6 @@ public class UserCar {
         this.carType = carType;
     }
 
-    public UserCar() {
-    }
-
     public Car getCarBrand() {
         return carBrand;
     }

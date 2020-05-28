@@ -3,6 +3,7 @@ package com.nextinnovation.pitak.fragment.main;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView fromPlace;
         private TextView toPlace;
         private TextView price;
-        private Button call;
+        private TextView role;
+        private Button call, whatsapp;
 
         public ViewHolder(@NonNull final View itemView, final onItemClick itemClick) {
             super(itemView);
@@ -83,7 +85,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             fromPlace = itemView.findViewById(R.id.item_main_from);
             toPlace = itemView.findViewById(R.id.item_main_to);
             price = itemView.findViewById(R.id.item_main_price);
+            role = itemView.findViewById(R.id.item_main_role);
             call = itemView.findViewById(R.id.item_main_call);
+            whatsapp = itemView.findViewById(R.id.item_main_whatsapp);
+            whatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClick.openWhatsapp(getAdapterPosition());
+                }
+            });
             call.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -125,9 +135,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             if (mine) {
                 save.setVisibility(View.GONE);
                 call.setVisibility(View.GONE);
+                whatsapp.setVisibility(View.GONE);
             } else {
                 save.setVisibility(View.VISIBLE);
                 call.setVisibility(View.VISIBLE);
+                whatsapp.setVisibility(View.VISIBLE);
             }
             if (post.getImgFileList().isEmpty()) {
                 Glide.with(profile.getContext()).load(R.drawable.launch_screen).transform(new CenterCrop(), new RoundedCorners(36)).into(profile);
@@ -137,6 +149,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             fromPlace.setText(fromPlace.getContext().getResources().getString(R.string.from) + " " + post.getFromPlace());
             toPlace.setText(post.getToPlace());
             price.setText(post.getAmountPayment() + " сом");
+            if (post.getAdvertType().equals("PASSENGER")){
+                role.setText(role.getContext().getResources().getString(R.string.passenger));
+            } else {
+                role.setText(role.getContext().getResources().getString(R.string.driver));
+            }
         }
     }
 
@@ -151,5 +168,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         void onSave(int pos, boolean save);
 
         void onClick(int pos);
+
+        void openWhatsapp(int pos);
     }
 }

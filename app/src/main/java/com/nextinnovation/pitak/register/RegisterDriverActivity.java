@@ -143,17 +143,16 @@ public class RegisterDriverActivity extends AppCompatActivity {
                 if (countryResponse != null && !countryResponse.getResult().isEmpty()) {
                     country = new Car(countryResponse.getResult().get(countySp.getSelectedItemPosition()).getId(), countryResponse.getResult().get(countySp.getSelectedItemPosition()).getName());
                 } else {
-                    country = new Car(null, null);
+                    country = new Car(1, null);
                 }
                 if (cityResponse != null && !cityResponse.getResult().isEmpty()) {
                     city = new Car(cityResponse.getResult().get(citySp.getSelectedItemPosition()).getId(), cityResponse.getResult().get(citySp.getSelectedItemPosition()).getName());
                 } else {
-                    city = new Car(null, null);
+                    city = new Car(1, null);
                 }
                 UserCar userCar = new UserCar(car, model, Statics.getString(carNumber), type);
                 if (edit) {
                     final UserWhenSignedIn userWhenSignedIn = new UserWhenSignedIn(userToEdit.getId(), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "surname", "patronymic", Statics.getString(name), Statics.getString(email), null, Statics.getToken(context).substring(7), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), userCar, country, city);
-                    Log.e("------------res", Statics.getToken(context));
                     if (userToEdit.getUsername().equals(userWhenSignedIn.getUsername())) {
                         MainRepository.getService().editDriver(userWhenSignedIn, Statics.getToken(context)).enqueue(new Callback<Void>() {
                             @Override
@@ -224,23 +223,34 @@ public class RegisterDriverActivity extends AppCompatActivity {
                             RequestBody.create(MediaType.parse("text/plain"), type.getId() + ""),
                             RequestBody.create(MediaType.parse("text/plain"), country.getId() + ""),
                             RequestBody.create(MediaType.parse("text/plain"), city.getId() + "")
-                    ).enqueue(new Callback<User>() {
+                    ).enqueue(new Callback<UserWhenSignedIn>() {
                         @Override
-                        public void onResponse(Call<User> call, Response<User> response) {
+                        public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
                             if (response.isSuccessful()) {
                                 MainRepository.getService().signIn(new UserSignIn(phone, phone)).enqueue(new Callback<UserWhenSignedIn>() {
                                     @Override
                                     public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
                                         if (response.isSuccessful()) {
-                                            MSharedPreferences.set(context, Statics.REGISTERED, true);
-                                            if (response.body().getRoles()[0].equals("ROLE_DRIVER")) {
-                                                MSharedPreferences.set(context, "who", Statics.DRIVER);
-                                            }
-                                            if (response.body().getRoles()[0].equals("ROLE_PASSENGER")) {
-                                                MSharedPreferences.set(context, "who", Statics.PASSENGER);
-                                            }
-                                            MSharedPreferences.set(context, Statics.USER, new Gson().toJson(response.body()));
-                                            MainActivity.start(context);
+                                            Statics.setToken(RegisterDriverActivity.this, response.body().getToken());
+                                            MainRepository.getService().getMe(Statics.getToken(RegisterDriverActivity.this)).enqueue(new Callback<User>() {
+                                                @Override
+                                                public void onResponse(Call<User> call, Response<User> response) {
+                                                    MSharedPreferences.set(context, Statics.REGISTERED, true);
+                                                    if (response.body().getResult().getUserType().equals("DRIVER")) {
+                                                        MSharedPreferences.set(context, "who", Statics.DRIVER);
+                                                    }
+                                                    if (response.body().getResult().getUserType().equals("PASSENGER")) {
+                                                        MSharedPreferences.set(context, "who", Statics.PASSENGER);
+                                                    }
+                                                    MSharedPreferences.set(context, Statics.USER, new Gson().toJson(response.body().getResult()));
+                                                    MainActivity.start(context);
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<User> call, Throwable t) {
+
+                                                }
+                                            });
                                         }
                                     }
 
@@ -257,7 +267,7 @@ public class RegisterDriverActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<User> call, Throwable t) {
+                        public void onFailure(Call<UserWhenSignedIn> call, Throwable t) {
                             MToast.showInternetError(context);
                             save.setVisibility(View.VISIBLE);
                         }
@@ -265,7 +275,242 @@ public class RegisterDriverActivity extends AppCompatActivity {
                 }
             }
         });
+        if (!edit) {
+            MainRepository.getService().getCarTypes().enqueue(new Callback<CarResponse>() {
+                @Override
+                public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        carTypeResponse = response.body();
+                        List<String> types = new ArrayList<>();
+                        types.add(getResources().getString(R.string.car_type));
+                        for (Car car : response.body().getResult()) {
+                            types.add(car.getName());
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, types);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        carType.setAdapter(adapter);
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<CarResponse> call, Throwable t) {
+
+                }
+            });
+
+            MainRepository.getService().getCars().enqueue(new Callback<CarResponse>() {
+                @Override
+                public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        carResponse = new CarResponse(response.body().getResult());
+                        List<String> mark = new ArrayList<>();
+                        mark.add(getResources().getString(R.string.car_mark));
+                        for (Car car : response.body().getResult()) {
+                            mark.add(car.getName());
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, mark);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        carMark.setAdapter(adapter);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CarResponse> call, Throwable t) {
+
+                }
+            });
+
+            MainRepository.getService().getCountry().enqueue(new Callback<CarResponse>() {
+                @Override
+                public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        countryResponse = new CarResponse(response.body().getResult());
+                        List<String> country = new ArrayList<>();
+                        for (Car car : countryResponse.getResult()) {
+                            country.add(car.getName());
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, country);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        countySp.setAdapter(adapter);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CarResponse> call, Throwable t) {
+
+                }
+            });
+
+
+            carMark.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position == 0) return;
+                    MainRepository.getService().getCarsModel(carResponse.getResult().get(--position).getId()).enqueue(new Callback<CarResponse>() {
+                        @Override
+                        public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                modelResponse = response.body();
+                                List<String> model = new ArrayList<>();
+                                model.add(getResources().getString(R.string.car_model));
+                                for (Car car : response.body().getResult()) {
+                                    model.add(car.getName());
+                                }
+                                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, model);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                carModel.setAdapter(adapter);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<CarResponse> call, Throwable t) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            countySp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    MainRepository.getService().getCity(countryResponse.getResult().get(position).getId()).enqueue(new Callback<CarResponse>() {
+                        @Override
+                        public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                cityResponse = response.body();
+                                List<String> city = new ArrayList<>();
+                                for (Car car : response.body().getResult()) {
+                                    city.add(car.getName());
+                                }
+                                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                citySp.setAdapter(adapter);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<CarResponse> call, Throwable t) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 28);
+            }
+        });
+
+    }
+
+    private void setValues(final UserWhenSignedIn user) {
+        String userPhone = "+" + user.getUsername();
+        editPhoneView.setVisibility(View.VISIBLE);
+        name.setText(user.getName());
+        email.setText(user.getEmail());
+        carNumber.setText(user.getCarCommonModel().getCarNumber());
+        phoneEdit.setText(userPhone.replace("+7", "+996").replace("+996", ""));
+        if (user.getProfilePhoto() != null) {
+            Glide.with(profile.getContext()).load(Base64.decode(user.getProfilePhoto().getContent(), Base64.DEFAULT)).apply(RequestOptions.circleCropTransform()).into(profile);
+            createFile(null, Base64.decode(user.getProfilePhoto().getContent(), Base64.DEFAULT));
+        }
+        if (userPhone.startsWith("+7")) {
+            codeEdit.setSelection(1);
+        }
+        MainRepository.getService().getCountry().enqueue(new Callback<CarResponse>() {
+            @Override
+            public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    countryResponse = new CarResponse(response.body().getResult());
+                    List<String> country = new ArrayList<>();
+                    int current = 0;
+                    for (int i = 0; i < countryResponse.getResult().size(); i++) {
+                        country.add(countryResponse.getResult().get(i).getName());
+                        if (countryResponse.getResult().get(i).getId() == user.getCountryModel().getId()) {
+                            current = i;
+                        }
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, country);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    countySp.setAdapter(adapter);
+                    countySp.setSelection(current);
+                    MainRepository.getService().getCity(countryResponse.getResult().get(current).getId()).enqueue(new Callback<CarResponse>() {
+                        @Override
+                        public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                cityResponse = response.body();
+                                List<String> city = new ArrayList<>();
+                                int current = 0;
+                                for (int i = 0; i < response.body().getResult().size(); i++) {
+                                    city.add(response.body().getResult().get(i).getName());
+                                    if (response.body().getResult().get(i).getId() == user.getCityModel().getId()) {
+                                        current = i;
+                                    }
+                                }
+                                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                citySp.setAdapter(adapter);
+                                citySp.setSelection(current);
+                                countySp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                        MainRepository.getService().getCity(countryResponse.getResult().get(position).getId()).enqueue(new Callback<CarResponse>() {
+                                            @Override
+                                            public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                                                if (response.isSuccessful() && response.body() != null) {
+                                                    cityResponse = response.body();
+                                                    List<String> city = new ArrayList<>();
+                                                    for (Car car : response.body().getResult()) {
+                                                        city.add(car.getName());
+                                                    }
+                                                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
+                                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                    citySp.setAdapter(adapter);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<CarResponse> call, Throwable t) {
+
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> parent) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<CarResponse> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CarResponse> call, Throwable t) {
+
+            }
+        });
         MainRepository.getService().getCarTypes().enqueue(new Callback<CarResponse>() {
             @Override
             public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
@@ -273,12 +518,17 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     carTypeResponse = response.body();
                     List<String> types = new ArrayList<>();
                     types.add(getResources().getString(R.string.car_type));
-                    for (Car car : response.body().getResult()) {
-                        types.add(car.getName());
+                    int current = 0;
+                    for (int i = 0; i < response.body().getResult().size(); i++) {
+                        types.add(response.body().getResult().get(i).getName());
+                        if (response.body().getResult().get(i).getId() == user.getCarCommonModel().getCarType().getId()) {
+                            current = i + 1;
+                        }
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, types);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     carType.setAdapter(adapter);
+                    carType.setSelection(current);
                 }
             }
 
@@ -294,12 +544,55 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     carResponse = new CarResponse(response.body().getResult());
                     List<String> mark = new ArrayList<>();
                     mark.add(getResources().getString(R.string.car_mark));
-                    for (Car car : response.body().getResult()) {
-                        mark.add(car.getName());
+                    int current = 0;
+                    for (int i = 0; i < response.body().getResult().size(); i++) {
+                        mark.add(response.body().getResult().get(i).getName());
+                        if (response.body().getResult().get(i).getId() == user.getCarCommonModel().getCarBrand().getId()) {
+                            current = i + 1;
+                        }
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, mark);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     carMark.setAdapter(adapter);
+                    carMark.setSelection(current);
+                    carMark.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if (position == 0) return;
+                            MainRepository.getService().getCarsModel(carResponse.getResult().get(--position).getId()).enqueue(new Callback<CarResponse>() {
+                                @Override
+                                public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        modelResponse = response.body();
+                                        List<String> model = new ArrayList<>();
+                                        model.add(getResources().getString(R.string.car_model));
+                                        int current = 0;
+                                        for (int i = 0; i < response.body().getResult().size(); i++) {
+                                            model.add(response.body().getResult().get(i).getName());
+                                            if (response.body().getResult().get(i).getId() == user.getCarCommonModel().getCarModel().getId()) {
+                                                current = i + 1;
+                                            }
+                                        }
+                                        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, model);
+                                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                        carModel.setAdapter(adapter);
+                                        carModel.setSelection(current);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<CarResponse> call, Throwable t) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
                 }
             }
 
@@ -308,111 +601,8 @@ public class RegisterDriverActivity extends AppCompatActivity {
 
             }
         });
-        MainRepository.getService().getCountry().enqueue(new Callback<CarResponse>() {
-            @Override
-            public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    countryResponse = new CarResponse(response.body().getResult());
-                    Collections.sort(countryResponse.getResult());
-                    List<String> country = new ArrayList<>();
-                    for (Car car : countryResponse.getResult()) {
-                        country.add(car.getName());
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, country);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    countySp.setAdapter(adapter);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<CarResponse> call, Throwable t) {
 
-            }
-        });
-
-        carMark.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) return;
-                MainRepository.getService().getCarsModel(carResponse.getResult().get(--position).getId()).enqueue(new Callback<CarResponse>() {
-                    @Override
-                    public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            modelResponse = response.body();
-                            List<String> model = new ArrayList<>();
-                            model.add(getResources().getString(R.string.car_model));
-                            for (Car car : response.body().getResult()) {
-                                model.add(car.getName());
-                            }
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, model);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            carModel.setAdapter(adapter);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<CarResponse> call, Throwable t) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        countySp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                MainRepository.getService().getCity(countryResponse.getResult().get(position).getId()).enqueue(new Callback<CarResponse>() {
-                    @Override
-                    public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            cityResponse = response.body();
-                            List<String> city = new ArrayList<>();
-                            for (Car car : response.body().getResult()) {
-                                city.add(car.getName());
-                            }
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            citySp.setAdapter(adapter);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<CarResponse> call, Throwable t) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, 28);
-            }
-        });
-
-    }
-
-    private void setValues(UserWhenSignedIn user) {
-        String userPhone = "+" + user.getUsername();
-        editPhoneView.setVisibility(View.VISIBLE);
-        name.setText(user.getName());
-        email.setText(user.getEmail());
-        phoneEdit.setText(userPhone.replace("+7", "+996").replace("+996", ""));
-        Glide.with(profile.getContext()).load(Base64.decode(user.getProfilePhoto().getContent(), Base64.DEFAULT)).apply(RequestOptions.circleCropTransform()).into(profile);
-        createFile(null, Base64.decode(user.getProfilePhoto().getContent(), Base64.DEFAULT));
     }
 
     @Override

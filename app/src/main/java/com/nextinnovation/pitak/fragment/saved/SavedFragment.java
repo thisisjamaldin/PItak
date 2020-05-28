@@ -105,6 +105,11 @@ public class SavedFragment extends Fragment implements RecyclerViewAdapter.onIte
         ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getId(), true);
     }
 
+    @Override
+    public void openWhatsapp(int pos) {
+        Statics.openWhatsapp(adapter.getList().get(pos).getMobileNumber(), getContext());
+    }
+
     public static void getData(final Context context) {
         MainRepository.getService().getFavourite(Statics.getToken(context)).enqueue(new Callback<FavouritePostResponse>() {
             @Override

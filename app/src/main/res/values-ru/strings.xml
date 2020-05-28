@@ -86,11 +86,12 @@
 
     <string-array name="service_types">
         <item>Тип услуги</item>
-        <item>PASSENGER</item>
-        <item>DRIVER</item>
-        <item>PACKAGE</item>
-        <item>SPECIAL_TECH</item>
+        <item>Пассажир</item>
+        <item>Водитель</item>
+        <item>Посылка</item>
+        <item>Спец.техника</item>
     </string-array>
     <string name="choose_service_type">Выберите тип услуги</string>
+    <string name="passenger">Пассажир</string>
 
 </resources>

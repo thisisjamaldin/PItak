@@ -1,19 +1,19 @@
 package com.nextinnovation.pitak.model.car;
 
-public class Car  implements Comparable< Car >{
-    private Long id;
+public class Car {
+    private int id;
     private String name;
 
-    public Car(Long id, String name) {
+    public Car(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -26,7 +26,10 @@ public class Car  implements Comparable< Car >{
     }
 
     @Override
-    public int compareTo(Car o) {
-        return this.getId().compareTo(o.getId());
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
