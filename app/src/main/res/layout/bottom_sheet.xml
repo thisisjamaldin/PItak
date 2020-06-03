@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="0dp"
+    android:padding="22dp"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <Button
+        android:id="@+id/bottom_sheet_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Пожаловаться"
+        android:fontFamily="@font/raleway_black"
+        android:textColor="@color/red"
+        android:layout_marginBottom="12dp"
+        android:textAllCaps="false"
+        android:background="@drawable/bg_round_light_gray" />
+
+    <Button
+        android:id="@+id/bottom_sheet_cancel"
+        android:layout_width="match_parent"
+        android:text="Отмена"
+        android:fontFamily="@font/raleway_black"
+        android:textColor="@color/blue"
+        android:textAllCaps="false"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_round_light_gray" />
+
+</LinearLayout>

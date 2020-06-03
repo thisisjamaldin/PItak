@@ -1,7 +1,6 @@
 package com.nextinnovation.pitak.fragment.main;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,7 @@ import retrofit2.Response;
 public class MainFragment extends Fragment implements RecyclerViewAdapter.onItemClick {
 
     private int page = 0;
-    private int size = 0;
+    private long size = 0;
 
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;

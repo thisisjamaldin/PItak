@@ -6,7 +6,7 @@ import com.nextinnovation.pitak.model.car.CarResponse;
 import java.util.Arrays;
 
 public class UserWhenSignedIn {
-    private int id;
+    private long id;
     private String username;
     private String surname;
     private String patronymic;
@@ -19,7 +19,7 @@ public class UserWhenSignedIn {
     private ProfileRequest profilePhoto;
     private Car countryModel, cityModel;
 
-    public UserWhenSignedIn(int id, String username, String surname, String patronymic, String name, String email, String userType, String token, String newPassword, UserCar carCommonModel, Car countryModel, Car cityModel) {
+    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String userType, String token, String newPassword, UserCar carCommonModel, Car countryModel, Car cityModel) {
         this.id = id;
         this.username = username;
         this.surname = surname;
@@ -33,7 +33,7 @@ public class UserWhenSignedIn {
         this.countryModel = countryModel;
         this.cityModel = cityModel;
     }
-    public UserWhenSignedIn(int id, String username, String surname, String patronymic, String name, String email, String userType, String token, String newPassword, Car countryModel, Car cityModel) {
+    public UserWhenSignedIn(long id, String username, String surname, String patronymic, String name, String email, String userType, String token, String newPassword, Car countryModel, Car cityModel) {
         this.id = id;
         this.username = username;
         this.surname = surname;
@@ -47,11 +47,11 @@ public class UserWhenSignedIn {
         this.cityModel = cityModel;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

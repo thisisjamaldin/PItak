@@ -6,14 +6,14 @@ public class EditUser {
     private UserCar carCommonModel;
     private Car cityModel, countryModel;
     private String email;
-    private int id;
+    private long id;
     private String name;
     private String newPassword;
     private String patronymic;
     private String surname;
     private String username;
 
-    public EditUser(UserCar carCommonModel, Car cityModel, Car countryModel, String email, int id, String name, String newPassword, String patronymic, String surname, String username) {
+    public EditUser(UserCar carCommonModel, Car cityModel, Car countryModel, String email, long id, String name, String newPassword, String patronymic, String surname, String username) {
         this.carCommonModel = carCommonModel;
         this.cityModel = cityModel;
         this.countryModel = countryModel;
@@ -58,11 +58,11 @@ public class EditUser {
         this.email = email;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

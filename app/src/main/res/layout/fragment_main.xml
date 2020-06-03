@@ -77,10 +77,10 @@
         <LinearLayout
             android:id="@+id/main_fragment_edit_search_ll"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_below="@id/main_fragment_edit_search"
-            android:layout_marginBottom="8dp"
-            android:visibility="gone">
+            android:layout_marginBottom="8dp">
 
             <Button
                 android:id="@+id/main_fragment_filter"
@@ -88,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:background="@drawable/bg_round_stroke"
                 android:drawableStart="@drawable/ic_filter"
                 android:paddingStart="12dp"
@@ -95,19 +96,21 @@
                 android:text="@string/filter"
                 android:textAllCaps="false" />
 
-            <Button
-                android:id="@+id/main_fragment_sort"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_round_stroke"
-                android:drawableStart="@drawable/ic_sort"
-                android:paddingStart="12dp"
-                android:paddingEnd="4dp"
-                android:text="@string/sort"
-                android:textAllCaps="false" />
+            <Spinner
+                android:id="@+id/phone_register_code_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/bg_drop_down_sort"
+                android:entries="@array/sort_types"
+                android:paddingEnd="0dp"
+                android:paddingStart="24dp"
+                android:textAlignment="center" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
             <ImageView
                 android:id="@+id/main_fragment_menu"
                 android:layout_width="wrap_content"
@@ -121,4 +124,6 @@
 
         </LinearLayout>
     </RelativeLayout>
-</RelativeLayout>
+
+    </RelativeLayout>
+

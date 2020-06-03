@@ -10,55 +10,60 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/add_fragment_image"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_marginBottom="16dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_upload_image" />
-        <ImageView
-            android:id="@+id/add_fragment_image_1"
-            android:layout_width="76dp"
-            android:layout_toEndOf="@id/add_fragment_image"
-            android:layout_height="76dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="4dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_upload_image" />
-        <ImageView
-            android:id="@+id/add_fragment_image_2"
-            android:layout_width="76dp"
-            android:layout_height="76dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_toEndOf="@id/add_fragment_image"
-            android:layout_below="@id/add_fragment_image_1"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_upload_image" />
-        <ImageView
-            android:id="@+id/add_fragment_image_3"
-            android:layout_width="76dp"
-            android:layout_toEndOf="@id/add_fragment_image_1"
-            android:layout_height="76dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="4dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_upload_image" />
-        <ImageView
-            android:id="@+id/add_fragment_image_4"
-            android:layout_width="76dp"
-            android:layout_height="76dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_toEndOf="@id/add_fragment_image_2"
-            android:layout_below="@id/add_fragment_image_3"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_upload_image" />
+            <ImageView
+                android:id="@+id/add_fragment_image"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/add_fragment_image_1"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_toEndOf="@id/add_fragment_image"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/add_fragment_image_2"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_below="@id/add_fragment_image_1"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/add_fragment_image"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/add_fragment_image_3"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_toEndOf="@id/add_fragment_image_1"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/add_fragment_image_4"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_below="@id/add_fragment_image_3"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/add_fragment_image_2"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
 
         </RelativeLayout>
 
@@ -89,8 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_drop_down"
-            android:padding="14dp"
-            android:entries="@array/service_types"/>
+            android:entries="@array/service_types"
+            android:padding="14dp" />
 
 
         <TextView

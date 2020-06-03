@@ -17,26 +17,10 @@ import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
-import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.fragment.saved.SavedFragment;
-import com.nextinnovation.pitak.model.location.Country;
-import com.nextinnovation.pitak.model.user.User;
-import com.nextinnovation.pitak.model.user.UserSignIn;
-import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
-import com.nextinnovation.pitak.register.PhoneAuthenticationActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.Statics;
-
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 

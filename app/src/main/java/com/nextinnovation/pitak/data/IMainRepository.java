@@ -1,17 +1,17 @@
 package com.nextinnovation.pitak.data;
 
+import com.nextinnovation.pitak.model.report.ReportRequest;
 import com.nextinnovation.pitak.model.car.CarResponse;
 import com.nextinnovation.pitak.model.post.FavouritePostResponse;
 import com.nextinnovation.pitak.model.post.PostResponse;
 import com.nextinnovation.pitak.model.post.PostSearch;
 import com.nextinnovation.pitak.model.post.PostSingle;
+import com.nextinnovation.pitak.model.report.ReportResponse;
 import com.nextinnovation.pitak.model.user.EditUser;
 import com.nextinnovation.pitak.model.user.ProfileResponse;
 import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
-
-import org.json.JSONObject;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -89,6 +89,9 @@ public interface IMainRepository {
     @POST("api/advert/favourite/{advertId}")
     Call<Void> addToFavourite(@Path("advertId") long advertId, @Header("Authorization") String token);
 
+    @POST("api/report/advert/create")
+    Call<Void> report(@Body ReportRequest report, @Header("Authorization") String token);
+
     @DELETE("api/advert/favourite/{advertId}")
     Call<Void> deleteFromFavourite(@Path("advertId") long advertId, @Header("Authorization") String token);
 
@@ -118,4 +121,7 @@ public interface IMainRepository {
 
     @GET("api/user/me")
     Call<User> getMe(@Header("Authorization") String token);
+
+    @GET("api/dictionary/reporttype/get/all")
+    Call<ReportResponse> getReports();
 }

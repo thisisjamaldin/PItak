@@ -46,7 +46,7 @@
     <string name="promotional_code">Промокоды</string>
     <string name="search">Поиск</string>
     <string name="settings">Настройки</string>
-    <string name="sort">Цена: по убыванию</string>
+    <string name="sort">Цена: </string>
     <string name="time">Время</string>
     <string name="to">Куда</string>
     <string name="to_">куда:</string>
@@ -91,7 +91,14 @@
         <item>Посылка</item>
         <item>Спец.техника</item>
     </string-array>
+    <string-array name="sort_types">
+        <item>по убыванию</item>
+        <item>по возрастанию</item>
+    </string-array>
     <string name="choose_service_type">Выберите тип услуги</string>
     <string name="passenger">Пассажир</string>
+    <string name="minimum_symbol_20">Минимум 20 символов</string>
+    <string name="describe_your_complaint">Опишите вашу жалобу</string>
+    <string name="choose_a_reason">Выберите причину</string>
 
 </resources>

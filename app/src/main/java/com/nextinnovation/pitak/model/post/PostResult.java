@@ -4,9 +4,9 @@ import java.util.List;
 
 public class PostResult {
     private List<Post> content;
-    private int totalElements;
+    private long totalElements;
 
-    public PostResult(List<Post> content, int totalElements) {
+    public PostResult(List<Post> content, long totalElements) {
         this.content = content;
         this.totalElements = totalElements;
     }
@@ -19,11 +19,11 @@ public class PostResult {
         this.content = content;
     }
 
-    public int getTotalElements() {
+    public long getTotalElements() {
         return totalElements;
     }
 
-    public void setTotalElements(int totalElements) {
+    public void setTotalElements(long totalElements) {
         this.totalElements = totalElements;
     }
 

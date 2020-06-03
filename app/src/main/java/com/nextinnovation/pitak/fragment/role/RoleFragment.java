@@ -32,7 +32,7 @@ import retrofit2.Response;
 public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItemClick {
 
     private int page = 0;
-    private int size = 0;
+    private long size = 0;
 
 
     private RecyclerView recyclerView;
