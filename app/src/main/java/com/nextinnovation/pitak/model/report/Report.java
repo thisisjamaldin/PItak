@@ -1,9 +1,5 @@
 package com.nextinnovation.pitak.model.report;
 
-import com.nextinnovation.pitak.model.car.Car;
-
-import java.util.List;
-
 public class Report {
     private boolean clicked;
     private long id;

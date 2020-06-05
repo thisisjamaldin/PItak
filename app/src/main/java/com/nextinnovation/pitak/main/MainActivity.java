@@ -19,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.fragment.saved.SavedFragment;
+import com.nextinnovation.pitak.register.WhoRegisterActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.Statics;
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private BottomNavigationView bottomNavigationView;
     private Button add;
+    private boolean loggedIn;
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -37,15 +39,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loggedIn = Statics.getToken(this).length() >= 10;
         FirebaseMessaging.getInstance().subscribeToTopic(MSharedPreferences.get(MainActivity.this, "who", ""));
         initView();
         listener();
-        Log.e("----token", Statics.getToken(this));
     }
 
     private void initView() {
         viewPager = findViewById(R.id.main_view_pager);
-        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), loggedIn));
         viewPager.setOffscreenPageLimit(5);
         bottomNavigationView = findViewById(R.id.main_bottom_navigation);
         if (MSharedPreferences.get(MainActivity.this, "who", "").equals(Statics.DRIVER)) {
@@ -64,15 +66,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.menu_main) {
                     viewPager.setCurrentItem(0, false);
+                } else if (!loggedIn) {
+                    Intent intent = new Intent(MainActivity.this, WhoRegisterActivity.class);
+                    startActivity(intent);
                 } else if (menuItem.getItemId() == R.id.menu_role) {
                     viewPager.setCurrentItem(1, false);
                 } else if (menuItem.getItemId() == R.id.menu_saved) {
-                    SavedFragment.getData(MainActivity.this);
                     viewPager.setCurrentItem(3, false);
+                    if (loggedIn)
+                        SavedFragment.getData(MainActivity.this);
                 } else if (menuItem.getItemId() == R.id.menu_profile) {
                     viewPager.setCurrentItem(4, false);
                 }
-                return true;
+                return loggedIn;
             }
         });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -84,23 +90,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 hideKeyboard(MainActivity.this, viewPager);
-                if (position == 0) {
-                    bottomNavigationView.setSelectedItemId(R.id.menu_main);
-                    add.setBackgroundResource(R.drawable.bg_floating_button);
-                } else if (position == 1) {
-                    bottomNavigationView.setSelectedItemId(R.id.menu_role);
-                    add.setBackgroundResource(R.drawable.bg_floating_button);
-                } else if (position == 2) {
-                    bottomNavigationView.setSelectedItemId(R.id.menu_add);
-                    add.setBackgroundResource(R.drawable.bg_floating_button_clicked);
-                } else if (position == 3) {
-                    new SavedFragment();
-                    bottomNavigationView.setSelectedItemId(R.id.menu_saved);
-                    add.setBackgroundResource(R.drawable.bg_floating_button);
-                } else if (position == 4) {
-                    bottomNavigationView.setSelectedItemId(R.id.menu_profile);
-                    add.setBackgroundResource(R.drawable.bg_floating_button);
-                }
+                    if (position == 0) {
+                        bottomNavigationView.setSelectedItemId(R.id.menu_main);
+                        add.setBackgroundResource(R.drawable.bg_floating_button);
+                    } else if (position == 1) {
+                        bottomNavigationView.setSelectedItemId(R.id.menu_role);
+                        add.setBackgroundResource(R.drawable.bg_floating_button);
+                    } else if (position == 2) {
+                        bottomNavigationView.setSelectedItemId(R.id.menu_add);
+                        add.setBackgroundResource(R.drawable.bg_floating_button_clicked);
+                    } else if (position == 3) {
+                        new SavedFragment();
+                        bottomNavigationView.setSelectedItemId(R.id.menu_saved);
+                        add.setBackgroundResource(R.drawable.bg_floating_button);
+                    } else if (position == 4) {
+                        bottomNavigationView.setSelectedItemId(R.id.menu_profile);
+                        add.setBackgroundResource(R.drawable.bg_floating_button);
+                    }
             }
 
             @Override
@@ -111,7 +117,12 @@ public class MainActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPager.setCurrentItem(2, false);
+                if (loggedIn) {
+                    viewPager.setCurrentItem(2, false);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, WhoRegisterActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -135,6 +146,4 @@ public class MainActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-
-
 }

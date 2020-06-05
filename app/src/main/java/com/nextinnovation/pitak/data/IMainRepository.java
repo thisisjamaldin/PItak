@@ -86,6 +86,9 @@ public interface IMainRepository {
     @POST("api/advert/passenger/search")
     Call<PostResponse> searchPassenger(@Body PostSearch search, @Header("Authorization") String token, @Query("page") int page);
 
+    @POST("api/advert/all/adverts")
+    Call<PostResponse> searchAnonymous(@Body PostSearch search, @Query("page") int page);
+
     @POST("api/advert/favourite/{advertId}")
     Call<Void> addToFavourite(@Path("advertId") long advertId, @Header("Authorization") String token);
 

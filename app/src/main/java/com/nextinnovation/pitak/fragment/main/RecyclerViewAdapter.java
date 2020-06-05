@@ -70,7 +70,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         private ImageView profile;
         private ImageView save;
-        private TextView name;
+//        private TextView name;
         private TextView fromPlace;
         private TextView toPlace;
         private TextView price;
@@ -80,7 +80,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ViewHolder(@NonNull final View itemView, final onItemClick itemClick) {
             super(itemView);
             profile = itemView.findViewById(R.id.item_main_image);
-            name = itemView.findViewById(R.id.item_main_name);
+//            name = itemView.findViewById(R.id.item_main_name);
             fromPlace = itemView.findViewById(R.id.item_main_from);
             toPlace = itemView.findViewById(R.id.item_main_to);
             price = itemView.findViewById(R.id.item_main_price);
@@ -148,6 +148,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             fromPlace.setText(fromPlace.getContext().getResources().getString(R.string.from) + " " + post.getFromPlace());
             toPlace.setText(post.getToPlace());
             price.setText(post.getAmountPayment() + " сом");
+            if (post.getAdvertType()==null) return;
             if (post.getAdvertType().equals("PASSENGER")){
                 role.setText(role.getContext().getResources().getString(R.string.passenger));
             } else {

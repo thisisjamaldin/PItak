@@ -238,5 +238,30 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                 }
             });
         }
+        if (MSharedPreferences.get(getContext(), "who", "").equals("")) {
+            MainRepository.getService().searchAnonymous(postSearch, page).enqueue(new Callback<PostResponse>() {
+                @Override
+                public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        if (search) {
+                            adapter.clear();
+                        }
+                        adapter.addList(response.body().getResult().getContent());
+                        page++;
+                        loading.setVisibility(View.GONE);
+                        size = response.body().getResult().getTotalElements();
+                        if (response.body().getResult().getContent().isEmpty()) {
+                            MToast.show(getContext(), getResources().getString(R.string.nothing_found));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PostResponse> call, Throwable t) {
+                    MToast.showInternetError(getContext());
+                    loading.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 }
