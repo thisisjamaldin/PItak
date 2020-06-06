@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity {
         } else if (user==null) {
             MainActivity.start(SplashActivity.this);
         } else if (!MSharedPreferences.get(this, Statics.REGISTERED, false)) {
-            WhoRegisterActivity.start(this);
+            startActivity(new Intent(SplashActivity.this, WhoRegisterActivity.class));
         } else {
             MainRepository.getService().signIn(new UserSignIn(user.getUsername(), user.getUsername())).enqueue(new Callback<UserWhenSignedIn>() {
                 @Override

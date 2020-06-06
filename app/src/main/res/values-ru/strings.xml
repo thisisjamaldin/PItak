@@ -100,5 +100,6 @@
     <string name="minimum_symbol_20">Минимум 20 символов</string>
     <string name="describe_your_complaint">Опишите вашу жалобу</string>
     <string name="choose_a_reason">Выберите причину</string>
+    <string name="register">Регистрация</string>
 
 </resources>

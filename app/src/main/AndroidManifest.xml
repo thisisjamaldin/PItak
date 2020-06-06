@@ -18,7 +18,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".item_detail.ReportActivity"></activity>
+        <activity android:name=".register.RegisterActivity"/>
+        <activity android:name=".item_detail.ReportActivity" />
         <activity
             android:name=".settings.MyOrdersActivity"
             android:screenOrientation="portrait" />

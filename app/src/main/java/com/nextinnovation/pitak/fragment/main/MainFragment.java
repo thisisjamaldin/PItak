@@ -1,6 +1,7 @@
 package com.nextinnovation.pitak.fragment.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -155,20 +156,24 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
         if (save) {
             MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {}
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    MToast.showInternetError(getContext());}
+                    MToast.showInternetError(getContext());
+                }
             });
         } else {
             MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {}
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    MToast.showInternetError(getContext());}
+                    MToast.showInternetError(getContext());
+                }
             });
         }
     }
@@ -188,6 +193,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
             return;
         }
         loading.setVisibility(View.VISIBLE);
+        Log.e("---------get", MSharedPreferences.get(getContext(), "who", ""));
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
             MainRepository.getService().searchDriver(postSearch, Statics.getToken(getContext()), page).enqueue(new Callback<PostResponse>() {
                 @Override
@@ -258,6 +264,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
 
                 @Override
                 public void onFailure(Call<PostResponse> call, Throwable t) {
+                    Log.e("------------fail", t.getMessage());
                     MToast.showInternetError(getContext());
                     loading.setVisibility(View.GONE);
                 }

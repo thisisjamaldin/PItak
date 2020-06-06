@@ -16,7 +16,6 @@ import com.nextinnovation.pitak.utils.Statics;
 
 public class WhoRegisterActivity extends AppCompatActivity {
 
-    private TextView signIn;
     private Button client;
     private Button driver;
 
@@ -36,7 +35,6 @@ public class WhoRegisterActivity extends AppCompatActivity {
     private void initView() {
         client = findViewById(R.id.who_register_client_btn);
         driver = findViewById(R.id.who_register_driver_btn);
-        signIn = findViewById(R.id.who_register_sign_in);
     }
 
     private void listener() {
@@ -44,12 +42,14 @@ public class WhoRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 client.setEnabled(false);
+                if (!MSharedPreferences.get(WhoRegisterActivity.this, "who", "").equals(Statics.UNAUTHORIZED)){
+                    MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.PASSENGER);
+                }
                 if (FirebaseAuth.getInstance().getCurrentUser() == null) {
                     PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
                 } else {
                     RegisterClientActivity.start(WhoRegisterActivity.this, false);
                 }
-                MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.PASSENGER);
             }
         });
 
@@ -57,20 +57,14 @@ public class WhoRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 driver.setEnabled(false);
+                if (!MSharedPreferences.get(WhoRegisterActivity.this, "who", "").equals(Statics.UNAUTHORIZED)){
+                    MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.DRIVER);
+                }
                 if (FirebaseAuth.getInstance().getCurrentUser() == null) {
                     PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
                 } else {
                     RegisterDriverActivity.start(WhoRegisterActivity.this, false);
                 }
-                MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.DRIVER);
-            }
-        });
-        signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn.setEnabled(false);
-                PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
-                MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.UNAUTHORIZED);
             }
         });
     }
@@ -80,6 +74,5 @@ public class WhoRegisterActivity extends AppCompatActivity {
         super.onResume();
         client.setEnabled(true);
         driver.setEnabled(true);
-        signIn.setEnabled(true);
     }
 }

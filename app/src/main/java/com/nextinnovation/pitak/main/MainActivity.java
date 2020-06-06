@@ -19,7 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.fragment.saved.SavedFragment;
-import com.nextinnovation.pitak.register.WhoRegisterActivity;
+import com.nextinnovation.pitak.register.RegisterActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.Statics;
 
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic(MSharedPreferences.get(MainActivity.this, "who", ""));
         initView();
         listener();
+        Log.e("------token", Statics.getToken(this));
     }
 
     private void initView() {
@@ -67,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItem.getItemId() == R.id.menu_main) {
                     viewPager.setCurrentItem(0, false);
                 } else if (!loggedIn) {
-                    Intent intent = new Intent(MainActivity.this, WhoRegisterActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                 } else if (menuItem.getItemId() == R.id.menu_role) {
                     viewPager.setCurrentItem(1, false);
                 } else if (menuItem.getItemId() == R.id.menu_saved) {
@@ -120,8 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 if (loggedIn) {
                     viewPager.setCurrentItem(2, false);
                 } else {
-                    Intent intent = new Intent(MainActivity.this, WhoRegisterActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                 }
             }
         });

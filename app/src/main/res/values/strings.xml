@@ -105,4 +105,5 @@
     <string name="minimum_symbol_20">Minimum 20 characters</string>
     <string name="describe_your_complaint">Describe your complaint</string>
     <string name="choose_a_reason">Choose a reason</string>
+    <string name="register">Register</string>
 </resources>
