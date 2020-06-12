@@ -1,7 +1,5 @@
 package com.nextinnovation.pitak.model.post;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,7 +7,6 @@ public class Post implements Serializable {
     private long id;
     private String title;
     private String text;
-    @SerializedName("amount_payment")
     private String amountPayment;
     private int numberOfSeat;
     private String fromPlace;

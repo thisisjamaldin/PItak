@@ -140,6 +140,10 @@
                 android:text="@string/share"
                 android:textColor="@color/bluish_black" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/item_detail_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
         </LinearLayout>
     </ScrollView>
     <View

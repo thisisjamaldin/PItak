@@ -1,11 +1,11 @@
 package com.nextinnovation.pitak.fragment.profile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +15,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.model.user.ProfileRequest;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
+import com.nextinnovation.pitak.register.RegisterActivity;
 import com.nextinnovation.pitak.register.RegisterClientActivity;
 import com.nextinnovation.pitak.register.RegisterDriverActivity;
+import com.nextinnovation.pitak.settings.AgreementActivity;
 import com.nextinnovation.pitak.settings.HistoryActivity;
+import com.nextinnovation.pitak.settings.MyCarActivity;
 import com.nextinnovation.pitak.settings.MyOrdersActivity;
 import com.nextinnovation.pitak.settings.NotificationActivity;
 import com.nextinnovation.pitak.settings.PayActivity;
@@ -41,6 +46,10 @@ public class ProfileFragment extends Fragment {
     private RelativeLayout pay;
     private RelativeLayout history;
     private RelativeLayout myPosts;
+    private RelativeLayout myCar;
+    private RelativeLayout about;
+    private RelativeLayout agreement;
+    private RelativeLayout signOut;
     private TextView name;
     private TextView email;
     private ImageView profile;
@@ -63,7 +72,11 @@ public class ProfileFragment extends Fragment {
         history = view.findViewById(R.id.profile_fragment_my_order_rl);
         name = view.findViewById(R.id.profile_fragment_name);
         email = view.findViewById(R.id.profile_fragment_email);
-        myPosts = view.findViewById(R.id.profile_fragment_my_address_rl);
+        myPosts = view.findViewById(R.id.profile_fragment_my_post_rl);
+        myCar = view.findViewById(R.id.profile_fragment_my_car_rl);
+        about = view.findViewById(R.id.profile_fragment_my_about_rl);
+        agreement = view.findViewById(R.id.profile_fragment_my_agreement_rl);
+        signOut = view.findViewById(R.id.profile_fragment_my_sign_out_rl);
         profile = view.findViewById(R.id.profile_fragment_profile);
     }
 
@@ -71,7 +84,6 @@ public class ProfileFragment extends Fragment {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("-----who", MSharedPreferences.get(getContext(), "who", ""));
                 if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
                     RegisterClientActivity.start(getContext(), true);
                 } else if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
@@ -103,6 +115,37 @@ public class ProfileFragment extends Fragment {
                 HistoryActivity.start(getContext());
             }
         });
+        agreement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), AgreementActivity.class));
+            }
+        });
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle(getResources().getString(R.string.sign_out));
+                alert.setMessage(getResources().getString(R.string.are_you_sure_to_sign_out));
+                alert.setNeutralButton(getResources().getString(R.string.cancel), null);
+                alert.setPositiveButton(getResources().getString(R.string.sign_out), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getContext(), RegisterActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                        MSharedPreferences.clear(getContext());
+                        MSharedPreferences.set(getContext(), "first", false);
+                    }
+                });
+                alert.show();
+            }
+        });
+        myCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyCarActivity.start(getContext());
+            }
+        });
         myPosts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +159,11 @@ public class ProfileFragment extends Fragment {
         name.setText(user.getName());
         email.setText(user.getEmail());
         setProfile(user.getProfilePhoto());
+        if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
+            myCar.setVisibility(View.GONE);
+        } else if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
+            myCar.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setProfile(ProfileRequest profileModel) {
@@ -131,4 +179,5 @@ public class ProfileFragment extends Fragment {
         super.onResume();
         setView();
     }
+
 }

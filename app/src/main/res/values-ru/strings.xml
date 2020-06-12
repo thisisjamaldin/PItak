@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PItak</string>
     <string name="already_have_an_account">У вас есть акаунт?</string>
     <string name="carrying_capacity">Грузоподъемность в тоннах</string>
     <string name="start">Начать</string>
@@ -33,6 +32,8 @@
     <string name="from">Откуда</string>
     <string name="headline">Заголовок объявления</string>
     <string name="mark_">"Марка: "</string>
+    <string name="model_">Модель: </string>
+    <string name="type_">Тип: </string>
     <string name="my_addresses">Мои адреса</string>
     <string name="my_orders">Мои заказы</string>
     <string name="notification">Уведомления</string>
@@ -92,8 +93,9 @@
         <item>Спец.техника</item>
     </string-array>
     <string-array name="sort_types">
-        <item>по убыванию</item>
-        <item>по возрастанию</item>
+        <item>Сортировка</item>
+        <item>Цена по убыванию</item>
+        <item>Цена по возрастанию</item>
     </string-array>
     <string name="choose_service_type">Выберите тип услуги</string>
     <string name="passenger">Пассажир</string>
@@ -101,5 +103,11 @@
     <string name="describe_your_complaint">Опишите вашу жалобу</string>
     <string name="choose_a_reason">Выберите причину</string>
     <string name="register">Регистрация</string>
+    <string name="about">О приложении</string>
+    <string name="information">Информация</string>
+    <string name="agreement_short">Пользовательское соглашение</string>
+    <string name="sign_out_from_account">Выйти с акканута</string>
+    <string name="my_posts">Мои объявления</string>
+    <string name="my_cars">Мои машины</string>
 
 </resources>

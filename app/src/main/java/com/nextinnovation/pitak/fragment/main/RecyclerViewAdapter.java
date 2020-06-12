@@ -1,5 +1,6 @@
 package com.nextinnovation.pitak.fragment.main;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -70,7 +71,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         private ImageView profile;
         private ImageView save;
-//        private TextView name;
+        private TextView name;
         private TextView fromPlace;
         private TextView toPlace;
         private TextView price;
@@ -80,7 +81,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ViewHolder(@NonNull final View itemView, final onItemClick itemClick) {
             super(itemView);
             profile = itemView.findViewById(R.id.item_main_image);
-//            name = itemView.findViewById(R.id.item_main_name);
+            name = itemView.findViewById(R.id.item_main_name);
             fromPlace = itemView.findViewById(R.id.item_main_from);
             toPlace = itemView.findViewById(R.id.item_main_to);
             price = itemView.findViewById(R.id.item_main_price);
@@ -100,7 +101,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             });
             save = itemView.findViewById(R.id.item_main_save);
-            save.setTag(0);
+
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -124,6 +125,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         void bind(Post post) {
+            Context context = save.getContext();
             if (saved || post.isFavorite()) {
                 save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save_checked));
                 save.setTag(1);
@@ -141,10 +143,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 whatsapp.setVisibility(View.VISIBLE);
             }
             if (post.getImgFileList().isEmpty()) {
-                Glide.with(profile.getContext()).load(R.drawable.launch_screen).transform(new CenterCrop(), new RoundedCorners(36)).into(profile);
+                Glide.with(context).load(R.drawable.launch_screen).centerCrop().into(profile);
             } else {
-                Glide.with(profile.getContext()).load(setImage(post.getImgFileList().get(0).getContent())).transform(new CenterCrop(), new RoundedCorners(36)).into(profile);
+                Glide.with(context).load(setImage(post.getImgFileList().get(0).getContent())).centerCrop().into(profile);
             }
+            name.setText(post.getTitle());
             fromPlace.setText(fromPlace.getContext().getResources().getString(R.string.from) + " " + post.getFromPlace());
             toPlace.setText(post.getToPlace());
             price.setText(post.getAmountPayment() + " сом");

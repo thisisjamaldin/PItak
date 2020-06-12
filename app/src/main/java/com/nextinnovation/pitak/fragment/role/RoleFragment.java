@@ -76,6 +76,12 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
                     searchLayout.animate().translationY(0).setDuration(250);
                     hide = false;
                 }
+
+            }
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
                 if (!recyclerView.canScrollVertically(1) && loading.getVisibility() == View.GONE) {
                     getData(false);
                 }
@@ -90,7 +96,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
                     if (Statics.getString(search).length() == 0) {
                         postSearch.setTitle(null);
                     } else {
-                        postSearch.setToPlace(Statics.getString(search));
+                        postSearch.setTitle(Statics.getString(search));
                     }
                     MainActivity.hideKeyboard(getActivity(), search);
                     page = 0;
@@ -148,7 +154,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
         }
         loading.setVisibility(View.VISIBLE);
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
-            MainRepository.getService().searchDriver(postSearch, Statics.getToken(getContext()), page).enqueue(new Callback<PostResponse>() {
+            MainRepository.getService().searchDriver(postSearch, Statics.getToken(getContext()), page, null).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
@@ -175,7 +181,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
             });
         }
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
-            MainRepository.getService().searchPassenger(new PostSearch(), Statics.getToken(getContext()), page).enqueue(new Callback<PostResponse>() {
+            MainRepository.getService().searchPassenger(postSearch, Statics.getToken(getContext()), page, null).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {

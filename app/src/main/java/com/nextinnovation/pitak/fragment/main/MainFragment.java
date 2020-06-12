@@ -6,8 +6,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +43,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
     private ProgressBar loading;
     private EditText searchFrom, searchTo, search;
     private PostSearch postSearch = new PostSearch();
+    private Spinner sort;
 
     @Nullable
     @Override
@@ -49,12 +52,12 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
 
         initAllView(view);
         listener();
-        getData(false);
         return view;
 
     }
 
     private void initAllView(View view) {
+        sort = view.findViewById(R.id.main_fragment_sort);
         searchFrom = view.findViewById(R.id.main_fragment_edit_search_from);
         searchTo = view.findViewById(R.id.main_fragment_edit_search_to);
         search = view.findViewById(R.id.main_fragment_edit_search);
@@ -144,6 +147,19 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
             }
         });
 
+        sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                page = 0;
+                getData(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     @Override
@@ -193,9 +209,16 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
             return;
         }
         loading.setVisibility(View.VISIBLE);
-        Log.e("---------get", MSharedPreferences.get(getContext(), "who", ""));
+        String sortRequest;
+        if (sort.getSelectedItemPosition() == 1) {
+            sortRequest = "amountPayment,desc";
+        } else if (sort.getSelectedItemPosition() == 2) {
+            sortRequest = "amountPayment,asc";
+        } else {
+            sortRequest = null;
+        }
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
-            MainRepository.getService().searchDriver(postSearch, Statics.getToken(getContext()), page).enqueue(new Callback<PostResponse>() {
+            MainRepository.getService().searchDriver(postSearch, Statics.getToken(getContext()), page, sortRequest).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
@@ -206,7 +229,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                         page++;
                         loading.setVisibility(View.GONE);
                         size = response.body().getResult().getTotalElements();
-                        if (response.body().getResult().getContent().isEmpty()) {
+                        if (response.body().getResult().getContent().isEmpty() && adapter.getList().isEmpty()) {
                             MToast.show(getContext(), getResources().getString(R.string.nothing_found));
                         }
                     }
@@ -220,7 +243,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
             });
         }
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
-            MainRepository.getService().searchPassenger(postSearch, Statics.getToken(getContext()), page).enqueue(new Callback<PostResponse>() {
+            MainRepository.getService().searchPassenger(postSearch, Statics.getToken(getContext()), page, sortRequest).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
@@ -231,7 +254,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                         page++;
                         loading.setVisibility(View.GONE);
                         size = response.body().getResult().getTotalElements();
-                        if (response.body().getResult().getContent().isEmpty()) {
+                        if (response.body().getResult().getContent().isEmpty() && adapter.getList().isEmpty()) {
                             MToast.show(getContext(), getResources().getString(R.string.nothing_found));
                         }
                     }
@@ -245,7 +268,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
             });
         }
         if (MSharedPreferences.get(getContext(), "who", "").equals("")) {
-            MainRepository.getService().searchAnonymous(postSearch, page).enqueue(new Callback<PostResponse>() {
+            MainRepository.getService().searchAnonymous(postSearch, page, sortRequest).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
@@ -256,7 +279,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                         page++;
                         loading.setVisibility(View.GONE);
                         size = response.body().getResult().getTotalElements();
-                        if (response.body().getResult().getContent().isEmpty()) {
+                        if (response.body().getResult().getContent().isEmpty() && adapter.getList().isEmpty()) {
                             MToast.show(getContext(), getResources().getString(R.string.nothing_found));
                         }
                     }
@@ -264,7 +287,6 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
 
                 @Override
                 public void onFailure(Call<PostResponse> call, Throwable t) {
-                    Log.e("------------fail", t.getMessage());
                     MToast.showInternetError(getContext());
                     loading.setVisibility(View.GONE);
                 }

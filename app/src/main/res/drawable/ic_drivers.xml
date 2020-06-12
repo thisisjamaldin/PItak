@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_driver_3" android:top="80dp" android:bottom="20dp" android:right="80dp" android:left="20dp"/>
-    <item android:drawable="@drawable/ic_driver_1" android:bottom="85dp" android:top="25dp" android:left="20dp" android:right="80dp"/>
-    <item android:drawable="@drawable/ic_driver_2" android:left="80dp" android:right="20dp" android:top="27dp" android:bottom="80dp"/>
-    <item android:drawable="@drawable/ic_driver" android:left="80dp" android:right="20dp" android:bottom="20dp" android:top="80dp"/>
+    <item android:drawable="@drawable/ic_driver_3" android:top="60dp" android:bottom="25dp" android:right="60dp" android:left="20dp"/>
+    <item android:drawable="@drawable/ic_driver_1" android:bottom="60dp" android:top="30dp" android:left="20dp" android:right="60dp"/>
+    <item android:drawable="@drawable/ic_driver_2" android:left="60dp" android:right="20dp" android:top="27dp" android:bottom="60dp"/>
+    <item android:drawable="@drawable/ic_driver" android:left="60dp" android:right="20dp" android:bottom="30dp" android:top="60dp"/>
 </layer-list>

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
@@ -25,12 +26,14 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
     private RecyclerView recyclerView;
     private ImageView back;
     private RecyclerViewAdapter adapter;
+    private ProgressBar loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_orders);
 
+        loading = findViewById(R.id.my_order_loading);
         back = findViewById(R.id.my_order_back_img);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +79,7 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
                 } else {
                     MToast.showResponseError(MyOrdersActivity.this, response.errorBody());
                 }
+                loading.setVisibility(View.GONE);
             }
 
             @Override

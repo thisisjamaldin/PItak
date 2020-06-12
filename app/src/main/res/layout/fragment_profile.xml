@@ -98,38 +98,38 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/profile_fragment_my_address_rl"
+                android:id="@+id/profile_fragment_my_car_rl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:background="@drawable/bg_edit_fields">
 
                 <ImageView
-                    android:id="@+id/profile_fragment_my_address_ic"
+                    android:id="@+id/profile_fragment_my_car_ic"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_navigation" />
+                    android:paddingTop="18dp"
+                    android:src="@drawable/ic_driver_1" />
 
                 <TextView
-                    android:id="@+id/profile_fragment_my_address"
+                    android:id="@+id/profile_fragment_my_car"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/profile_fragment_my_address_ic"
+                    android:layout_toEndOf="@id/profile_fragment_my_car_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:paddingTop="10dp"
-                    android:text="@string/my_addresses"
+                    android:text="@string/my_cars"
                     android:textColor="@color/bluish_black"
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/profile_fragment_my_address_desc"
+                    android:id="@+id/profile_fragment_my_car_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/profile_fragment_my_address"
-                    android:layout_toEndOf="@id/profile_fragment_my_address_ic"
+                    android:layout_below="@id/profile_fragment_my_car"
+                    android:layout_toEndOf="@id/profile_fragment_my_car_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:text="@string/now_addresses" />
@@ -142,12 +142,57 @@
                     android:padding="12dp"
                     android:src="@drawable/ic_right" />
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_post_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
 
+                <ImageView
+                    android:id="@+id/profile_fragment_my_post_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_my_post" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/profile_fragment_my_post_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/my_posts"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_post_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_post"
+                    android:layout_toEndOf="@id/profile_fragment_my_post_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="@string/now_addresses" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/profile_fragment_my_pay_rl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
+                android:visibility="gone"
                 android:background="@drawable/bg_edit_fields">
 
                 <ImageView
@@ -192,6 +237,7 @@
             <RelativeLayout
                 android:id="@+id/profile_fragment_promotional_code_rl"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:background="@drawable/bg_edit_fields">
@@ -317,6 +363,141 @@
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
                     android:text="@string/profile_settings" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_about_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
+
+                <ImageView
+                    android:id="@+id/profile_fragment_my_about_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_about" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_about"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/profile_fragment_my_about_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/about"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_about_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_about"
+                    android:layout_toEndOf="@id/profile_fragment_my_about_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="@string/information" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_agreement_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
+
+                <ImageView
+                    android:id="@+id/profile_fragment_my_agreement_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_agreement" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_agreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/profile_fragment_my_agreement_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/agreement_short"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_agreement_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_agreement"
+                    android:layout_toEndOf="@id/profile_fragment_my_agreement_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="@string/information" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_right" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/profile_fragment_my_sign_out_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_edit_fields">
+
+                <ImageView
+                    android:id="@+id/profile_fragment_my_sign_out_ic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_sign_out" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_sign_out"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/profile_fragment_my_sign_out_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/sign_out"
+                    android:textColor="@color/bluish_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/profile_fragment_my_sign_out_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_fragment_my_sign_out"
+                    android:layout_toEndOf="@id/profile_fragment_my_sign_out_ic"
+                    android:fontFamily="@font/raleway_semibold"
+                    android:paddingStart="8dp"
+                    android:text="@string/sign_out_from_account" />
 
                 <ImageView
                     android:layout_width="50dp"

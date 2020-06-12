@@ -1,5 +1,7 @@
 package com.nextinnovation.pitak.model.car;
 
+import java.io.Serializable;
+
 public class Car {
     private long id;
     private String name;

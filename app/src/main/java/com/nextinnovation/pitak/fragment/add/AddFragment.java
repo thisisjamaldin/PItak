@@ -28,6 +28,7 @@ import com.asksira.bsimagepicker.BSImagePicker;
 import com.bumptech.glide.Glide;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.settings.AgreementActivity;
 import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.model.car.Car;
 import com.nextinnovation.pitak.model.car.CarResponse;
@@ -309,6 +310,13 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
             @Override
             public void onClick(View v) {
                 imagePicker("27");
+            }
+        });
+        agreement.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                startActivity(new Intent(getContext(), AgreementActivity.class));
+                return true;
             }
         });
     }

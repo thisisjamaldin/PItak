@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingTop="180dp" />
+        android:paddingTop="220dp" />
 
     <ProgressBar
         android:id="@+id/main_fragment_loading"
@@ -28,11 +28,26 @@
             android:layout_height="140dp"
             android:src="@drawable/bg_gradient_blue" />
 
+        <EditText
+            android:id="@+id/main_fragment_edit_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="42dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_edit_fields"
+            android:drawableEnd="@drawable/ic_search"
+            android:hint="@string/search"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:padding="12dp" />
+
         <LinearLayout
             android:id="@+id/main_search_layout_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="42dp">
+            android:layout_below="@id/main_fragment_edit_search"
+            android:layout_marginTop="20dp">
 
             <EditText
                 android:id="@+id/main_fragment_edit_search_from"
@@ -61,26 +76,14 @@
                 android:padding="12dp" />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/main_fragment_edit_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/main_search_layout_ll"
-            android:layout_margin="20dp"
-            android:background="@drawable/bg_edit_fields"
-            android:drawableEnd="@drawable/ic_search"
-            android:hint="@string/search"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:padding="12dp" />
-
         <LinearLayout
             android:id="@+id/main_fragment_edit_search_ll"
             android:layout_width="match_parent"
-            android:visibility="gone"
             android:layout_height="wrap_content"
-            android:layout_below="@id/main_fragment_edit_search"
-            android:layout_marginBottom="8dp">
+            android:layout_below="@id/main_search_layout_ll"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
+            android:visibility="visible">
 
             <Button
                 android:id="@+id/main_fragment_filter"
@@ -88,29 +91,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
-                android:visibility="gone"
                 android:background="@drawable/bg_round_stroke"
                 android:drawableStart="@drawable/ic_filter"
                 android:paddingStart="12dp"
                 android:paddingEnd="4dp"
                 android:text="@string/filter"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:visibility="gone" />
 
             <Spinner
-                android:id="@+id/phone_register_code_sp"
+                android:id="@+id/main_fragment_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/bg_drop_down_sort"
                 android:entries="@array/sort_types"
-                android:paddingEnd="0dp"
                 android:paddingStart="24dp"
-                android:textAlignment="center" />
+                android:paddingEnd="0dp" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/main_fragment_menu"
                 android:layout_width="wrap_content"
@@ -120,10 +125,11 @@
                 android:background="@drawable/bg_round_blue_button"
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
-                android:src="@drawable/ic_menu" />
+                android:src="@drawable/ic_menu"
+                android:visibility="gone" />
 
         </LinearLayout>
     </RelativeLayout>
 
-    </RelativeLayout>
+</RelativeLayout>
 

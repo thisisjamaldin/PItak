@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
@@ -29,6 +30,7 @@ public class ReportActivity extends AppCompatActivity implements ReportAdapter.o
     private Button send;
     private long advertId;
     private long reportId;
+    private ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class ReportActivity extends AppCompatActivity implements ReportAdapter.o
         advertId = getIntent().getLongExtra("id", 0);
         editText = findViewById(R.id.report_edit);
         send = findViewById(R.id.report_send);
+        back = findViewById(R.id.report_back);
         recyclerView = findViewById(R.id.report_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -72,6 +75,12 @@ public class ReportActivity extends AppCompatActivity implements ReportAdapter.o
                     });
                 }
 
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

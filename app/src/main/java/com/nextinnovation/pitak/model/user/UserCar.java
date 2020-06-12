@@ -2,7 +2,9 @@ package com.nextinnovation.pitak.model.user;
 
 import com.nextinnovation.pitak.model.car.Car;
 
-public class UserCar {
+import java.io.Serializable;
+
+public class UserCar implements Serializable {
     private Car carBrand;
     private Car carModel;
     private String carNumber;

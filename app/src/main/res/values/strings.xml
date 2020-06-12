@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PITAK</string>
+    <string name="app_name" translatable="false">PITAK</string>
     <string name="confirmations_ncode">Confirmations\ncode</string>
     <string name="confirmations_code">Confirmations code</string>
     <string name="next">Next</string>
@@ -49,6 +49,8 @@
     <string name="my_orders">My Orders</string>
     <string name="to_">Posted</string>
     <string name="mark_">Mark: </string>
+    <string name="model_">Model: </string>
+    <string name="type_">Type: </string>
     <string name="personal_account">Personal account №: 123456789</string>
     <string name="money">Money</string>
     <string name="month">Month</string>
@@ -89,8 +91,9 @@
         <item>Special tech</item>
     </string-array>
     <string-array name="sort_types">
-        <item>by descending</item>
-        <item>by ascending</item>
+        <item>Sort</item>
+        <item>Price by descending</item>
+        <item>Price by ascending</item>
     </string-array>
 
     <string name="car_type">Vehicle type</string>
@@ -106,4 +109,10 @@
     <string name="describe_your_complaint">Describe your complaint</string>
     <string name="choose_a_reason">Choose a reason</string>
     <string name="register">Register</string>
+    <string name="about">About</string>
+    <string name="information">Information</string>
+    <string name="agreement_short">Agreement</string>
+    <string name="sign_out_from_account">Sign out from account</string>
+    <string name="my_posts">My posts</string>
+    <string name="my_cars">My cars</string>
 </resources>

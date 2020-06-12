@@ -18,7 +18,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".register.RegisterActivity"/>
+        <activity android:name=".settings.MyCarActivity"></activity>
+        <activity android:name=".settings.AgreementActivity" />
+        <activity android:name=".register.RegisterActivity" />
         <activity android:name=".item_detail.ReportActivity" />
         <activity
             android:name=".settings.MyOrdersActivity"
@@ -66,7 +68,7 @@
             android:name=".start.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Launcher">
-            <intent-filter>
+            <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

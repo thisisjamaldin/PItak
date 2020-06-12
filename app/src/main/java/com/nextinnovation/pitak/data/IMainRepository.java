@@ -1,5 +1,6 @@
 package com.nextinnovation.pitak.data;
 
+import com.nextinnovation.pitak.model.agreement.AgreementResponse;
 import com.nextinnovation.pitak.model.report.ReportRequest;
 import com.nextinnovation.pitak.model.car.CarResponse;
 import com.nextinnovation.pitak.model.post.FavouritePostResponse;
@@ -81,13 +82,13 @@ public interface IMainRepository {
                             @Header("Authorization") String token);
 
     @POST("api/advert/driver/search")
-    Call<PostResponse> searchDriver(@Body PostSearch search, @Header("Authorization") String token, @Query("page") int page);
+    Call<PostResponse> searchDriver(@Body PostSearch search, @Header("Authorization") String token, @Query("page") int page, @Query("sort") String sort);
 
     @POST("api/advert/passenger/search")
-    Call<PostResponse> searchPassenger(@Body PostSearch search, @Header("Authorization") String token, @Query("page") int page);
+    Call<PostResponse> searchPassenger(@Body PostSearch search, @Header("Authorization") String token, @Query("page") int page, @Query("sort") String sort);
 
     @POST("api/advert/all/adverts")
-    Call<PostResponse> searchAnonymous(@Body PostSearch search, @Query("page") int page);
+    Call<PostResponse> searchAnonymous(@Body PostSearch search, @Query("page") int page, @Query("sort") String sort);
 
     @POST("api/advert/favourite/{advertId}")
     Call<Void> addToFavourite(@Path("advertId") long advertId, @Header("Authorization") String token);
@@ -127,4 +128,7 @@ public interface IMainRepository {
 
     @GET("api/dictionary/reporttype/get/all")
     Call<ReportResponse> getReports();
+
+    @GET("api/dictionary/agreement/html/get")
+    Call<AgreementResponse> getAgreement();
 }

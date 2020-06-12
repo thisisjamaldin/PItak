@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.util.Base64;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -19,13 +20,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.fragment.main.RecyclerViewAdapter;
 import com.nextinnovation.pitak.model.post.Post;
 import com.nextinnovation.pitak.model.post.PostSingle;
+import com.nextinnovation.pitak.register.RegisterActivity;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
 
@@ -33,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ItemDetailActivity extends AppCompatActivity {
+public class ItemDetailActivity extends AppCompatActivity implements RecyclerViewAdapter.onItemClick {
 
     private ImageView back;
     private TextView title, price, phone;
@@ -47,6 +52,8 @@ public class ItemDetailActivity extends AppCompatActivity {
     private BottomSheetBehavior bsb;
     private View bottomSheet, dim;
     private Button bottomCancel, bottomReport;
+    private RecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
 
     public static void start(Context context, long id, Boolean saved) {
         context.startActivity(new Intent(context, ItemDetailActivity.class).putExtra("id", id).putExtra("saved", saved));
@@ -58,6 +65,11 @@ public class ItemDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item_detail);
 
         saved.setValue(getIntent().getBooleanExtra("saved", false));
+
+        if (Statics.getToken(this).length() <= 10){
+            startActivity(new Intent(ItemDetailActivity.this, RegisterActivity.class));
+            finish();
+        }
 
         getData(getIntent().getLongExtra("id", 0));
         initView();
@@ -76,7 +88,6 @@ public class ItemDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PostSingle> call, Throwable t) {
-
             }
         });
     }
@@ -98,6 +109,10 @@ public class ItemDetailActivity extends AppCompatActivity {
         bottomCancel = findViewById(R.id.bottom_sheet_cancel);
         bottomReport = findViewById(R.id.bottom_sheet_report);
         bsb = BottomSheetBehavior.from(bottomSheet);
+        recyclerView = findViewById(R.id.item_detail_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new RecyclerViewAdapter(this, false, false);
+        recyclerView.setAdapter(adapter);
     }
 
     private void listener() {
@@ -263,5 +278,47 @@ public class ItemDetailActivity extends AppCompatActivity {
         byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         Glide.with(this).load(decodedByte).into(mainImg);
+    }
+
+    @Override
+    public void onCall(int pos) {
+        Statics.call("+" + adapter.getList().get(pos).getMobileNumber(), this);
+    }
+
+    @Override
+    public void onSave(int pos, boolean save) {
+        if (save) {
+            MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(this)).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    MToast.showInternetError(ItemDetailActivity.this);
+                }
+            });
+        } else {
+            MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getId(), Statics.getToken(this)).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    MToast.showInternetError(ItemDetailActivity.this);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onClick(int pos) {
+        ItemDetailActivity.start(this, adapter.getList().get(pos).getId(), false);
+    }
+
+    @Override
+    public void openWhatsapp(int pos) {
+        Statics.openWhatsapp(adapter.getList().get(pos).getMobileNumber(), this);
     }
 }

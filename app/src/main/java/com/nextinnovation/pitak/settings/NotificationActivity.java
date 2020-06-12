@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.main.MainActivity;
+import com.nextinnovation.pitak.register.RegisterActivity;
 import com.nextinnovation.pitak.register.RegisterClientActivity;
 import com.nextinnovation.pitak.register.RegisterDriverActivity;
 import com.nextinnovation.pitak.register.WhoRegisterActivity;
@@ -27,7 +28,6 @@ import com.nextinnovation.pitak.utils.Statics;
 public class NotificationActivity extends AppCompatActivity {
 
     private TextView editProfile;
-    private TextView signOut;
     private ImageView back;
     private Switch notifyNewPost;
 
@@ -48,7 +48,6 @@ public class NotificationActivity extends AppCompatActivity {
         notifyNewPost = findViewById(R.id.settings_notification_new_notification_switch);
         editProfile = findViewById(R.id.settings_notification_profile_edit);
         back = findViewById(R.id.settings_notification_back_img);
-        signOut = findViewById(R.id.settings_notification_sign_out);
     }
 
     private void listener() {
@@ -66,25 +65,6 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-            }
-        });
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(NotificationActivity.this);
-                alert.setTitle(getResources().getString(R.string.sign_out));
-                alert.setMessage(getResources().getString(R.string.are_you_sure_to_sign_out));
-                alert.setNeutralButton(getResources().getString(R.string.cancel), null);
-                alert.setPositiveButton(getResources().getString(R.string.sign_out), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(NotificationActivity.this, WhoRegisterActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-                        MSharedPreferences.clear(NotificationActivity.this);
-                        MSharedPreferences.set(NotificationActivity.this, "first", false);
-                    }
-                });
-                alert.show();
             }
         });
         notifyNewPost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
