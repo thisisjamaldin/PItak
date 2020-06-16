@@ -43,11 +43,12 @@
     <string name="promotional_code">Promotional code</string>
     <string name="pay24_o_money">Pay24, O! Money</string>
     <string name="pay">Pay</string>
-    <string name="now_addresses">Now 0 addresses</string>
+    <string name="list_of_car">List of cars</string>
+    <string name="list_of_post">List of posts</string>
     <string name="my_addresses">My addresses</string>
     <string name="trip_history">Trip history</string>
     <string name="my_orders">My Orders</string>
-    <string name="to_">Posted</string>
+    <string name="to_">To: </string>
     <string name="mark_">Mark: </string>
     <string name="model_">Model: </string>
     <string name="type_">Type: </string>
@@ -89,6 +90,20 @@
         <item>Driver</item>
         <item>Package</item>
         <item>Special tech</item>
+        <item>Cargo transportation</item>
+    </string-array>
+    <string-array name="service_types_driver">
+        <item>Service type</item>
+        <item>Passenger</item>
+        <item>Package</item>
+        <item>Special tech</item>
+        <item>Cargo transportation</item>
+    </string-array>
+    <string-array name="service_types_passenger">
+        <item>Service type</item>
+        <item>Driver</item>
+        <item>Special tech</item>
+        <item>Cargo transportation</item>
     </string-array>
     <string-array name="sort_types">
         <item>Sort</item>
@@ -115,4 +130,8 @@
     <string name="sign_out_from_account">Sign out from account</string>
     <string name="my_posts">My posts</string>
     <string name="my_cars">My cars</string>
+    <string name="are_you_sure_to_delete_">Are you sure to delete?</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="add">Add</string>
 </resources>

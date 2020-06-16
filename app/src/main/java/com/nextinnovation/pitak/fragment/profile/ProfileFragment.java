@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -23,11 +24,13 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.fragment.main.MainFragment;
 import com.nextinnovation.pitak.model.user.ProfileRequest;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.register.RegisterActivity;
 import com.nextinnovation.pitak.register.RegisterClientActivity;
 import com.nextinnovation.pitak.register.RegisterDriverActivity;
+import com.nextinnovation.pitak.settings.AboutActivity;
 import com.nextinnovation.pitak.settings.AgreementActivity;
 import com.nextinnovation.pitak.settings.HistoryActivity;
 import com.nextinnovation.pitak.settings.MyCarActivity;
@@ -81,6 +84,18 @@ public class ProfileFragment extends Fragment {
     }
 
     private void listener() {
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse("https://firebasestorage.googleapis.com/v0/b/pitak-37337.appspot.com/o/pitak%20%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5.pdf?alt=media&token=0517a897-926b-46cb-8191-d0c63167e9a4"), "application/pdf");
+                    startActivity(intent);
+                } catch (Exception e) {
+                    startActivity(new Intent(getContext(), AboutActivity.class));
+                }
+            }
+        });
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

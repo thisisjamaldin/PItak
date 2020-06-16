@@ -11,8 +11,7 @@
         android:layout_width="126dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/item_main_layout"
-        android:layout_alignTop="@id/item_main_layout"
-        android:src="@drawable/bg_launch_screen" />
+        android:layout_alignTop="@id/item_main_layout" />
 
     <ImageView
         android:id="@+id/item_main_save"
@@ -85,7 +84,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/item_main_to_text"
             android:layout_toRightOf="@id/item_main_mark_text"
-            android:text="KIA Sorento"
             android:textColor="@color/black" />
 
         <TextView

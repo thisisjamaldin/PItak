@@ -3,12 +3,10 @@ package com.nextinnovation.pitak.register;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,6 +26,7 @@ import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.model.car.Car;
 import com.nextinnovation.pitak.model.car.CarResponse;
+import com.nextinnovation.pitak.model.car.NewCarResponse;
 import com.nextinnovation.pitak.model.user.EditUser;
 import com.nextinnovation.pitak.model.user.ProfileRequest;
 import com.nextinnovation.pitak.model.user.ProfileResponse;
@@ -42,9 +41,7 @@ import com.nextinnovation.pitak.utils.Statics;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -138,7 +135,6 @@ public class RegisterClientActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
-                                    Log.e("--------ress", editUser+"");
                                     if (profileFile != null) {
                                         MainRepository.getService().setUserProfile(getBody(profileFile), Statics.getToken(RegisterClientActivity.this)).enqueue(new Callback<ProfileResponse>() {
                                             @Override
@@ -217,14 +213,28 @@ public class RegisterClientActivity extends AppCompatActivity {
                                             MainRepository.getService().getMe(Statics.getToken(RegisterClientActivity.this)).enqueue(new Callback<User>() {
                                                 @Override
                                                 public void onResponse(Call<User> call, Response<User> response) {
+                                                    MSharedPreferences.set(RegisterClientActivity.this, Statics.USER, new Gson().toJson(response.body().getResult()));
                                                     MSharedPreferences.set(RegisterClientActivity.this, Statics.REGISTERED, true);
-                                                    if (response.body().getResult().getUserType().equals("DRIVER")) {
-                                                        MSharedPreferences.set(RegisterClientActivity.this, "who", Statics.DRIVER);
-                                                    }
                                                     if (response.body().getResult().getUserType().equals("PASSENGER")) {
                                                         MSharedPreferences.set(RegisterClientActivity.this, "who", Statics.PASSENGER);
                                                     }
-                                                    MSharedPreferences.set(RegisterClientActivity.this, Statics.USER, new Gson().toJson(response.body().getResult()));
+                                                    if (response.body().getResult().getUserType().equals("DRIVER")) {
+                                                        MSharedPreferences.set(RegisterClientActivity.this, "who", Statics.DRIVER);
+                                                        MainRepository.getService().getMyCars(Statics.getToken(RegisterClientActivity.this)).enqueue(new Callback<NewCarResponse>() {
+                                                            @Override
+                                                            public void onResponse(Call<NewCarResponse> call, Response<NewCarResponse> response) {
+                                                                UserWhenSignedIn uws = new Gson().fromJson(MSharedPreferences.get(RegisterClientActivity.this, Statics.USER, ""), UserWhenSignedIn.class);
+                                                                if (response.body().getResult().isEmpty()) return;
+                                                                uws.setCarCommonModel(response.body().getResult().get(0));
+                                                                MSharedPreferences.set(RegisterClientActivity.this, Statics.USER, new Gson().toJson(uws));
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<NewCarResponse> call, Throwable t) {
+
+                                                            }
+                                                        });
+                                                    }
                                                     MainActivity.start(RegisterClientActivity.this);
                                                 }
 
@@ -246,7 +256,6 @@ public class RegisterClientActivity extends AppCompatActivity {
                                     }
                                 });
                             } else {
-                                Log.e("---------if", "else");
                                 MToast.showResponseError(RegisterClientActivity.this, response.errorBody());
                                 save.setVisibility(View.VISIBLE);
                             }

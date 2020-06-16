@@ -3,6 +3,7 @@ package com.nextinnovation.pitak.fragment.main;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.model.post.Post;
 
@@ -76,10 +75,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView toPlace;
         private TextView price;
         private TextView role;
+        private TextView mark;
         private Button call, whatsapp;
 
         public ViewHolder(@NonNull final View itemView, final onItemClick itemClick) {
             super(itemView);
+            mark = itemView.findViewById(R.id.item_main_mark);
             profile = itemView.findViewById(R.id.item_main_image);
             name = itemView.findViewById(R.id.item_main_name);
             fromPlace = itemView.findViewById(R.id.item_main_from);
@@ -124,39 +125,49 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             });
         }
 
-        void bind(Post post) {
-            Context context = save.getContext();
-            if (saved || post.isFavorite()) {
-                save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save_checked));
-                save.setTag(1);
-            } else {
-                save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save));
-                save.setTag(0);
-            }
-            if (mine) {
-                save.setVisibility(View.GONE);
-                call.setVisibility(View.GONE);
-                whatsapp.setVisibility(View.GONE);
-            } else {
-                save.setVisibility(View.VISIBLE);
-                call.setVisibility(View.VISIBLE);
-                whatsapp.setVisibility(View.VISIBLE);
-            }
-            if (post.getImgFileList().isEmpty()) {
-                Glide.with(context).load(R.drawable.launch_screen).centerCrop().into(profile);
-            } else {
-                Glide.with(context).load(setImage(post.getImgFileList().get(0).getContent())).centerCrop().into(profile);
-            }
-            name.setText(post.getTitle());
-            fromPlace.setText(fromPlace.getContext().getResources().getString(R.string.from) + " " + post.getFromPlace());
-            toPlace.setText(post.getToPlace());
-            price.setText(post.getAmountPayment() + " сом");
-            if (post.getAdvertType()==null) return;
-            if (post.getAdvertType().equals("PASSENGER")){
-                role.setText(role.getContext().getResources().getString(R.string.passenger));
-            } else {
-                role.setText(role.getContext().getResources().getString(R.string.driver));
-            }
+        void bind(final Post post) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    Context context = save.getContext();
+                    if (saved || post.isFavorite()) {
+                        save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save_checked));
+                        save.setTag(1);
+                    } else {
+                        save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save));
+                        save.setTag(0);
+                    }
+                    if (mine) {
+                        save.setVisibility(View.GONE);
+                        call.setVisibility(View.GONE);
+                        whatsapp.setVisibility(View.GONE);
+                    } else {
+                        save.setVisibility(View.VISIBLE);
+                        call.setVisibility(View.VISIBLE);
+                        whatsapp.setVisibility(View.VISIBLE);
+                    }
+                    if (post.getImgFileList().isEmpty()) {
+                        Glide.with(context).load(R.drawable.launch_screen).centerCrop().into(profile);
+                    } else {
+                        Glide.with(context).load(setImage(post.getImgFileList().get(0).getContent())).centerCrop().into(profile);
+                    }
+                    if (post.getCarCommonModel() != null) {
+                        mark.setText(post.getCarCommonModel().getCarBrand().getName());
+                    }
+                    name.setText(post.getTitle());
+                    fromPlace.setText(fromPlace.getContext().getResources().getString(R.string.from) + " " + post.getFromPlace());
+                    toPlace.setText(post.getToPlace());
+                    price.setText(post.getAmountPayment() + " сом");
+                    if (post.getAdvertType() == null) return;
+                    if (post.getAdvertType().equals("PASSENGER")) {
+                        role.setText(role.getContext().getResources().getString(R.string.passenger));
+                    } else if (post.getAdvertType().equals("DRIVER")) {
+                        role.setText(role.getContext().getResources().getString(R.string.driver));
+                    } else {
+                        role.setText(role.getContext().getResources().getStringArray(R.array.service_types)[4]);
+                    }
+                }
+            });
         }
     }
 
@@ -174,4 +185,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         void openWhatsapp(int pos);
     }
+
 }

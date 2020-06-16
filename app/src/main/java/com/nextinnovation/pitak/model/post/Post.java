@@ -1,5 +1,7 @@
 package com.nextinnovation.pitak.model.post;
 
+import com.nextinnovation.pitak.model.user.UserCar;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,6 +15,7 @@ public class Post implements Serializable {
     private String toPlace;
     private String advertType;
     private long createdBy;
+    private UserCar carCommonModel;
     private String mobileNumber;
     private List<PostImage> appFiles;
     private boolean isFavorite;
@@ -124,6 +127,22 @@ public class Post implements Serializable {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public UserCar getCarCommonModel() {
+        return carCommonModel;
+    }
+
+    public void setCarCommonModel(UserCar carCommonModel) {
+        this.carCommonModel = carCommonModel;
+    }
+
+    public List<PostImage> getAppFiles() {
+        return appFiles;
+    }
+
+    public void setAppFiles(List<PostImage> appFiles) {
+        this.appFiles = appFiles;
     }
 
     @Override

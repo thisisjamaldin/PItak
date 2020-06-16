@@ -1,9 +1,8 @@
 package com.nextinnovation.pitak.model.user;
 
 import com.nextinnovation.pitak.model.car.Car;
-import com.nextinnovation.pitak.model.car.CarResponse;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class UserWhenSignedIn {
     private long id;

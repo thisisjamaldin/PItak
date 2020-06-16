@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.model.car.NewCarResponse;
 import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
@@ -76,14 +77,28 @@ public class PhoneAuthenticationActivity extends AppCompatActivity {
                                         @Override
                                         public void onResponse(Call<User> call, Response<User> response) {
                                             MSharedPreferences.set(PhoneAuthenticationActivity.this, "phone", fullPhone);
-                                            if (response.body().getResult().getUserType().equals("DRIVER")){
-                                                MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.DRIVER);
-                                            }
-                                            if (response.body().getResult().getUserType().equals("PASSENGER")){
-                                                MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.PASSENGER);
-                                            }
                                             MSharedPreferences.set(PhoneAuthenticationActivity.this, Statics.USER, new Gson().toJson(response.body().getResult()));
                                             MSharedPreferences.set(PhoneAuthenticationActivity.this, Statics.REGISTERED, true);
+                                            if (response.body().getResult().getUserType().equals("PASSENGER")) {
+                                                MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.PASSENGER);
+                                            }
+                                            if (response.body().getResult().getUserType().equals("DRIVER")) {
+                                                MSharedPreferences.set(PhoneAuthenticationActivity.this, "who", Statics.DRIVER);
+                                                MainRepository.getService().getMyCars(Statics.getToken(PhoneAuthenticationActivity.this)).enqueue(new Callback<NewCarResponse>() {
+                                                    @Override
+                                                    public void onResponse(Call<NewCarResponse> call, Response<NewCarResponse> response) {
+                                                        UserWhenSignedIn uws = new Gson().fromJson(MSharedPreferences.get(PhoneAuthenticationActivity.this, Statics.USER, ""), UserWhenSignedIn.class);
+                                                        if (response.body().getResult().isEmpty()) return;
+                                                        uws.setCarCommonModel(response.body().getResult().get(0));
+                                                        MSharedPreferences.set(PhoneAuthenticationActivity.this, Statics.USER, new Gson().toJson(uws));
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<NewCarResponse> call, Throwable t) {
+
+                                                    }
+                                                });
+                                            }
                                             CodeAuthenticationActivity.start(PhoneAuthenticationActivity.this, null);
                                         }
 

@@ -18,10 +18,30 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".settings.MyCarActivity"></activity>
-        <activity android:name=".settings.AgreementActivity" />
-        <activity android:name=".register.RegisterActivity" />
-        <activity android:name=".item_detail.ReportActivity" />
+        <activity
+            android:name=".settings.AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.AddCarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.MyCarDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.AddPostActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.MyCarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.AgreementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".register.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".item_detail.ReportActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".settings.MyOrdersActivity"
             android:screenOrientation="portrait" />

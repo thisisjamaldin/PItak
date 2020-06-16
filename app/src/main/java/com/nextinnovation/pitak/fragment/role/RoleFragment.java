@@ -1,6 +1,7 @@
 package com.nextinnovation.pitak.fragment.role;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.fragment.main.MainFragment;
 import com.nextinnovation.pitak.fragment.main.RecyclerViewAdapter;
 import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
 import com.nextinnovation.pitak.main.MainActivity;
@@ -36,7 +38,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
 
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
+    public static RecyclerViewAdapter adapter;
     private View searchLayout;
     private EditText search;
     private ProgressBar loading;
@@ -114,11 +116,12 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
     }
 
     @Override
-    public void onSave(int pos, boolean save) {
+    public void onSave(final int pos, final boolean save) {
         if (save) {
             MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {}
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
@@ -128,7 +131,8 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
         } else {
             MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {}
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
@@ -136,6 +140,17 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
                 }
             });
         }
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < MainFragment.adapter.getList().size(); i++) {
+                    if (MainFragment.adapter.getList().get(i).getId() == adapter.getList().get(pos).getId()) {
+                        MainFragment.adapter.getList().get(i).setFavorite(save);
+                        MainFragment.adapter.notifyItemChanged(i);
+                    }
+                }
+            }
+        });
     }
 
     @Override

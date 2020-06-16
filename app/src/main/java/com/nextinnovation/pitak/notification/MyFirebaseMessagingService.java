@@ -5,11 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -18,8 +15,6 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.start.SplashActivity;
-import com.nextinnovation.pitak.utils.MSharedPreferences;
-import com.nextinnovation.pitak.utils.MToast;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 

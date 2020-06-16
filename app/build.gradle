@@ -42,5 +42,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.2.0'
 //ImagePicker
     implementation 'com.asksira.android:bsimagepicker:1.3.2'
-
 }

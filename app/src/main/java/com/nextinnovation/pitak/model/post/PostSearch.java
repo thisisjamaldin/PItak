@@ -1,19 +1,31 @@
 package com.nextinnovation.pitak.model.post;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class PostSearch {
     private String fromPlace;
     private String toPlace;
     private String title;
-
-    public PostSearch(String fromPlace, String toPlace, String title) {
-        this.fromPlace = fromPlace;
-        this.toPlace = toPlace;
-        this.title = title;
-    }
+    private List<String> type;
 
     public PostSearch() {
+    }
+
+    public List<String> getType() {
+        return type;
+    }
+
+    public void setType(List<String> type) {
+        this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getFromPlace() {
@@ -32,20 +44,11 @@ public class PostSearch {
         this.toPlace = toPlace;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     @Override
     public String toString() {
         return "PostSearch{" +
                 ", fromPlace='" + fromPlace + '\'' +
                 ", toPlace='" + toPlace + '\'' +
-                ", title='" + title + '\'' +
                 '}';
     }
 }

@@ -23,31 +23,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_alignTop="@id/main_search_layout_ll"
+            android:layout_alignBottom="@id/main_search_layout_ll"/>
+
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="130dp"
             android:src="@drawable/bg_gradient_blue" />
-
-        <EditText
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="32dp"
+            android:layout_margin="12dp"
+            android:src="@mipmap/logo_label" />
+        <Spinner
             android:id="@+id/main_fragment_edit_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="42dp"
-            android:layout_marginEnd="20dp"
+            android:entries="@array/service_types"
             android:background="@drawable/bg_edit_fields"
-            android:drawableEnd="@drawable/ic_search"
-            android:hint="@string/search"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:padding="12dp" />
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="20dp"
+            android:padding="12dp"/>
 
         <LinearLayout
             android:id="@+id/main_search_layout_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/main_fragment_edit_search"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="14dp">
 
             <EditText
                 android:id="@+id/main_fragment_edit_search_from"
@@ -102,13 +110,13 @@
             <Spinner
                 android:id="@+id/main_fragment_sort"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
                 android:background="@drawable/bg_drop_down_sort"
                 android:entries="@array/sort_types"
-                android:paddingStart="24dp"
-                android:paddingEnd="0dp" />
+                android:paddingStart="24dp" />
 
             <View
                 android:layout_width="0dp"

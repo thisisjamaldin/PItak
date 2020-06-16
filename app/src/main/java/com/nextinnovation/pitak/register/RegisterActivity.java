@@ -13,15 +13,13 @@ import com.nextinnovation.pitak.utils.Statics;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private Button register;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         Button signIn = findViewById(R.id.register_sign_in);
-        register = findViewById(R.id.register_register);
+        Button register = findViewById(R.id.register_register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

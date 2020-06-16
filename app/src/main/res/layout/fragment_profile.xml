@@ -132,7 +132,7 @@
                     android:layout_toEndOf="@id/profile_fragment_my_car_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:text="@string/now_addresses" />
+                    android:text="@string/list_of_car" />
 
                 <ImageView
                     android:layout_width="50dp"
@@ -177,7 +177,7 @@
                     android:layout_toEndOf="@id/profile_fragment_my_post_ic"
                     android:fontFamily="@font/raleway_semibold"
                     android:paddingStart="8dp"
-                    android:text="@string/now_addresses" />
+                    android:text="@string/list_of_post" />
 
                 <ImageView
                     android:layout_width="50dp"

@@ -1,6 +1,7 @@
 package com.nextinnovation.pitak.data;
 
 import com.nextinnovation.pitak.model.agreement.AgreementResponse;
+import com.nextinnovation.pitak.model.car.NewCarResponse;
 import com.nextinnovation.pitak.model.report.ReportRequest;
 import com.nextinnovation.pitak.model.car.CarResponse;
 import com.nextinnovation.pitak.model.post.FavouritePostResponse;
@@ -13,6 +14,8 @@ import com.nextinnovation.pitak.model.user.ProfileResponse;
 import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -32,19 +35,19 @@ public interface IMainRepository {
     @Multipart
     @POST("api/auth/signup")
     Call<UserWhenSignedIn> signUp(@Part MultipartBody.Part profile,
-                      @Part ("username") RequestBody username,
-                      @Part ("email") RequestBody email,
-                      @Part ("password") RequestBody password,
-                      @Part ("surname") RequestBody surname,
-                      @Part ("name") RequestBody name,
-                      @Part ("patronymic") RequestBody patronymic,
-                      @Part ("userType") RequestBody userType,
-                      @Part ("carCommonModel.carBrand.id") RequestBody carBrandId,
-                      @Part ("carCommonModel.carModel.id") RequestBody carModelId,
-                      @Part ("carCommonModel.carNumber") RequestBody carNumber,
-                      @Part ("carCommonModel.carType.id") RequestBody carTypeId,
-                      @Part ("countryModel.id") RequestBody countryId,
-                      @Part ("cityModel.id") RequestBody cityId
+                                  @Part("username") RequestBody username,
+                                  @Part("email") RequestBody email,
+                                  @Part("password") RequestBody password,
+                                  @Part("surname") RequestBody surname,
+                                  @Part("name") RequestBody name,
+                                  @Part("patronymic") RequestBody patronymic,
+                                  @Part("userType") RequestBody userType,
+                                  @Part("carCommonModel.carBrand.id") RequestBody carBrandId,
+                                  @Part("carCommonModel.carModel.id") RequestBody carModelId,
+                                  @Part("carCommonModel.carNumber") RequestBody carNumber,
+                                  @Part("carCommonModel.carType.id") RequestBody carTypeId,
+                                  @Part("countryModel.id") RequestBody countryId,
+                                  @Part("cityModel.id") RequestBody cityId
     );
 
     @POST("api/auth/signin")
@@ -54,6 +57,7 @@ public interface IMainRepository {
     @POST("api/user/upload/profile/photo")
     Call<ProfileResponse> setUserProfile(@Part MultipartBody.Part profile,
                                          @Header("Authorization") String token);
+
     @POST("api/user/remove/profile/photo")
     Call<Void> removeProfile(@Header("Authorization") String token);
 
@@ -64,22 +68,25 @@ public interface IMainRepository {
     Call<Void> editClient(@Body EditUser editUser, @Header("Authorization") String token);
 
     @Multipart
-    @POST("api/advert/create")
-    Call<Object> createPost(@Part MultipartBody.Part image,
-                            @Part MultipartBody.Part image1,
-                            @Part MultipartBody.Part image2,
-                            @Part MultipartBody.Part image3,
-                            @Part MultipartBody.Part image4,
-                            @Part("title") RequestBody title,
-                            @Part("text") RequestBody text,
-                            @Part("amountPayment") RequestBody amountPayment,
-                            @Part("fromPlace") RequestBody fromPlace,
-                            @Part("toPlace") RequestBody toPlace,
-                            @Part("advertType") RequestBody advertType,
-                            @Part("numberOfSeat") RequestBody numberOfSeat,
-                            @Part("sendDateTime") RequestBody sendDateTime,
-                            @Part("arrivalDateTime") RequestBody arrivalDateTime,
-                            @Header("Authorization") String token);
+    @POST("api/advert/save")
+    Call<Object> savePost(
+            @Part("id") RequestBody id,
+            @Part MultipartBody.Part image,
+            @Part MultipartBody.Part image1,
+            @Part MultipartBody.Part image2,
+            @Part MultipartBody.Part image3,
+            @Part MultipartBody.Part image4,
+            @Part("title") RequestBody title,
+            @Part("text") RequestBody text,
+            @Part("amountPayment") RequestBody amountPayment,
+            @Part("fromPlace") RequestBody fromPlace,
+            @Part("toPlace") RequestBody toPlace,
+            @Part("advertType") RequestBody advertType,
+            @Part("numberOfSeat") RequestBody numberOfSeat,
+            @Part("sendDateTime") RequestBody sendDateTime,
+            @Part("arrivalDateTime") RequestBody arrivalDateTime,
+            @Part("carCommonModel.id") RequestBody markId,
+            @Header("Authorization") String token);
 
     @POST("api/advert/driver/search")
     Call<PostResponse> searchDriver(@Body PostSearch search, @Header("Authorization") String token, @Query("page") int page, @Query("sort") String sort);
@@ -98,6 +105,12 @@ public interface IMainRepository {
 
     @DELETE("api/advert/favourite/{advertId}")
     Call<Void> deleteFromFavourite(@Path("advertId") long advertId, @Header("Authorization") String token);
+
+    @DELETE("api/advert/remove/myadvert/{id}")
+    Call<Void> deleteMyPost(@Path("id") long id, @Header("Authorization") String token);
+
+    @GET("api/car/remove")
+    Call<Void> deleteMyCar(@Query("carId") long carId, @Header("Authorization") String token);
 
     @GET("api/advert/favourite/get/list")
     Call<FavouritePostResponse> getFavourite(@Header("Authorization") String token);
@@ -123,6 +136,9 @@ public interface IMainRepository {
     @GET("api/advert/get/{advertId}")
     Call<PostSingle> getAdvert(@Path("advertId") long advertId, @Header("Authorization") String token);
 
+    @GET("api/advert/get/myadvert/{id}")
+    Call<PostSingle> getMyAdvert(@Path("id") long id, @Header("Authorization") String token);
+
     @GET("api/user/me")
     Call<User> getMe(@Header("Authorization") String token);
 
@@ -131,4 +147,23 @@ public interface IMainRepository {
 
     @GET("api/dictionary/agreement/html/get")
     Call<AgreementResponse> getAgreement();
+
+    @GET("api/car/mycars")
+    Call<NewCarResponse> getMyCars(@Header("Authorization") String token);
+
+    @Multipart
+    @POST("api/car/create")
+    Call<Object> createCar(@Part List<MultipartBody.Part> image,
+                           @Part("id") RequestBody id,
+                           @Part("userId") RequestBody userId,
+                           @Part("carBrand.id") RequestBody markId,
+                           @Part("carBrand.name") RequestBody markName,
+                           @Part("carModel.id") RequestBody modelId,
+                           @Part("carModel.name") RequestBody modelName,
+                           @Part("carNumber") RequestBody number,
+                           @Part("carType.id") RequestBody typeId,
+                           @Part("carType.name") RequestBody typeName,
+                           @Part("carryCapacity") RequestBody capacity,
+                           @Header("Authorization") String token);
+
 }

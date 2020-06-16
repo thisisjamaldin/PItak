@@ -2,9 +2,7 @@ package com.nextinnovation.pitak.settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
@@ -12,7 +10,6 @@ import android.widget.ProgressBar;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.model.agreement.AgreementResponse;
-import com.nextinnovation.pitak.model.report.ReportResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;

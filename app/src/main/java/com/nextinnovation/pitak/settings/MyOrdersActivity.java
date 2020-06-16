@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -27,12 +29,14 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
     private ImageView back;
     private RecyclerViewAdapter adapter;
     private ProgressBar loading;
+    private Button add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_orders);
 
+        add = findViewById(R.id.my_order_add);
         loading = findViewById(R.id.my_order_loading);
         back = findViewById(R.id.my_order_back_img);
         back.setOnClickListener(new View.OnClickListener() {
@@ -41,11 +45,16 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
                 finish();
             }
         });
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MyOrdersActivity.this, AddPostActivity.class));
+            }
+        });
         recyclerView = findViewById(R.id.my_order_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RecyclerViewAdapter(this, false, true);
         recyclerView.setAdapter(adapter);
-        getData();
     }
 
     @Override
@@ -60,7 +69,7 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
 
     @Override
     public void onClick(int pos) {
-        ItemDetailActivity.start(MyOrdersActivity.this, adapter.getList().get(pos).getId(), null);
+        ItemDetailActivity.start(MyOrdersActivity.this, adapter.getList().get(pos).getId(), true);
     }
 
     @Override
@@ -73,6 +82,7 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getResult() != null && !response.body().getResult().getContent().isEmpty()) {
+                    adapter.clear();
                     adapter.addList(response.body().getResult().getContent());
                 } else if (response.isSuccessful() && response.body() != null && response.body().getResult() != null && response.body().getResult().getContent().isEmpty()) {
                     MToast.show(MyOrdersActivity.this, getResources().getString(R.string.nothing_found));
@@ -87,5 +97,12 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
                 MToast.showInternetError(MyOrdersActivity.this);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loading.setVisibility(View.VISIBLE);
+        getData();
     }
 }

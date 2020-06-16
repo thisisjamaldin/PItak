@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/add_fragment_main_scroll_view_1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/add_fragment_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:padding="12dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/add_fragment_image_1"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/add_fragment_image_1_1"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_toEndOf="@id/add_fragment_image_1"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/add_fragment_image_2_1"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_below="@id/add_fragment_image_1_1"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/add_fragment_image_1"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/add_fragment_image_3_1"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_toEndOf="@id/add_fragment_image_1_1"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/add_fragment_image_4_1"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_below="@id/add_fragment_image_3_1"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/add_fragment_image_2_1"
+                android:background="@drawable/bg_upload_image"
+                android:scaleType="centerCrop" />
+
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/add_fragment_title_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:hint="@string/headline"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <EditText
+            android:id="@+id/add_fragment_desc_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:gravity="top"
+            android:hint="@string/description"
+            android:minHeight="120dp"
+            android:padding="12dp" />
+
+        <Spinner
+            android:id="@+id/add_fragment_service_type_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_drop_down"
+            android:entries="@array/service_types"
+            android:padding="14dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_semibold"
+            android:padding="4dp"
+            android:text="@string/from"
+            android:textColor="@color/bluish_black" />
+
+        <EditText
+            android:id="@+id/add_fragment_from_place_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:gravity="top"
+            android:hint="@string/from"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="2"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="@string/date"
+                android:textColor="@color/bluish_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="@string/time"
+                android:textColor="@color/bluish_black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="4dp">
+
+            <Button
+                android:id="@+id/add_fragment_date_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="2"
+                android:background="@drawable/bg_edit_fields"
+                android:drawableStart="@drawable/ic_date"
+                android:paddingStart="12dp" />
+
+            <Button
+                android:id="@+id/add_fragment_time_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edit_fields" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_semibold"
+            android:padding="4dp"
+            android:text="@string/to"
+            android:textColor="@color/bluish_black" />
+
+        <EditText
+            android:id="@+id/add_fragment_to_place_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:gravity="top"
+            android:hint="@string/to"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="2"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="@string/date"
+                android:textColor="@color/bluish_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="@string/time"
+                android:textColor="@color/bluish_black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="4dp">
+
+            <Button
+                android:id="@+id/add_fragment_date_1_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="2"
+                android:background="@drawable/bg_edit_fields"
+                android:drawableStart="@drawable/ic_date"
+                android:paddingStart="12dp" />
+
+            <Button
+                android:id="@+id/add_fragment_time_1_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_edit_fields" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/add_fragment_payment_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_fields"
+            android:hint="@string/price"
+            android:inputType="number"
+            android:padding="12dp" />
+
+        <Spinner
+            android:id="@+id/add_fragment_car_type_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_drop_down"
+            android:padding="14dp" />
+
+        <CheckBox
+            android:id="@+id/add_fragment_agreement_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="@string/agreement" />
+
+        <Button
+            android:id="@+id/add_fragment_post_btn_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_round_blue_button"
+            android:text="@string/post"
+            android:textColor="@color/white" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-64dp" />
+    </LinearLayout>
+</ScrollView>

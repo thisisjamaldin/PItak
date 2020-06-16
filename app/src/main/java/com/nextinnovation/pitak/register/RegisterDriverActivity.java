@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +26,7 @@ import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.model.car.Car;
 import com.nextinnovation.pitak.model.car.CarResponse;
+import com.nextinnovation.pitak.model.car.NewCarResponse;
 import com.nextinnovation.pitak.model.user.ProfileRequest;
 import com.nextinnovation.pitak.model.user.ProfileResponse;
 import com.nextinnovation.pitak.model.user.User;
@@ -41,7 +41,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -235,14 +234,28 @@ public class RegisterDriverActivity extends AppCompatActivity {
                                             MainRepository.getService().getMe(Statics.getToken(RegisterDriverActivity.this)).enqueue(new Callback<User>() {
                                                 @Override
                                                 public void onResponse(Call<User> call, Response<User> response) {
+                                                    MSharedPreferences.set(context, Statics.USER, new Gson().toJson(response.body().getResult()));
                                                     MSharedPreferences.set(context, Statics.REGISTERED, true);
-                                                    if (response.body().getResult().getUserType().equals("DRIVER")) {
-                                                        MSharedPreferences.set(context, "who", Statics.DRIVER);
-                                                    }
                                                     if (response.body().getResult().getUserType().equals("PASSENGER")) {
                                                         MSharedPreferences.set(context, "who", Statics.PASSENGER);
                                                     }
-                                                    MSharedPreferences.set(context, Statics.USER, new Gson().toJson(response.body().getResult()));
+                                                    if (response.body().getResult().getUserType().equals("DRIVER")) {
+                                                        MSharedPreferences.set(context, "who", Statics.DRIVER);
+                                                        MainRepository.getService().getMyCars(Statics.getToken(RegisterDriverActivity.this)).enqueue(new Callback<NewCarResponse>() {
+                                                            @Override
+                                                            public void onResponse(Call<NewCarResponse> call, Response<NewCarResponse> response) {
+                                                                UserWhenSignedIn uws = new Gson().fromJson(MSharedPreferences.get(RegisterDriverActivity.this, Statics.USER, ""), UserWhenSignedIn.class);
+                                                                if (response.body().getResult().isEmpty()) return;
+                                                                uws.setCarCommonModel(response.body().getResult().get(0));
+                                                                MSharedPreferences.set(RegisterDriverActivity.this, Statics.USER, new Gson().toJson(uws));
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<NewCarResponse> call, Throwable t) {
+
+                                                            }
+                                                        });
+                                                    }
                                                     MainActivity.start(context);
                                                 }
 
@@ -422,7 +435,9 @@ public class RegisterDriverActivity extends AppCompatActivity {
         editPhoneView.setVisibility(View.VISIBLE);
         name.setText(user.getName());
         email.setText(user.getEmail());
-        carNumber.setText(user.getCarCommonModel().getCarNumber());
+        if (user.getCarCommonModel() != null) {
+            carNumber.setText(user.getCarCommonModel().getCarNumber());
+        }
         phoneEdit.setText(userPhone.replace("+7", "+996").replace("+996", ""));
         if (user.getProfilePhoto() != null) {
             Glide.with(profile.getContext()).load(Base64.decode(user.getProfilePhoto().getContent(), Base64.DEFAULT)).apply(RequestOptions.circleCropTransform()).into(profile);
@@ -438,10 +453,16 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     countryResponse = new CarResponse(response.body().getResult());
                     List<String> country = new ArrayList<>();
                     int current = 0;
-                    for (int i = 0; i < countryResponse.getResult().size(); i++) {
-                        country.add(countryResponse.getResult().get(i).getName());
-                        if (countryResponse.getResult().get(i).getId() == user.getCountryModel().getId()) {
-                            current = i;
+                    if (user.getCountryModel() != null) {
+                        for (int i = 0; i < countryResponse.getResult().size(); i++) {
+                            country.add(countryResponse.getResult().get(i).getName());
+                            if (countryResponse.getResult().get(i).getId() == user.getCountryModel().getId()) {
+                                current = i;
+                            }
+                        }
+                    } else {
+                        for (Car c : response.body().getResult()) {
+                            country.add(c.getName());
                         }
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, country);
@@ -455,10 +476,16 @@ public class RegisterDriverActivity extends AppCompatActivity {
                                 cityResponse = response.body();
                                 List<String> city = new ArrayList<>();
                                 int current = 0;
-                                for (int i = 0; i < response.body().getResult().size(); i++) {
-                                    city.add(response.body().getResult().get(i).getName());
-                                    if (response.body().getResult().get(i).getId() == user.getCityModel().getId()) {
-                                        current = i;
+                                if (user.getCityModel() != null) {
+                                    for (int i = 0; i < response.body().getResult().size(); i++) {
+                                        city.add(response.body().getResult().get(i).getName());
+                                        if (response.body().getResult().get(i).getId() == user.getCityModel().getId()) {
+                                            current = i;
+                                        }
+                                    }
+                                } else {
+                                    for (Car c : response.body().getResult()) {
+                                        city.add(c.getName());
                                     }
                                 }
                                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, city);
@@ -519,10 +546,16 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     List<String> types = new ArrayList<>();
                     types.add(getResources().getString(R.string.car_type));
                     int current = 0;
-                    for (int i = 0; i < response.body().getResult().size(); i++) {
-                        types.add(response.body().getResult().get(i).getName());
-                        if (response.body().getResult().get(i).getId() == user.getCarCommonModel().getCarType().getId()) {
-                            current = i + 1;
+                    if (user.getCarCommonModel() != null) {
+                        for (int i = 0; i < response.body().getResult().size(); i++) {
+                            types.add(response.body().getResult().get(i).getName());
+                            if (response.body().getResult().get(i).getId() == user.getCarCommonModel().getCarType().getId()) {
+                                current = i + 1;
+                            }
+                        }
+                    } else {
+                        for (Car c : response.body().getResult()) {
+                            types.add(c.getName());
                         }
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, types);
@@ -545,10 +578,16 @@ public class RegisterDriverActivity extends AppCompatActivity {
                     List<String> mark = new ArrayList<>();
                     mark.add(getResources().getString(R.string.car_mark));
                     int current = 0;
-                    for (int i = 0; i < response.body().getResult().size(); i++) {
-                        mark.add(response.body().getResult().get(i).getName());
-                        if (response.body().getResult().get(i).getId() == user.getCarCommonModel().getCarBrand().getId()) {
-                            current = i + 1;
+                    if (user.getCarCommonModel() != null) {
+                        for (int i = 0; i < response.body().getResult().size(); i++) {
+                            mark.add(response.body().getResult().get(i).getName());
+                            if (response.body().getResult().get(i).getId() == user.getCarCommonModel().getCarBrand().getId()) {
+                                current = i + 1;
+                            }
+                        }
+                    } else {
+                        for (Car c : response.body().getResult()) {
+                            mark.add(c.getName());
                         }
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, mark);
@@ -567,10 +606,16 @@ public class RegisterDriverActivity extends AppCompatActivity {
                                         List<String> model = new ArrayList<>();
                                         model.add(getResources().getString(R.string.car_model));
                                         int current = 0;
-                                        for (int i = 0; i < response.body().getResult().size(); i++) {
-                                            model.add(response.body().getResult().get(i).getName());
-                                            if (response.body().getResult().get(i).getId() == user.getCarCommonModel().getCarModel().getId()) {
-                                                current = i + 1;
+                                        if (user.getCarCommonModel() != null) {
+                                            for (int i = 0; i < response.body().getResult().size(); i++) {
+                                                model.add(response.body().getResult().get(i).getName());
+                                                if (response.body().getResult().get(i).getId() == user.getCarCommonModel().getCarModel().getId()) {
+                                                    current = i + 1;
+                                                }
+                                            }
+                                        } else {
+                                            for (Car c : response.body().getResult()) {
+                                                model.add(c.getName());
                                             }
                                         }
                                         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, model);

@@ -1,6 +1,8 @@
 package com.nextinnovation.pitak.model.user;
 
-public class ProfileRequest {
+import java.io.Serializable;
+
+public class ProfileRequest implements Serializable {
     private String content;
 
     public ProfileRequest(String content) {
@@ -13,5 +15,12 @@ public class ProfileRequest {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "ProfileRequest{" +
+                "content='" + content + '\'' +
+                '}';
     }
 }

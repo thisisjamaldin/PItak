@@ -2,14 +2,12 @@ package com.nextinnovation.pitak.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,6 +16,7 @@ import android.widget.Button;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.fragment.role.RoleFragment;
 import com.nextinnovation.pitak.fragment.saved.SavedFragment;
 import com.nextinnovation.pitak.register.RegisterActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic(MSharedPreferences.get(MainActivity.this, "who", ""));
         initView();
         listener();
-        Log.e("------token", Statics.getToken(this));
     }
 
     private void initView() {
@@ -145,4 +143,6 @@ public class MainActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+
 }

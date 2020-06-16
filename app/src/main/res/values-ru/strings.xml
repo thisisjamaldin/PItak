@@ -37,7 +37,8 @@
     <string name="my_addresses">Мои адреса</string>
     <string name="my_orders">Мои заказы</string>
     <string name="notification">Уведомления</string>
-    <string name="now_addresses">Сейчас 0 адреса</string>
+    <string name="list_of_car">Список машин</string>
+    <string name="list_of_post">Список объявлений</string>
     <string name="on_and_off_notifications">Вкл и выкл уведомлений</string>
     <string name="pay">Методы оплаты</string>
     <string name="pay24_o_money">Pay24, О! Деньги</string>
@@ -91,6 +92,20 @@
         <item>Водитель</item>
         <item>Посылка</item>
         <item>Спец.техника</item>
+        <item>Грузоперевозки</item>
+    </string-array>
+    <string-array name="service_types_driver">
+        <item>Тип услуги</item>
+        <item>Пассажир</item>
+        <item>Посылка</item>
+        <item>Спец.техника</item>
+        <item>Грузоперевозки</item>
+    </string-array>
+    <string-array name="service_types_passenger">
+        <item>Тип услуги</item>
+        <item>Водитель</item>
+        <item>Спец.техника</item>
+        <item>Грузоперевозки</item>
     </string-array>
     <string-array name="sort_types">
         <item>Сортировка</item>
@@ -109,5 +124,9 @@
     <string name="sign_out_from_account">Выйти с акканута</string>
     <string name="my_posts">Мои объявления</string>
     <string name="my_cars">Мои машины</string>
+    <string name="are_you_sure_to_delete_">Вы уверены, что хотите удалить?</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
+    <string name="add">Добавление</string>
 
 </resources>

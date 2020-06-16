@@ -2,6 +2,7 @@ package com.nextinnovation.pitak.fragment.saved;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.fragment.main.MainFragment;
 import com.nextinnovation.pitak.fragment.main.RecyclerViewAdapter;
+import com.nextinnovation.pitak.fragment.role.RoleFragment;
 import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
 import com.nextinnovation.pitak.model.post.FavouritePostResponse;
 import com.nextinnovation.pitak.utils.MToast;
@@ -71,7 +74,7 @@ public class SavedFragment extends Fragment implements RecyclerViewAdapter.onIte
     }
 
     @Override
-    public void onSave(int pos, boolean save) {
+    public void onSave(final int pos, final boolean save) {
         if (save) {
             MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
@@ -97,11 +100,28 @@ public class SavedFragment extends Fragment implements RecyclerViewAdapter.onIte
                 }
             });
         }
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < MainFragment.adapter.getList().size(); i++) {
+                    if (MainFragment.adapter.getList().get(i).getId() == adapter.getList().get(pos).getId()) {
+                        MainFragment.adapter.getList().get(i).setFavorite(save);
+                        MainFragment.adapter.notifyItemChanged(i);
+                    }
+                }
+                for (int i = 0; i < RoleFragment.adapter.getList().size(); i++) {
+                    if (RoleFragment.adapter.getList().get(i).getId() == adapter.getList().get(pos).getId()) {
+                        RoleFragment.adapter.getList().get(i).setFavorite(save);
+                        RoleFragment.adapter.notifyItemChanged(i);
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(int pos) {
-        ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getId(), true);
+        ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getId(), false);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.nextinnovation.pitak.model.car;
 
 import java.io.Serializable;
 
-public class Car {
+public class Car implements Serializable{
     private long id;
     private String name;
 

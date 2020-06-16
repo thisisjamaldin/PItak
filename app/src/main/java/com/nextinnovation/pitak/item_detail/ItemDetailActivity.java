@@ -1,6 +1,8 @@
 package com.nextinnovation.pitak.item_detail;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.util.Base64;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -17,11 +18,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -31,6 +29,7 @@ import com.nextinnovation.pitak.fragment.main.RecyclerViewAdapter;
 import com.nextinnovation.pitak.model.post.Post;
 import com.nextinnovation.pitak.model.post.PostSingle;
 import com.nextinnovation.pitak.register.RegisterActivity;
+import com.nextinnovation.pitak.settings.AddPostActivity;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
 
@@ -42,21 +41,24 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
 
     private ImageView back;
     private TextView title, price, phone;
-    private Button save, share;
+    private Button save, share, edit, delete;
     private ImageView saveImg, shareImg, reportImage;
     private ImageView mainImg;
     private View call;
     private Post post;
-    private MutableLiveData<Boolean> saved = new MutableLiveData<>();
+    private long postId;
 
     private BottomSheetBehavior bsb;
     private View bottomSheet, dim;
     private Button bottomCancel, bottomReport;
-    private RecyclerViewAdapter adapter;
-    private RecyclerView recyclerView;
+    private boolean saved;
+    private boolean mine;
+    private ProgressDialog dialog;
+//    private RecyclerViewAdapter adapter;
+//    private RecyclerView recyclerView;
 
-    public static void start(Context context, long id, Boolean saved) {
-        context.startActivity(new Intent(context, ItemDetailActivity.class).putExtra("id", id).putExtra("saved", saved));
+    public static void start(Context context, long id, boolean mine) {
+        context.startActivity(new Intent(context, ItemDetailActivity.class).putExtra("id", id).putExtra("mine", mine));
     }
 
     @Override
@@ -64,35 +66,64 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
 
-        saved.setValue(getIntent().getBooleanExtra("saved", false));
-
-        if (Statics.getToken(this).length() <= 10){
+        if (Statics.getToken(this).length() <= 10) {
             startActivity(new Intent(ItemDetailActivity.this, RegisterActivity.class));
             finish();
         }
 
-        getData(getIntent().getLongExtra("id", 0));
+        dialog = ProgressDialog.show(this, null,
+                null, true);
+
+        mine = getIntent().getBooleanExtra("mine", false);
+        postId = getIntent().getLongExtra("id", 0);
+        getData(postId);
         initView();
         listener();
     }
 
     private void getData(long id) {
-        MainRepository.getService().getAdvert(id, Statics.getToken(this)).enqueue(new Callback<PostSingle>() {
-            @Override
-            public void onResponse(Call<PostSingle> call, Response<PostSingle> response) {
-                if (response.isSuccessful() && response.body().getResult() != null) {
-                    post = response.body().getResult();
-                    setView();
+        if (mine){
+            MainRepository.getService().getMyAdvert(id, Statics.getToken(this)).enqueue(new Callback<PostSingle>() {
+                @Override
+                public void onResponse(Call<PostSingle> call, Response<PostSingle> response) {
+                    dialog.dismiss();
+                    if (response.isSuccessful() && response.body().getResult() != null) {
+                        post = response.body().getResult();
+                        setView();
+                    } else {
+                        finish();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<PostSingle> call, Throwable t) {
-            }
-        });
+                @Override
+                public void onFailure(Call<PostSingle> call, Throwable t) {
+                    dialog.dismiss();
+                }
+            });
+        } else {
+            MainRepository.getService().getAdvert(id, Statics.getToken(this)).enqueue(new Callback<PostSingle>() {
+                @Override
+                public void onResponse(Call<PostSingle> call, Response<PostSingle> response) {
+                    dialog.dismiss();
+                    if (response.isSuccessful() && response.body().getResult() != null) {
+                        post = response.body().getResult();
+                        setView();
+                    } else {
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PostSingle> call, Throwable t) {
+                    dialog.dismiss();
+                }
+            });
+        }
     }
 
     private void initView() {
+        edit = findViewById(R.id.item_detail_edit);
+        delete = findViewById(R.id.item_detail_delete);
         back = findViewById(R.id.item_detail_back_img);
         title = findViewById(R.id.item_detail_title);
         price = findViewById(R.id.item_detail_price);
@@ -109,10 +140,10 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
         bottomCancel = findViewById(R.id.bottom_sheet_cancel);
         bottomReport = findViewById(R.id.bottom_sheet_report);
         bsb = BottomSheetBehavior.from(bottomSheet);
-        recyclerView = findViewById(R.id.item_detail_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerViewAdapter(this, false, false);
-        recyclerView.setAdapter(adapter);
+//        recyclerView = findViewById(R.id.item_detail_recycler);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        adapter = new RecyclerViewAdapter(this, false, false);
+//        recyclerView.setAdapter(adapter);
     }
 
     private void listener() {
@@ -175,31 +206,14 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
             @Override
             public void onClick(View v) {
                 saveClicked();
-                saved.setValue(!saved.getValue());
-                addToFavourite(saved.getValue());
+                addToFavourite(saved);
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveClicked();
-                saved.setValue(!saved.getValue());
-                addToFavourite(saved.getValue());
-            }
-        });
-        saved.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean s) {
-                if (s == null) {
-                    saveImg.setVisibility(View.GONE);
-                    save.setVisibility(View.GONE);
-                } else if (s) {
-                    saveImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_checked));
-                    save.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_save_checked, 0, 0, 0);
-                } else {
-                    saveImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_save));
-                    save.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_save, 0, 0, 0);
-                }
+                addToFavourite(saved);
             }
         });
         share.setOnClickListener(new View.OnClickListener() {
@@ -214,9 +228,54 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
                 share();
             }
         });
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                post.setImgFileList(null);
+                AddPostActivity.start(ItemDetailActivity.this, post);
+                finish();
+            }
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(ItemDetailActivity.this);
+                alert.setTitle(getResources().getString(R.string.are_you_sure_to_delete_));
+                alert.setNeutralButton(getResources().getString(R.string.cancel), null);
+                alert.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainRepository.getService().deleteMyPost(postId, Statics.getToken(ItemDetailActivity.this)).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+
+                            }
+                        });
+                        finish();
+                    }
+                });
+                alert.show();
+            }
+        });
+        if (mine) {
+            share.setVisibility(View.GONE);
+            shareImg.setVisibility(View.GONE);
+            save.setVisibility(View.GONE);
+            saveImg.setVisibility(View.GONE);
+            call.setVisibility(View.GONE);
+            reportImage.setVisibility(View.GONE);
+            edit.setVisibility(View.VISIBLE);
+            delete.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setView() {
+        saved = post.isFavorite();
         title.setText(Html.fromHtml("<h2>" + post.getTitle() + "</h2>" + "<br>" + post.getText()));
         price.setText(post.getAmountPayment() + " сом");
         phone.setText("+" + post.getMobileNumber());
@@ -225,9 +284,24 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
         } else {
             Glide.with(this).load(getResources().getDrawable(R.drawable.bg_launch_screen)).into(mainImg);
         }
+        if (saved) {
+            saveImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_checked));
+            save.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_save_checked, 0, 0, 0);
+        } else {
+            saveImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_save));
+            save.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_save, 0, 0, 0);
+        }
     }
 
     private void addToFavourite(Boolean mSave) {
+        saved = !mSave;
+        if (saved) {
+            saveImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_checked));
+            save.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_save_checked, 0, 0, 0);
+        } else {
+            saveImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_save));
+            save.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_save, 0, 0, 0);
+        }
         if (mSave) {
             MainRepository.getService().addToFavourite(post.getId(), Statics.getToken(ItemDetailActivity.this)).enqueue(new Callback<Void>() {
                 @Override
@@ -282,43 +356,43 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onCall(int pos) {
-        Statics.call("+" + adapter.getList().get(pos).getMobileNumber(), this);
+//        Statics.call("+" + adapter.getList().get(pos).getMobileNumber(), this);
     }
 
     @Override
     public void onSave(int pos, boolean save) {
-        if (save) {
-            MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(this)).enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    MToast.showInternetError(ItemDetailActivity.this);
-                }
-            });
-        } else {
-            MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getId(), Statics.getToken(this)).enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    MToast.showInternetError(ItemDetailActivity.this);
-                }
-            });
-        }
+//        if (save) {
+//            MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(this)).enqueue(new Callback<Void>() {
+//                @Override
+//                public void onResponse(Call<Void> call, Response<Void> response) {
+//                }
+//
+//                @Override
+//                public void onFailure(Call<Void> call, Throwable t) {
+//                    MToast.showInternetError(ItemDetailActivity.this);
+//                }
+//            });
+//        } else {
+//            MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getId(), Statics.getToken(this)).enqueue(new Callback<Void>() {
+//                @Override
+//                public void onResponse(Call<Void> call, Response<Void> response) {
+//                }
+//
+//                @Override
+//                public void onFailure(Call<Void> call, Throwable t) {
+//                    MToast.showInternetError(ItemDetailActivity.this);
+//                }
+//            });
+//        }
     }
 
     @Override
     public void onClick(int pos) {
-        ItemDetailActivity.start(this, adapter.getList().get(pos).getId(), false);
+//        ItemDetailActivity.start(this, adapter.getList().get(pos).getId(), false);
     }
 
     @Override
     public void openWhatsapp(int pos) {
-        Statics.openWhatsapp(adapter.getList().get(pos).getMobileNumber(), this);
+//        Statics.openWhatsapp(adapter.getList().get(pos).getMobileNumber(), this);
     }
 }

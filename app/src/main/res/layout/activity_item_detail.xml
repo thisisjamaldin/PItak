@@ -93,6 +93,7 @@
                 android:background="@drawable/bg_round_blue_button"
                 android:drawableStart="@drawable/ic_save"
                 android:paddingStart="16dp"
+                android:textAllCaps="false"
                 android:paddingEnd="40dp"
                 android:text="@string/save"
                 android:textColor="@color/white" />
@@ -131,19 +132,46 @@
                 android:id="@+id/item_detail_share_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/bg_dark_blue_stroke"
                 android:drawableStart="@drawable/ic_share_black"
                 android:fontFamily="@font/raleway_semibold"
                 android:paddingStart="16dp"
                 android:paddingEnd="37dp"
+                android:textAllCaps="false"
                 android:text="@string/share"
                 android:textColor="@color/bluish_black" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/item_detail_recycler"
+            <Button
+                android:id="@+id/item_detail_edit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                android:background="@drawable/bg_round_green"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="@string/edit"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/item_detail_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                android:background="@drawable/bg_round_grey"
+                android:fontFamily="@font/raleway_semibold"
+                android:text="@string/delete"
+                android:textColor="@color/white" />
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/item_detail_recycler"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"/>-->
         </LinearLayout>
     </ScrollView>
     <View

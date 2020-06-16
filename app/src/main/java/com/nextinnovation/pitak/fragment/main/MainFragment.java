@@ -1,12 +1,13 @@
 package com.nextinnovation.pitak.fragment.main;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.fragment.role.RoleFragment;
 import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
 import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.model.post.PostResponse;
@@ -26,6 +28,9 @@ import com.nextinnovation.pitak.model.post.PostSearch;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,11 +42,12 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
     private long size = 0;
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
+    public static RecyclerViewAdapter adapter;
     private View searchLayout;
     private boolean hide;
     private ProgressBar loading;
-    private EditText searchFrom, searchTo, search;
+    private Spinner searchS;
+    private EditText searchFrom, searchTo;
     private PostSearch postSearch = new PostSearch();
     private Spinner sort;
 
@@ -52,6 +58,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
 
         initAllView(view);
         listener();
+        getData(false);
         return view;
 
     }
@@ -60,13 +67,14 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
         sort = view.findViewById(R.id.main_fragment_sort);
         searchFrom = view.findViewById(R.id.main_fragment_edit_search_from);
         searchTo = view.findViewById(R.id.main_fragment_edit_search_to);
-        search = view.findViewById(R.id.main_fragment_edit_search);
+        searchS = view.findViewById(R.id.main_fragment_edit_search);
         loading = view.findViewById(R.id.main_fragment_loading);
         searchLayout = view.findViewById(R.id.search_layout_rl);
         adapter = new RecyclerViewAdapter(this, false, false);
         recyclerView = view.findViewById(R.id.main_fragment_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
     }
 
     private void listener() {
@@ -128,28 +136,10 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                 return false;
             }
         });
-        search.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    if (Statics.getString(search).length() == 0) {
-                        postSearch.setTitle(null);
-                    } else {
-                        postSearch.setToPlace(Statics.getString(search));
-                    }
-                    MainActivity.hideKeyboard(getActivity(), search);
-                    page = 0;
-                    getData(true);
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        searchS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) return;
                 page = 0;
                 getData(true);
             }
@@ -160,6 +150,30 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
             }
         });
 
+        sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) return;
+                page = 0;
+                getData(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.service_types_passenger));
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            searchS.setAdapter(adapter);
+        } else if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.service_types_driver));
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            searchS.setAdapter(adapter);
+        }
+
     }
 
     @Override
@@ -168,7 +182,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
     }
 
     @Override
-    public void onSave(int pos, boolean save) {
+    public void onSave(final int pos, final boolean save) {
         if (save) {
             MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
@@ -192,6 +206,17 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                 }
             });
         }
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < RoleFragment.adapter.getList().size(); i++) {
+                    if (RoleFragment.adapter.getList().get(i).getId() == adapter.getList().get(pos).getId()) {
+                        RoleFragment.adapter.getList().get(i).setFavorite(save);
+                        RoleFragment.adapter.notifyItemChanged(i);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -217,7 +242,23 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
         } else {
             sortRequest = null;
         }
+        if (searchS.getSelectedItemPosition() == 0) {
+            postSearch.setType(null);
+        }
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
+            if (searchS.getSelectedItemPosition() == 1) {
+                List<String> list = new ArrayList<>();
+                list.add("DRIVER");
+                postSearch.setType(list);
+            } else if (searchS.getSelectedItemPosition() == 2) {
+                List<String> list = new ArrayList<>();
+                list.add("SPECIAL_TECH");
+                postSearch.setType(list);
+            } else if (searchS.getSelectedItemPosition() == 2) {
+                List<String> list = new ArrayList<>();
+                list.add("CARGO_TRANSPORTATION");
+                postSearch.setType(list);
+            }
             MainRepository.getService().searchDriver(postSearch, Statics.getToken(getContext()), page, sortRequest).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
@@ -239,10 +280,28 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                 public void onFailure(Call<PostResponse> call, Throwable t) {
                     MToast.showInternetError(getContext());
                     loading.setVisibility(View.GONE);
+                    page = 0;
                 }
             });
         }
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
+            if (searchS.getSelectedItemPosition() == 1) {
+                List<String> list = new ArrayList<>();
+                list.add("PASSENGER");
+                postSearch.setType(list);
+            } else if (searchS.getSelectedItemPosition() == 2) {
+                List<String> list = new ArrayList<>();
+                list.add("PACKAGE");
+                postSearch.setType(list);
+            } else if (searchS.getSelectedItemPosition() == 3) {
+                List<String> list = new ArrayList<>();
+                list.add("SPECIAL_TECH");
+                postSearch.setType(list);
+            } else if (searchS.getSelectedItemPosition() == 4) {
+                List<String> list = new ArrayList<>();
+                list.add("CARGO_TRANSPORTATION");
+                postSearch.setType(list);
+            }
             MainRepository.getService().searchPassenger(postSearch, Statics.getToken(getContext()), page, sortRequest).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
@@ -264,10 +323,32 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                 public void onFailure(Call<PostResponse> call, Throwable t) {
                     MToast.showInternetError(getContext());
                     loading.setVisibility(View.GONE);
+                    page = 0;
                 }
             });
         }
         if (MSharedPreferences.get(getContext(), "who", "").equals("")) {
+            if (searchS.getSelectedItemPosition() == 1) {
+                List<String> list = new ArrayList<>();
+                list.add("PASSENGER");
+                postSearch.setType(list);
+            } else if (searchS.getSelectedItemPosition() == 2) {
+                List<String> list = new ArrayList<>();
+                list.add("DRIVER");
+                postSearch.setType(list);
+            } else if (searchS.getSelectedItemPosition() == 3) {
+                List<String> list = new ArrayList<>();
+                list.add("PACKAGE");
+                postSearch.setType(list);
+            } else if (searchS.getSelectedItemPosition() == 4) {
+                List<String> list = new ArrayList<>();
+                list.add("SPECIAL_TECH");
+                postSearch.setType(list);
+            } else if (searchS.getSelectedItemPosition() == 5) {
+                List<String> list = new ArrayList<>();
+                list.add("CARGO_TRANSPORTATION");
+                postSearch.setType(list);
+            }
             MainRepository.getService().searchAnonymous(postSearch, page, sortRequest).enqueue(new Callback<PostResponse>() {
                 @Override
                 public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
@@ -289,6 +370,7 @@ public class MainFragment extends Fragment implements RecyclerViewAdapter.onItem
                 public void onFailure(Call<PostResponse> call, Throwable t) {
                     MToast.showInternetError(getContext());
                     loading.setVisibility(View.GONE);
+                    page = 0;
                 }
             });
         }

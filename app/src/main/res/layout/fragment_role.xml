@@ -29,6 +29,11 @@
             android:layout_height="100dp"
             android:src="@drawable/bg_gradient_blue" />
 
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="32dp"
+            android:layout_margin="12dp"
+            android:src="@mipmap/logo_label" />
         <EditText
             android:id="@+id/role_fragment_edit_search"
             android:layout_width="match_parent"

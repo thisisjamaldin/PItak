@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -28,10 +30,11 @@ import com.asksira.bsimagepicker.BSImagePicker;
 import com.bumptech.glide.Glide;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.model.car.NewCarResponse;
+import com.nextinnovation.pitak.model.user.UserCar;
 import com.nextinnovation.pitak.settings.AgreementActivity;
 import com.nextinnovation.pitak.main.MainActivity;
-import com.nextinnovation.pitak.model.car.Car;
-import com.nextinnovation.pitak.model.car.CarResponse;
+import com.nextinnovation.pitak.settings.MyCarActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
@@ -54,8 +57,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.app.Activity.RESULT_OK;
-
 public class AddFragment extends Fragment implements BSImagePicker.OnSingleImageSelectedListener, BSImagePicker.ImageLoaderDelegate {
 
     private ImageView image, image1, image2, image3, image4;
@@ -67,6 +68,9 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
     private CheckBox agreement;
     private ScrollView mainView;
     private File imageFile, image1File, image2File, image3File, image4File;
+    private List<String> cars;
+    private NewCarResponse newCarResponse;
+    private String advertType;
 
     @Nullable
     @Override
@@ -107,6 +111,22 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
             carType.setVisibility(View.GONE);
         }
+        carType.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (cars.isEmpty()){
+                    carType.setEnabled(false);
+                    MyCarActivity.start(getContext());
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        carType.setEnabled(true);
+                    }
+                }, 500);
+                return false;
+            }
+        });
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,15 +226,31 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                     agreement.setError(getResources().getString(R.string.must_agree));
                     return;
                 }
-                if (serviceType.getSelectedItemPosition()==0) {
+                if (serviceType.getSelectedItemPosition() == 0) {
                     MToast.show(getContext(), getResources().getString(R.string.choose_service_type));
                     return;
                 }
                 post.setVisibility(View.GONE);
-//                UserWhenSignedIn user = new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), UserWhenSignedIn.class);
                 MainActivity.hideKeyboard(getActivity(), post);
-
-                MainRepository.getService().createPost(
+                switch (serviceType.getSelectedItemPosition()){
+                    case 1:
+                        advertType = "PASSENGER";
+                        break;
+                    case 2:
+                        advertType = "DRIVER";
+                        break;
+                    case 3:
+                        advertType = "PACKAGE";
+                        break;
+                    case 4:
+                        advertType = "SPECIAL_TECH";
+                        break;
+                    case 5:
+                        advertType = "CARGO_TRANSPORTATION";
+                        break;
+                }
+                MainRepository.getService().savePost(
+                        null,
                         getBody(imageFile),
                         getBody(image1File),
                         getBody(image2File),
@@ -225,10 +261,11 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                         RequestBody.create(MediaType.parse("text/plain"), Statics.getString(payment)),
                         RequestBody.create(MediaType.parse("text/plain"), Statics.getString(fromPlace)),
                         RequestBody.create(MediaType.parse("text/plain"), Statics.getString(toPlace)),
-                        RequestBody.create(MediaType.parse("text/plain"), MSharedPreferences.get(getContext(), "who", "")),
+                        RequestBody.create(MediaType.parse("text/plain"), advertType),
                         RequestBody.create(MediaType.parse("text/plain"), "1"),
                         RequestBody.create(MediaType.parse("text/plain"), convertDate(date.getText().toString() + "" + time.getText().toString())),
                         RequestBody.create(MediaType.parse("text/plain"), convertDate(date1.getText().toString() + "" + time1.getText().toString())),
+                        RequestBody.create(MediaType.parse("text/plain"), newCarResponse.getResult().get(carType.getSelectedItemPosition()).getId()+""),
                         Statics.getToken(getContext())).enqueue(new Callback<Object>() {
                     @Override
                     public void onResponse(Call<Object> call, Response<Object> response) {
@@ -258,27 +295,6 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                 image.setImageDrawable(null);
                 agreement.setChecked(false);
                 ((MainActivity) getActivity()).openMain();
-            }
-        });
-
-        MainRepository.getService().getCarTypes().enqueue(new Callback<CarResponse>() {
-            @Override
-            public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<String> types = new ArrayList<>();
-                    types.add(getResources().getString(R.string.car_type));
-                    for (Car car : response.body().getResult()) {
-                        types.add(car.getName());
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, types);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    carType.setAdapter(adapter);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CarResponse> call, Throwable t) {
-
             }
         });
 
@@ -337,14 +353,6 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
         }
         SimpleDateFormat sdfOut = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
         return sdfOut.format(date);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-        }
     }
 
     private Bitmap resizeImage(Uri uri) {
@@ -416,5 +424,31 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                 .setTag(requestCode)
                 .build()
                 .show(getChildFragmentManager(), "picker");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainRepository.getService().getMyCars(Statics.getToken(getContext())).enqueue(new Callback<NewCarResponse>() {
+            @Override
+            public void onResponse(Call<NewCarResponse> call, Response<NewCarResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    newCarResponse = response.body();
+                    List<String> types = new ArrayList<>();
+                    for (UserCar car : response.body().getResult()) {
+                        types.add(car.getCarBrand().getName());
+                    }
+                    cars = types;
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, types);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    carType.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewCarResponse> call, Throwable t) {
+
+            }
+        });
     }
 }

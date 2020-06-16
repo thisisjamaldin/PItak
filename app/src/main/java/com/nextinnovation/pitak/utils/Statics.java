@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
+import com.nextinnovation.pitak.fragment.role.RoleFragment;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 
 import org.json.JSONObject;
