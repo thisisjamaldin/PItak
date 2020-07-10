@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.nextinnovation.pitak"
         minSdkVersion 17
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 30
+        versionCode 6
+        versionName "1.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "BASE_URL", "\"${base_url}\""
@@ -39,7 +39,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
 //Firebase
     implementation 'com.google.firebase:firebase-auth:19.3.1'
-    implementation 'com.google.firebase:firebase-messaging:20.2.0'
+    implementation 'com.google.firebase:firebase-messaging:20.2.1'
 //ImagePicker
     implementation 'com.asksira.android:bsimagepicker:1.3.2'
 }

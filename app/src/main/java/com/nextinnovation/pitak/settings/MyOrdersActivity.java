@@ -69,20 +69,20 @@ public class MyOrdersActivity extends AppCompatActivity implements RecyclerViewA
 
     @Override
     public void onClick(int pos) {
-        ItemDetailActivity.start(MyOrdersActivity.this, adapter.getList().get(pos).getId(), true);
+        ItemDetailActivity.start(MyOrdersActivity.this, adapter.getList().get(pos).getAppAdvertModel().getId(), true);
     }
 
     @Override
     public void openWhatsapp(int pos) {
-        Statics.openWhatsapp(adapter.getList().get(pos).getMobileNumber(), MyOrdersActivity.this);
+        Statics.openWhatsapp(adapter.getList().get(pos).getAppAdvertModel().getMobileNumber(), MyOrdersActivity.this);
     }
 
     private void getData() {
         MainRepository.getService().getMyPosts(Statics.getToken(MyOrdersActivity.this)).enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                adapter.clear();
                 if (response.isSuccessful() && response.body() != null && response.body().getResult() != null && !response.body().getResult().getContent().isEmpty()) {
-                    adapter.clear();
                     adapter.addList(response.body().getResult().getContent());
                 } else if (response.isSuccessful() && response.body() != null && response.body().getResult() != null && response.body().getResult().getContent().isEmpty()) {
                     MToast.show(MyOrdersActivity.this, getResources().getString(R.string.nothing_found));

@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.model.car.CarCommonModel;
 import com.nextinnovation.pitak.model.user.UserCar;
 import com.nextinnovation.pitak.utils.Statics;
 
@@ -30,23 +32,24 @@ public class MyCarDetailActivity extends AppCompatActivity {
     private Button edit, delete;
     private ImageView image, back;
     private TextView number, mark, model, type;
-    private UserCar car;
+    private CarCommonModel car;
 
-    public static void start(Context context, UserCar car){
+    public static void start(Context context, CarCommonModel car) {
         context.startActivity(new Intent(context, MyCarDetailActivity.class).putExtra("car", car));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_car_detail);
 
-        car = (UserCar) getIntent().getSerializableExtra("car");
+        car = (CarCommonModel) getIntent().getSerializableExtra("car");
         findView();
         listener();
         initView();
     }
 
-    private void findView(){
+    private void findView() {
         edit = findViewById(R.id.my_car_edit);
         delete = findViewById(R.id.my_car_delete);
         image = findViewById(R.id.my_car_image);
@@ -57,7 +60,7 @@ public class MyCarDetailActivity extends AppCompatActivity {
         type = findViewById(R.id.my_car_type);
     }
 
-    private void listener(){
+    private void listener() {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +83,7 @@ public class MyCarDetailActivity extends AppCompatActivity {
                 alert.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        MainRepository.getService().deleteMyCar(car.getId(), Statics.getToken(MyCarDetailActivity.this)).enqueue(new Callback<Void>() {
+                        MainRepository.getService().deleteMyCar(car.getCarCommonModel().getId(), Statics.getToken(MyCarDetailActivity.this)).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
 
@@ -98,18 +101,13 @@ public class MyCarDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initView(){
-        if (!car.getCarFiles().isEmpty() && car.getCarFiles().get(0).getContent()!=null){
-            Glide.with(this).load(setImage(car.getCarFiles().get(0).getContent())).centerCrop().into(image);
+    private void initView() {
+        if (!car.getAttachmentModels().isEmpty()) {
+            Statics.loadImage(image, car.getAttachmentModels().get(0).getAppFile().getUrl(), false);
         }
-        number.setText(car.getCarNumber());
-        mark.setText(car.getCarBrand().getName());
-        model.setText(car.getCarModel().getName());
-        type.setText(car.getCarType().getName());
-    }
-
-    private Bitmap setImage(String encoded) {
-        byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        number.setText(car.getCarCommonModel().getCarNumber());
+        mark.setText(car.getCarCommonModel().getCarBrand().getName());
+        model.setText(car.getCarCommonModel().getCarModel().getName());
+        type.setText(car.getCarCommonModel().getCarType().getName());
     }
 }

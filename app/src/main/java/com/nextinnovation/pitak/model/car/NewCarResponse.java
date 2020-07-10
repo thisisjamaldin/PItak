@@ -5,17 +5,17 @@ import com.nextinnovation.pitak.model.user.UserCar;
 import java.util.List;
 
 public class NewCarResponse {
-    private List<UserCar> result;
+    private List<CarCommonModel> result;
 
-    public NewCarResponse(List<UserCar> result) {
+    public NewCarResponse(List<CarCommonModel> result) {
         this.result = result;
     }
 
-    public List<UserCar> getResult() {
+    public List<CarCommonModel> getResult() {
         return result;
     }
 
-    public void setResult(List<UserCar> result) {
+    public void setResult(List<CarCommonModel> result) {
         this.result = result;
     }
 

@@ -13,7 +13,6 @@ import com.nextinnovation.pitak.model.car.NewCarResponse;
 import com.nextinnovation.pitak.model.user.User;
 import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
-import com.nextinnovation.pitak.register.WhoRegisterActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
 import com.nextinnovation.pitak.utils.Statics;
@@ -34,10 +33,12 @@ public class SplashActivity extends AppCompatActivity {
             finish();
         } else if (user==null) {
             MainActivity.start(SplashActivity.this);
-        } else if (!MSharedPreferences.get(this, Statics.REGISTERED, false)) {
-            startActivity(new Intent(SplashActivity.this, WhoRegisterActivity.class));
-        } else {
-            MainRepository.getService().signIn(new UserSignIn(user.getUsername(), user.getUsername())).enqueue(new Callback<UserWhenSignedIn>() {
+        }
+//        else if (!MSharedPreferences.get(this, Statics.REGISTERED, false)) {
+//            startActivity(new Intent(SplashActivity.this, WhoRegisterActivity.class));
+//        }
+        else {
+            MainRepository.getService().signIn(new UserSignIn(user.getUsername(), user.getUsername(), MSharedPreferences.get(SplashActivity.this, "who", ""))).enqueue(new Callback<UserWhenSignedIn>() {
                 @Override
                 public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
                     if (response.isSuccessful()) {
@@ -57,7 +58,7 @@ public class SplashActivity extends AppCompatActivity {
                                         public void onResponse(Call<NewCarResponse> call, Response<NewCarResponse> response) {
                                             UserWhenSignedIn uws = new Gson().fromJson(MSharedPreferences.get(SplashActivity.this, Statics.USER, ""), UserWhenSignedIn.class);
                                             if (response.body().getResult().isEmpty()) return;
-                                            uws.setCarCommonModel(response.body().getResult().get(0));
+                                            uws.setCarCommonModel(response.body().getResult().get(0).getCarCommonModel());
                                             MSharedPreferences.set(SplashActivity.this, Statics.USER, new Gson().toJson(uws));
                                         }
 

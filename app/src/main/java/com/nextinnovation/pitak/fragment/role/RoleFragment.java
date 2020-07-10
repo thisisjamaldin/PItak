@@ -19,6 +19,7 @@ import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.fragment.main.MainFragment;
 import com.nextinnovation.pitak.fragment.main.RecyclerViewAdapter;
+import com.nextinnovation.pitak.fragment.saved.SavedFragment;
 import com.nextinnovation.pitak.item_detail.ItemDetailActivity;
 import com.nextinnovation.pitak.main.MainActivity;
 import com.nextinnovation.pitak.model.post.PostResponse;
@@ -84,7 +85,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (!recyclerView.canScrollVertically(1) && loading.getVisibility() == View.GONE) {
+                if (!recyclerView.canScrollVertically(1) && loading.getVisibility() == View.GONE && adapter.getList().size() > 5) {
                     getData(false);
                 }
             }
@@ -112,13 +113,13 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
 
     @Override
     public void onCall(int pos) {
-        Statics.call("+" + adapter.getList().get(pos).getMobileNumber(), getContext());
+        Statics.call("+" + adapter.getList().get(pos).getAppAdvertModel().getMobileNumber(), getContext());
     }
 
     @Override
     public void onSave(final int pos, final boolean save) {
         if (save) {
-            MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
+            MainRepository.getService().addToFavourite(adapter.getList().get(pos).getAppAdvertModel().getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                 }
@@ -129,7 +130,7 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
                 }
             });
         } else {
-            MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
+            MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getAppAdvertModel().getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                 }
@@ -144,9 +145,15 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
             @Override
             public void run() {
                 for (int i = 0; i < MainFragment.adapter.getList().size(); i++) {
-                    if (MainFragment.adapter.getList().get(i).getId() == adapter.getList().get(pos).getId()) {
-                        MainFragment.adapter.getList().get(i).setFavorite(save);
+                    if (MainFragment.adapter.getList().get(i).getAppAdvertModel().getId() == adapter.getList().get(pos).getAppAdvertModel().getId()) {
+                        MainFragment.adapter.getList().get(i).getAppAdvertModel().setFavorite(save);
                         MainFragment.adapter.notifyItemChanged(i);
+                    }
+                }
+                for (int i = 0; i < SavedFragment.adapter.getList().size(); i++) {
+                    if (SavedFragment.adapter.getList().get(i).getAppAdvertModel().getId() == adapter.getList().get(pos).getAppAdvertModel().getId()) {
+                        SavedFragment.adapter.getList().get(i).getAppAdvertModel().setFavorite(save);
+                        SavedFragment.adapter.notifyItemChanged(i);
                     }
                 }
             }
@@ -155,12 +162,12 @@ public class RoleFragment extends Fragment implements RecyclerViewAdapter.onItem
 
     @Override
     public void onClick(int pos) {
-        ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getId(), false);
+        ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getAppAdvertModel().getId(), false);
     }
 
     @Override
     public void openWhatsapp(int pos) {
-        Statics.openWhatsapp(adapter.getList().get(pos).getMobileNumber(), getContext());
+        Statics.openWhatsapp(adapter.getList().get(pos).getAppAdvertModel().getMobileNumber(), getContext());
     }
 
     private void getData(final boolean search) {

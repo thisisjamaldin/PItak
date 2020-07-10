@@ -3,24 +3,33 @@ package com.nextinnovation.pitak.model.user;
 import java.io.Serializable;
 
 public class ProfileRequest implements Serializable {
-    private String content;
+    private String url;
+    private long id;
 
-    public ProfileRequest(String content) {
-        this.content = content;
+    public ProfileRequest(String url) {
+        this.url = url;
     }
 
-    public String getContent() {
-        return content;
+    public String getUrl() {
+        return url;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "ProfileRequest{" +
-                "content='" + content + '\'' +
+                "url='" + url + '\'' +
                 '}';
     }
 }

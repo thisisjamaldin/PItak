@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.util.Base64;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,11 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.fragment.main.MainFragment;
 import com.nextinnovation.pitak.fragment.main.RecyclerViewAdapter;
+import com.nextinnovation.pitak.fragment.role.RoleFragment;
+import com.nextinnovation.pitak.fragment.saved.SavedFragment;
+import com.nextinnovation.pitak.model.post.AppAdvertModel;
 import com.nextinnovation.pitak.model.post.Post;
 import com.nextinnovation.pitak.model.post.PostSingle;
 import com.nextinnovation.pitak.register.RegisterActivity;
@@ -45,7 +50,7 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
     private ImageView saveImg, shareImg, reportImage;
     private ImageView mainImg;
     private View call;
-    private Post post;
+    private AppAdvertModel post;
     private long postId;
 
     private BottomSheetBehavior bsb;
@@ -81,7 +86,7 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
         listener();
     }
 
-    private void getData(long id) {
+    private void getData(final long id) {
         if (mine){
             MainRepository.getService().getMyAdvert(id, Statics.getToken(this)).enqueue(new Callback<PostSingle>() {
                 @Override
@@ -106,6 +111,8 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
                 public void onResponse(Call<PostSingle> call, Response<PostSingle> response) {
                     dialog.dismiss();
                     if (response.isSuccessful() && response.body().getResult() != null) {
+                        Log.e("--------post", response.body().getResult().getAppAdvertModel().getId()+"");
+                        Log.e("--------postId", id+"");
                         post = response.body().getResult();
                         setView();
                     } else {
@@ -164,7 +171,7 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ItemDetailActivity.this, ReportActivity.class);
-                intent.putExtra("id", post.getId());
+                intent.putExtra("id", post.getAppAdvertModel().getId());
                 startActivity(intent);
                 bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
@@ -231,7 +238,6 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                post.setImgFileList(null);
                 AddPostActivity.start(ItemDetailActivity.this, post);
                 finish();
             }
@@ -275,14 +281,14 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
     }
 
     private void setView() {
-        saved = post.isFavorite();
-        title.setText(Html.fromHtml("<h2>" + post.getTitle() + "</h2>" + "<br>" + post.getText()));
-        price.setText(post.getAmountPayment() + " сом");
-        phone.setText("+" + post.getMobileNumber());
-        if (!post.getImgFileList().isEmpty() && post.getImgFileList().get(0) != null && post.getImgFileList().get(0).getContent() != null) {
-            setImage(post.getImgFileList().get(0).getContent());
-        } else {
+        saved = post.getAppAdvertModel().isFavorite();
+        title.setText(Html.fromHtml("<h2>" + post.getAppAdvertModel().getTitle() + "</h2>" + "<br>" + post.getAppAdvertModel().getText()));
+        price.setText(post.getAppAdvertModel().getAmountPayment() + " сом");
+        phone.setText("+" + post.getAppAdvertModel().getMobileNumber());
+        if (post.getAttachmentModels().isEmpty()) {
             Glide.with(this).load(getResources().getDrawable(R.drawable.bg_launch_screen)).into(mainImg);
+        } else {
+            Statics.loadImage(mainImg, post.getAttachmentModels().get(0).getAppFile().getUrl(), null);
         }
         if (saved) {
             saveImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_checked));
@@ -293,7 +299,7 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
         }
     }
 
-    private void addToFavourite(Boolean mSave) {
+    private void addToFavourite(final Boolean mSave) {
         saved = !mSave;
         if (saved) {
             saveImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_checked));
@@ -302,8 +308,8 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
             saveImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_save));
             save.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_save, 0, 0, 0);
         }
-        if (mSave) {
-            MainRepository.getService().addToFavourite(post.getId(), Statics.getToken(ItemDetailActivity.this)).enqueue(new Callback<Void>() {
+        if (saved) {
+            MainRepository.getService().addToFavourite(post.getAppAdvertModel().getId(), Statics.getToken(ItemDetailActivity.this)).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                 }
@@ -314,7 +320,7 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
                 }
             });
         } else {
-            MainRepository.getService().deleteFromFavourite(post.getId(), Statics.getToken(ItemDetailActivity.this)).enqueue(new Callback<Void>() {
+            MainRepository.getService().deleteFromFavourite(post.getAppAdvertModel().getId(), Statics.getToken(ItemDetailActivity.this)).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
 
@@ -326,6 +332,29 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
                 }
             });
         }
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < MainFragment.adapter.getList().size(); i++) {
+                    if (MainFragment.adapter.getList().get(i).getAppAdvertModel().getId() == post.getAppAdvertModel().getId()) {
+                        MainFragment.adapter.getList().get(i).getAppAdvertModel().setFavorite(saved);
+                        MainFragment.adapter.notifyItemChanged(i);
+                    }
+                }
+                for (int i = 0; i < RoleFragment.adapter.getList().size(); i++) {
+                    if (RoleFragment.adapter.getList().get(i).getAppAdvertModel().getId() == post.getAppAdvertModel().getId()) {
+                        RoleFragment.adapter.getList().get(i).getAppAdvertModel().setFavorite(saved);
+                        RoleFragment.adapter.notifyItemChanged(i);
+                    }
+                }
+                for (int i = 0; i < SavedFragment.adapter.getList().size(); i++) {
+                    if (SavedFragment.adapter.getList().get(i).getAppAdvertModel().getId() == post.getAppAdvertModel().getId()) {
+                        SavedFragment.adapter.getList().get(i).getAppAdvertModel().setFavorite(saved);
+                        SavedFragment.adapter.notifyItemChanged(i);
+                    }
+                }
+            }
+        });
     }
 
     private void saveClicked() {
@@ -341,17 +370,11 @@ public class ItemDetailActivity extends AppCompatActivity implements RecyclerVie
     }
 
     private void share() {
-        String text = post.getFromPlace() + " -> " + post.getToPlace() + "\n" + post.getAmountPayment() + " сом\n" + post.getTitle() + "\n" + post.getText() + "\n+" + post.getMobileNumber();
+        String text = post.getAppAdvertModel().getFromPlace() + " -> " + post.getAppAdvertModel().getToPlace() + "\n" + post.getAppAdvertModel().getAmountPayment() + " сом\n" + post.getAppAdvertModel().getTitle() + "\n" + post.getAppAdvertModel().getText() + "\n+" + post.getAppAdvertModel().getMobileNumber();
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, text);
         startActivity(intent);
-    }
-
-    private void setImage(String encoded) {
-        byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        Glide.with(this).load(decodedByte).into(mainImg);
     }
 
     @Override

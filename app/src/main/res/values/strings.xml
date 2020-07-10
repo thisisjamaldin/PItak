@@ -48,7 +48,6 @@
     <string name="my_addresses">My addresses</string>
     <string name="trip_history">Trip history</string>
     <string name="my_orders">My Orders</string>
-    <string name="to_">To: </string>
     <string name="mark_">Mark: </string>
     <string name="model_">Model: </string>
     <string name="type_">Type: </string>
@@ -84,27 +83,6 @@
         <item>+996</item>
         <item>+7</item>
     </string-array>
-    <string-array name="service_types">
-        <item>Service type</item>
-        <item>Passenger</item>
-        <item>Driver</item>
-        <item>Package</item>
-        <item>Special tech</item>
-        <item>Cargo transportation</item>
-    </string-array>
-    <string-array name="service_types_driver">
-        <item>Service type</item>
-        <item>Passenger</item>
-        <item>Package</item>
-        <item>Special tech</item>
-        <item>Cargo transportation</item>
-    </string-array>
-    <string-array name="service_types_passenger">
-        <item>Service type</item>
-        <item>Driver</item>
-        <item>Special tech</item>
-        <item>Cargo transportation</item>
-    </string-array>
     <string-array name="sort_types">
         <item>Sort</item>
         <item>Price by descending</item>
@@ -119,6 +97,7 @@
     <string name="share">Share</string>
     <string name="call">Call</string>
     <string name="choose_service_type">Choose service type</string>
+    <string name="service_type">Service type</string>
     <string name="passenger">Passenger</string>
     <string name="minimum_symbol_20">Minimum 20 characters</string>
     <string name="describe_your_complaint">Describe your complaint</string>

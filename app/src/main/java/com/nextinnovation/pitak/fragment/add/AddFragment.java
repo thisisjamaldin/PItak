@@ -30,6 +30,9 @@ import com.asksira.bsimagepicker.BSImagePicker;
 import com.bumptech.glide.Glide;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
+import com.nextinnovation.pitak.model.car.Car;
+import com.nextinnovation.pitak.model.car.CarCommonModel;
+import com.nextinnovation.pitak.model.car.CarResponse;
 import com.nextinnovation.pitak.model.car.NewCarResponse;
 import com.nextinnovation.pitak.model.user.UserCar;
 import com.nextinnovation.pitak.settings.AgreementActivity;
@@ -45,10 +48,13 @@ import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -60,8 +66,8 @@ import retrofit2.Response;
 public class AddFragment extends Fragment implements BSImagePicker.OnSingleImageSelectedListener, BSImagePicker.ImageLoaderDelegate {
 
     private ImageView image, image1, image2, image3, image4;
-    private Button date, time;
-    private Button date1, time1;
+    private Button date;
+    private Button date1;
     private Button post;
     private Spinner carType, serviceType;
     private EditText title, desc, fromPlace, toPlace, payment;
@@ -71,6 +77,8 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
     private List<String> cars;
     private NewCarResponse newCarResponse;
     private String advertType;
+    private long advertTypeId;
+    private List<Car> services = new ArrayList<>();
 
     @Nullable
     @Override
@@ -99,12 +107,8 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
         image4 = view.findViewById(R.id.add_fragment_image_4);
         date = view.findViewById(R.id.add_fragment_date);
         date1 = view.findViewById(R.id.add_fragment_date_1);
-        time = view.findViewById(R.id.add_fragment_time);
-        time1 = view.findViewById(R.id.add_fragment_time_1);
         date.setText(new SimpleDateFormat("EE, dd MMM yyyy").format(Calendar.getInstance().getTime()));
         date1.setText(new SimpleDateFormat("EE, dd MMM yyyy").format(Calendar.getInstance().getTime()));
-        time.setText(new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()));
-        time1.setText(new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()));
     }
 
     private void listener() {
@@ -114,7 +118,7 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
         carType.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (cars.isEmpty()){
+                if (cars.isEmpty()) {
                     carType.setEnabled(false);
                     MyCarActivity.start(getContext());
                 }
@@ -146,26 +150,6 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                 datePickerDialog.show();
             }
         });
-        time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime.get(Calendar.MINUTE);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        getContext(),
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int h, int m) {
-                                time.setText(h + ":" + m);
-                            }
-                        },
-                        hour,
-                        minute,
-                        true);
-                timePickerDialog.show();
-            }
-        });
         date1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -183,26 +167,6 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                         Calendar.getInstance().get(Calendar.MONTH),
                         Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
-            }
-        });
-        time1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime.get(Calendar.MINUTE);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        getContext(),
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int h, int m) {
-                                time1.setText(h + ":" + m);
-                            }
-                        },
-                        hour,
-                        minute,
-                        true);
-                timePickerDialog.show();
             }
         });
         post.setOnClickListener(new View.OnClickListener() {
@@ -226,64 +190,77 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                     agreement.setError(getResources().getString(R.string.must_agree));
                     return;
                 }
-                if (serviceType.getSelectedItemPosition() == 0) {
-                    MToast.show(getContext(), getResources().getString(R.string.choose_service_type));
-                    return;
-                }
                 post.setVisibility(View.GONE);
                 MainActivity.hideKeyboard(getActivity(), post);
-                switch (serviceType.getSelectedItemPosition()){
-                    case 1:
-                        advertType = "PASSENGER";
-                        break;
-                    case 2:
-                        advertType = "DRIVER";
-                        break;
-                    case 3:
-                        advertType = "PACKAGE";
-                        break;
-                    case 4:
-                        advertType = "SPECIAL_TECH";
-                        break;
-                    case 5:
-                        advertType = "CARGO_TRANSPORTATION";
-                        break;
-                }
-                MainRepository.getService().savePost(
-                        null,
-                        getBody(imageFile),
-                        getBody(image1File),
-                        getBody(image2File),
-                        getBody(image3File),
-                        getBody(image4File),
-                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(title)),
-                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(desc)),
-                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(payment)),
-                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(fromPlace)),
-                        RequestBody.create(MediaType.parse("text/plain"), Statics.getString(toPlace)),
-                        RequestBody.create(MediaType.parse("text/plain"), advertType),
-                        RequestBody.create(MediaType.parse("text/plain"), "1"),
-                        RequestBody.create(MediaType.parse("text/plain"), convertDate(date.getText().toString() + "" + time.getText().toString())),
-                        RequestBody.create(MediaType.parse("text/plain"), convertDate(date1.getText().toString() + "" + time1.getText().toString())),
-                        RequestBody.create(MediaType.parse("text/plain"), newCarResponse.getResult().get(carType.getSelectedItemPosition()).getId()+""),
-                        Statics.getToken(getContext())).enqueue(new Callback<Object>() {
-                    @Override
-                    public void onResponse(Call<Object> call, Response<Object> response) {
-                        if (response.isSuccessful()) {
-                            MToast.show(getContext(), getResources().getString(R.string.posted));
-                            clearFields();
-                        } else {
-                            MToast.showResponseError(getContext(), response.errorBody());
+                advertType = services.get(serviceType.getSelectedItemPosition()).getName();
+                advertTypeId = services.get(serviceType.getSelectedItemPosition()).getId();
+                if (newCarResponse != null) {
+                    MainRepository.getService().savePost(
+                            null,
+                            Arrays.asList(getBody(imageFile), getBody(image1File), getBody(image2File), getBody(image3File), getBody(image4File)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(title)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(desc)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(payment)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(fromPlace)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(toPlace)),
+                            RequestBody.create(MediaType.parse("text/plain"), advertTypeId+""),
+                            RequestBody.create(MediaType.parse("text/plain"), advertType),
+                            RequestBody.create(MediaType.parse("text/plain"), "1"),
+                            RequestBody.create(MediaType.parse("text/plain"), convertDate(date.getText().toString() + "00:00")),
+                            RequestBody.create(MediaType.parse("text/plain"), convertDate(date1.getText().toString() + "00:00")),
+                            RequestBody.create(MediaType.parse("text/plain"), newCarResponse.getResult().get(carType.getSelectedItemPosition()).getCarCommonModel().getId() + ""),
+                            Statics.getToken(getContext())).enqueue(new Callback<Object>() {
+                        @Override
+                        public void onResponse(Call<Object> call, Response<Object> response) {
+                            if (response.isSuccessful()) {
+                                MToast.show(getContext(), getResources().getString(R.string.posted));
+                                clearFields();
+                            } else {
+                                MToast.showResponseError(getContext(), response.errorBody());
+                            }
+                            post.setVisibility(View.VISIBLE);
                         }
-                        post.setVisibility(View.VISIBLE);
-                    }
 
-                    @Override
-                    public void onFailure(Call<Object> call, Throwable t) {
-                        MToast.showInternetError(getContext());
-                        post.setVisibility(View.VISIBLE);
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Object> call, Throwable t) {
+                            MToast.showInternetError(getContext());
+                            post.setVisibility(View.VISIBLE);
+                        }
+                    });
+                } else {
+                    MainRepository.getService().savePost(
+                            null,
+                            Arrays.asList(getBody(imageFile), getBody(image1File), getBody(image2File), getBody(image3File), getBody(image4File)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(title)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(desc)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(payment)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(fromPlace)),
+                            RequestBody.create(MediaType.parse("text/plain"), Statics.getString(toPlace)),
+                            RequestBody.create(MediaType.parse("text/plain"), advertTypeId+""),
+                            RequestBody.create(MediaType.parse("text/plain"), advertType),
+                            RequestBody.create(MediaType.parse("text/plain"), "1"),
+                            RequestBody.create(MediaType.parse("text/plain"), convertDate(date.getText().toString() + "00:00")),
+                            RequestBody.create(MediaType.parse("text/plain"), convertDate(date1.getText().toString() + "00:00")),
+                            RequestBody.create(MediaType.parse("text/plain"), ""),
+                            Statics.getToken(getContext())).enqueue(new Callback<Object>() {
+                        @Override
+                        public void onResponse(Call<Object> call, Response<Object> response) {
+                            if (response.isSuccessful()) {
+                                MToast.show(getContext(), getResources().getString(R.string.posted));
+                                clearFields();
+                            } else {
+                                MToast.showResponseError(getContext(), response.errorBody());
+                            }
+                            post.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onFailure(Call<Object> call, Throwable t) {
+                            MToast.showInternetError(getContext());
+                            post.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
             }
 
             private void clearFields() {
@@ -335,12 +312,33 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
                 return true;
             }
         });
+        MainRepository.getService().getServices().enqueue(new Callback<CarResponse>() {
+            @Override
+            public void onResponse(Call<CarResponse> call, Response<CarResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    services.clear();
+                    services.addAll(response.body().getResult());
+                    List<String> list = new ArrayList<>();
+                    for (Car car : services) {
+                        list.add(car.getName());
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    serviceType.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CarResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     private MultipartBody.Part getBody(File file) {
         if (file == null) return null;
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
-        return MultipartBody.Part.createFormData("fileList", file.getName(), requestFile);
+        return MultipartBody.Part.createFormData("multiUploadRequest.fileList", file.getName(), requestFile);
     }
 
     private String convertDate(String dateString) {
@@ -357,7 +355,20 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
 
     private Bitmap resizeImage(Uri uri) {
         try {
-            return Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri), 800, 600, true);
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+
+            float bitmapRatio = (float) width / (float) height;
+            if (bitmapRatio > 1) {
+                width = 1000;
+                height = (int) (width / bitmapRatio);
+            } else {
+                height = 1000;
+                width = (int) (height * bitmapRatio);
+            }
+            return Bitmap.createScaledBitmap(bitmap, width, height, true);
         } catch (Exception e) {
             return null;
         }
@@ -365,7 +376,7 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
 
     private File createFile(Bitmap bitmap) {
         try {
-            File f = new File(getContext().getCacheDir(), "filename");
+            File f = new File(image.getContext().getCacheDir(), "filename");
             f.createNewFile();
 
 //Convert bitmap to byte array
@@ -434,12 +445,15 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
             public void onResponse(Call<NewCarResponse> call, Response<NewCarResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     newCarResponse = response.body();
-                    List<String> types = new ArrayList<>();
-                    for (UserCar car : response.body().getResult()) {
-                        types.add(car.getCarBrand().getName());
+                    List<String> list = new ArrayList<>();
+                    for (CarCommonModel carModel : response.body().getResult()) {
+                        UserCar car = carModel.getCarCommonModel();
+                        if (car.getCarBrand() != null) {
+                            list.add(car.getCarBrand().getName());
+                        }
                     }
-                    cars = types;
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, types);
+                    cars = list;
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     carType.setAdapter(adapter);
                 }
@@ -450,5 +464,8 @@ public class AddFragment extends Fragment implements BSImagePicker.OnSingleImage
 
             }
         });
+
+
+
     }
 }

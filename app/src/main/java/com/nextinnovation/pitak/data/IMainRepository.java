@@ -26,6 +26,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -58,6 +59,15 @@ public interface IMainRepository {
     Call<ProfileResponse> setUserProfile(@Part MultipartBody.Part profile,
                                          @Header("Authorization") String token);
 
+    @Multipart
+    @PUT("api/car/update/photo/{carId}")
+    Call<Void> setCarImage(@Path("carId") long id, @Part List<MultipartBody.Part> image,
+                                         @Header("Authorization") String token);
+
+    @DELETE("api/car/remove/photo")
+    Call<Void> deleteCarImage(@Query("carId") long carId, @Query("fileId") long fileId,
+                                         @Header("Authorization") String token);
+
     @POST("api/user/remove/profile/photo")
     Call<Void> removeProfile(@Header("Authorization") String token);
 
@@ -70,22 +80,19 @@ public interface IMainRepository {
     @Multipart
     @POST("api/advert/save")
     Call<Object> savePost(
-            @Part("id") RequestBody id,
-            @Part MultipartBody.Part image,
-            @Part MultipartBody.Part image1,
-            @Part MultipartBody.Part image2,
-            @Part MultipartBody.Part image3,
-            @Part MultipartBody.Part image4,
-            @Part("title") RequestBody title,
-            @Part("text") RequestBody text,
-            @Part("amountPayment") RequestBody amountPayment,
-            @Part("fromPlace") RequestBody fromPlace,
-            @Part("toPlace") RequestBody toPlace,
-            @Part("advertType") RequestBody advertType,
-            @Part("numberOfSeat") RequestBody numberOfSeat,
-            @Part("sendDateTime") RequestBody sendDateTime,
-            @Part("arrivalDateTime") RequestBody arrivalDateTime,
-            @Part("carCommonModel.id") RequestBody markId,
+            @Part("appAdvertModel.id") RequestBody id,
+            @Part List<MultipartBody.Part> image,
+            @Part("appAdvertModel.title") RequestBody title,
+            @Part("appAdvertModel.text") RequestBody text,
+            @Part("appAdvertModel.amountPayment") RequestBody amountPayment,
+            @Part("appAdvertModel.fromPlace") RequestBody fromPlace,
+            @Part("appAdvertModel.toPlace") RequestBody toPlace,
+            @Part("appAdvertModel.typeService.id") RequestBody advertTypeId,
+            @Part("appAdvertModel.typeService.name") RequestBody advertType,
+            @Part("appAdvertModel.numberOfSeat") RequestBody numberOfSeat,
+            @Part("appAdvertModel.sendDateTime") RequestBody sendDateTime,
+            @Part("appAdvertModel.arrivalDateTime") RequestBody arrivalDateTime,
+            @Part("appAdvertModel.carCommonModel.id") RequestBody markId,
             @Header("Authorization") String token);
 
     @POST("api/advert/driver/search")
@@ -151,19 +158,22 @@ public interface IMainRepository {
     @GET("api/car/mycars")
     Call<NewCarResponse> getMyCars(@Header("Authorization") String token);
 
+    @GET("api/dictionary/typeService/get/all")
+    Call<CarResponse> getServices();
+
     @Multipart
     @POST("api/car/create")
     Call<Object> createCar(@Part List<MultipartBody.Part> image,
-                           @Part("id") RequestBody id,
-                           @Part("userId") RequestBody userId,
-                           @Part("carBrand.id") RequestBody markId,
-                           @Part("carBrand.name") RequestBody markName,
-                           @Part("carModel.id") RequestBody modelId,
-                           @Part("carModel.name") RequestBody modelName,
-                           @Part("carNumber") RequestBody number,
-                           @Part("carType.id") RequestBody typeId,
-                           @Part("carType.name") RequestBody typeName,
-                           @Part("carryCapacity") RequestBody capacity,
+                           @Part("carCommonModel.id") RequestBody id,
+                           @Part("carCommonModel.userId") RequestBody userId,
+                           @Part("carCommonModel.carBrand.id") RequestBody markId,
+                           @Part("carCommonModel.carBrand.name") RequestBody markName,
+                           @Part("carCommonModel.carModel.id") RequestBody modelId,
+                           @Part("carCommonModel.carModel.name") RequestBody modelName,
+                           @Part("carCommonModel.carNumber") RequestBody number,
+                           @Part("carCommonModel.carType.id") RequestBody typeId,
+                           @Part("carCommonModel.carType.name") RequestBody typeName,
+                           @Part("carCommonModel.carryCapacity") RequestBody capacity,
                            @Header("Authorization") String token);
 
 }

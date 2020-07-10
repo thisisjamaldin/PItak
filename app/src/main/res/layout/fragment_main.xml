@@ -43,7 +43,6 @@
             android:id="@+id/main_fragment_edit_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/service_types"
             android:background="@drawable/bg_edit_fields"
             android:layout_marginStart="20dp"
             android:layout_marginTop="52dp"
@@ -57,22 +56,24 @@
             android:layout_below="@id/main_fragment_edit_search"
             android:layout_marginTop="14dp">
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/main_fragment_edit_search_from"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
+                android:completionThreshold="1"
                 android:background="@drawable/bg_edit_fields"
                 android:hint="@string/from"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:padding="12dp" />
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/main_fragment_edit_search_to"
                 android:layout_width="0dp"
+                android:completionThreshold="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="20dp"

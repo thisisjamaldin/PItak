@@ -17,14 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.model.post.AppAdvertModel;
 import com.nextinnovation.pitak.model.post.Post;
+import com.nextinnovation.pitak.utils.Statics;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private List<Post> list = new ArrayList<>();
+    private List<AppAdvertModel> list = new ArrayList<>();
     private boolean saved;
     private boolean mine;
     private onItemClick itemClick;
@@ -40,12 +42,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyDataSetChanged();
     }
 
-    public void addList(List<Post> list) {
+    public void addList(List<AppAdvertModel> list) {
         this.list.addAll(list);
         notifyDataSetChanged();
     }
 
-    public List<Post> getList() {
+    public List<AppAdvertModel> getList() {
         return this.list;
     }
 
@@ -68,9 +70,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView profile;
+        private ImageView image;
         private ImageView save;
-        private TextView name;
         private TextView fromPlace;
         private TextView toPlace;
         private TextView price;
@@ -81,10 +82,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ViewHolder(@NonNull final View itemView, final onItemClick itemClick) {
             super(itemView);
             mark = itemView.findViewById(R.id.item_main_mark);
-            profile = itemView.findViewById(R.id.item_main_image);
-            name = itemView.findViewById(R.id.item_main_name);
+            image = itemView.findViewById(R.id.item_main_image);
             fromPlace = itemView.findViewById(R.id.item_main_from);
-            toPlace = itemView.findViewById(R.id.item_main_to);
+            toPlace = itemView.findViewById(R.id.item_main_to_text);
             price = itemView.findViewById(R.id.item_main_price);
             role = itemView.findViewById(R.id.item_main_role);
             call = itemView.findViewById(R.id.item_main_call);
@@ -125,55 +125,39 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             });
         }
 
-        void bind(final Post post) {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    Context context = save.getContext();
-                    if (saved || post.isFavorite()) {
-                        save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save_checked));
-                        save.setTag(1);
-                    } else {
-                        save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save));
-                        save.setTag(0);
-                    }
-                    if (mine) {
-                        save.setVisibility(View.GONE);
-                        call.setVisibility(View.GONE);
-                        whatsapp.setVisibility(View.GONE);
-                    } else {
-                        save.setVisibility(View.VISIBLE);
-                        call.setVisibility(View.VISIBLE);
-                        whatsapp.setVisibility(View.VISIBLE);
-                    }
-                    if (post.getImgFileList().isEmpty()) {
-                        Glide.with(context).load(R.drawable.launch_screen).centerCrop().into(profile);
-                    } else {
-                        Glide.with(context).load(setImage(post.getImgFileList().get(0).getContent())).centerCrop().into(profile);
-                    }
-                    if (post.getCarCommonModel() != null) {
-                        mark.setText(post.getCarCommonModel().getCarBrand().getName());
-                    }
-                    name.setText(post.getTitle());
-                    fromPlace.setText(fromPlace.getContext().getResources().getString(R.string.from) + " " + post.getFromPlace());
-                    toPlace.setText(post.getToPlace());
-                    price.setText(post.getAmountPayment() + " сом");
-                    if (post.getAdvertType() == null) return;
-                    if (post.getAdvertType().equals("PASSENGER")) {
-                        role.setText(role.getContext().getResources().getString(R.string.passenger));
-                    } else if (post.getAdvertType().equals("DRIVER")) {
-                        role.setText(role.getContext().getResources().getString(R.string.driver));
-                    } else {
-                        role.setText(role.getContext().getResources().getStringArray(R.array.service_types)[4]);
-                    }
-                }
-            });
+        void bind(final AppAdvertModel appAdvertModel) {
+            Post post = appAdvertModel.getAppAdvertModel();
+            Context context = save.getContext();
+            if (saved || post.isFavorite()) {
+                save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save_checked));
+                save.setTag(1);
+            } else {
+                save.setImageDrawable(save.getContext().getResources().getDrawable(R.drawable.ic_save));
+                save.setTag(0);
+            }
+            if (mine) {
+                save.setVisibility(View.GONE);
+                call.setVisibility(View.GONE);
+                whatsapp.setVisibility(View.GONE);
+            } else {
+                save.setVisibility(View.VISIBLE);
+                call.setVisibility(View.VISIBLE);
+                whatsapp.setVisibility(View.VISIBLE);
+            }
+            if (appAdvertModel.getAttachmentModels().isEmpty()) {
+                Glide.with(context).load(R.drawable.launch_screen).centerCrop().into(image);
+            } else {
+                Statics.loadImage(image, appAdvertModel.getAttachmentModels().get(0).getAppFile().getUrl(), false);
+            }
+            if (post.getCarCommonModel() != null) {
+                mark.setText(post.getCarCommonModel().getCarBrand().getName());
+            }
+            fromPlace.setText(fromPlace.getContext().getResources().getString(R.string.from) + ": " + post.getFromPlace());
+            toPlace.setText(fromPlace.getContext().getResources().getString(R.string.to) + ": " + post.getToPlace());
+            price.setText(post.getAmountPayment() + " сом");
+            if (post.getTypeService() == null) return;
+            role.setText(post.getTypeService().getName());
         }
-    }
-
-    private Bitmap setImage(String encoded) {
-        byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
     public interface onItemClick {

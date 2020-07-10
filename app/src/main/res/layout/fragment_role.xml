@@ -42,7 +42,6 @@
             android:layout_marginTop="74dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/bg_edit_fields"
-            android:drawableEnd="@drawable/ic_search"
             android:hint="@string/search"
             android:imeOptions="actionSearch"
             android:inputType="text"

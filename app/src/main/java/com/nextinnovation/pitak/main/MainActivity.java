@@ -8,15 +8,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.nextinnovation.pitak.R;
-import com.nextinnovation.pitak.fragment.role.RoleFragment;
+import com.nextinnovation.pitak.fragment.main.MainFragment;
 import com.nextinnovation.pitak.fragment.saved.SavedFragment;
 import com.nextinnovation.pitak.register.RegisterActivity;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.e("-------token", Statics.getToken(this));
         loggedIn = Statics.getToken(this).length() >= 10;
         FirebaseMessaging.getInstance().subscribeToTopic(MSharedPreferences.get(MainActivity.this, "who", ""));
         initView();

@@ -94,7 +94,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_drop_down"
-            android:entries="@array/service_types"
             android:padding="14dp" />
 
 
@@ -117,51 +116,23 @@
             android:inputType="text"
             android:padding="12dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:layout_weight="2"
                 android:fontFamily="@font/raleway_semibold"
                 android:text="@string/date"
                 android:textColor="@color/bluish_black" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/raleway_semibold"
-                android:text="@string/time"
-                android:textColor="@color/bluish_black" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp">
 
             <Button
                 android:id="@+id/add_fragment_date"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:layout_weight="2"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/bg_edit_fields"
                 android:drawableStart="@drawable/ic_date"
                 android:paddingStart="12dp" />
 
-            <Button
-                android:id="@+id/add_fragment_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/bg_edit_fields" />
-        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -182,51 +153,22 @@
             android:inputType="text"
             android:padding="12dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:layout_weight="2"
                 android:fontFamily="@font/raleway_semibold"
                 android:text="@string/date"
                 android:textColor="@color/bluish_black" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/raleway_semibold"
-                android:text="@string/time"
-                android:textColor="@color/bluish_black" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:padding="4dp">
-
             <Button
                 android:id="@+id/add_fragment_date_1"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:layout_weight="2"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/bg_edit_fields"
                 android:drawableStart="@drawable/ic_date"
                 android:paddingStart="12dp" />
-
-            <Button
-                android:id="@+id/add_fragment_time_1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/bg_edit_fields" />
-        </LinearLayout>
 
         <EditText
             android:id="@+id/add_fragment_payment"

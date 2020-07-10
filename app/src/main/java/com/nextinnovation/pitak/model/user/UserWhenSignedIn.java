@@ -1,6 +1,7 @@
 package com.nextinnovation.pitak.model.user;
 
 import com.nextinnovation.pitak.model.car.Car;
+import com.nextinnovation.pitak.model.car.CarCommonModel;
 
 import java.util.List;
 

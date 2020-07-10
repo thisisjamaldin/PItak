@@ -16,14 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.nextinnovation.pitak.R;
+import com.nextinnovation.pitak.model.car.CarCommonModel;
 import com.nextinnovation.pitak.model.user.UserCar;
+import com.nextinnovation.pitak.utils.Statics;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
 
-    private List<UserCar> list = new ArrayList<>();
+    private List<CarCommonModel> list = new ArrayList<>();
     private onItemClick itemClick;
 
     public CarAdapter(onItemClick itemClick) {
@@ -35,18 +37,18 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void addList(List<UserCar> list) {
+    public void addList(List<CarCommonModel> list) {
         this.list.clear();
         this.list.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void addItem(UserCar item) {
+    public void addItem(CarCommonModel item) {
         this.list.add(item);
         notifyDataSetChanged();
     }
 
-    public List<UserCar> getList() {
+    public List<CarCommonModel> getList() {
         return this.list;
     }
 
@@ -88,31 +90,19 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
             });
         }
 
-        void bind(UserCar car) {
+        void bind(CarCommonModel carCommonModel) {
+            UserCar car = carCommonModel.getCarCommonModel();
             Context context = image.getContext();
-            if (car.getCarFiles().isEmpty()) {
-                Glide.with(context).load(R.drawable.bg_upload_image).centerCrop().into(image);
-            } else if (car.getCarFiles().get(0).getContent() == null) {
+            if (carCommonModel.getAttachmentModels().isEmpty()) {
                 Glide.with(context).load(R.drawable.bg_upload_image).centerCrop().into(image);
             } else {
-                Glide.with(context).load(setImage(car.getCarFiles().get(0).getContent())).centerCrop().into(image);
+                Statics.loadImage(image, carCommonModel.getAttachmentModels().get(0).getAppFile().getUrl(), false);
             }
-            mark.setText(car.getCarBrand().
-
-                    getName());
-            model.setText(car.getCarModel().
-
-                    getName());
+            mark.setText(car.getCarBrand().getName());
+            model.setText(car.getCarModel().getName());
             number.setText(car.getCarNumber());
-            type.setText(car.getCarType().
-
-                    getName());
+            type.setText(car.getCarType().getName());
         }
-    }
-
-    private Bitmap setImage(String encoded) {
-        byte[] decodedString = Base64.decode(encoded, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
     public interface onItemClick {

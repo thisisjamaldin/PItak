@@ -32,7 +32,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 1) {
             return new RoleFragment();
         } else {
-            return new MainFragment();
+            return new MainFragment(!loggedIn);
         }
     }
 

@@ -23,14 +23,14 @@ public class RegisterActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MSharedPreferences.set(RegisterActivity.this, "who", Statics.DRIVER);
+                MSharedPreferences.set(RegisterActivity.this, "sign", Statics.SIGN_UP);
                 startActivity(new Intent(RegisterActivity.this, WhoRegisterActivity.class));
             }
         });
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MSharedPreferences.set(RegisterActivity.this, "who", Statics.UNAUTHORIZED);
+                MSharedPreferences.set(RegisterActivity.this, "sign", Statics.SIGN_IN);
                 startActivity(new Intent(RegisterActivity.this, WhoRegisterActivity.class));
             }
         });

@@ -51,12 +51,11 @@
     <string name="sort">Цена: </string>
     <string name="time">Время</string>
     <string name="to">Куда</string>
-    <string name="to_">куда:</string>
     <string name="trip_history">История поездок, доставок</string>
     <string name="about_app">О приложении</string>
     <string name="before">Прошлые</string>
     <string name="canceled">Отмененные</string>
-    <string name="edit_profile">Редактировать профильные данные</string>
+    <string name="edit_profile">Редактировать профиль</string>
     <string name="money">Деньги</string>
     <string name="month">Месяц</string>
     <string name="new_notification">Новые сообщения</string>
@@ -86,33 +85,14 @@
     <string name="share">Поделиться</string>
     <string name="call">Позвонить</string>
 
-    <string-array name="service_types">
-        <item>Тип услуги</item>
-        <item>Пассажир</item>
-        <item>Водитель</item>
-        <item>Посылка</item>
-        <item>Спец.техника</item>
-        <item>Грузоперевозки</item>
-    </string-array>
-    <string-array name="service_types_driver">
-        <item>Тип услуги</item>
-        <item>Пассажир</item>
-        <item>Посылка</item>
-        <item>Спец.техника</item>
-        <item>Грузоперевозки</item>
-    </string-array>
-    <string-array name="service_types_passenger">
-        <item>Тип услуги</item>
-        <item>Водитель</item>
-        <item>Спец.техника</item>
-        <item>Грузоперевозки</item>
-    </string-array>
+
     <string-array name="sort_types">
         <item>Сортировка</item>
         <item>Цена по убыванию</item>
         <item>Цена по возрастанию</item>
     </string-array>
     <string name="choose_service_type">Выберите тип услуги</string>
+    <string name="service_type">Тип услуги</string>
     <string name="passenger">Пассажир</string>
     <string name="minimum_symbol_20">Минимум 20 символов</string>
     <string name="describe_your_complaint">Опишите вашу жалобу</string>

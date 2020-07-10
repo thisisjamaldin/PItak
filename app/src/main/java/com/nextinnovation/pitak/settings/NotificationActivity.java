@@ -21,7 +21,6 @@ import com.nextinnovation.pitak.utils.Statics;
 
 public class NotificationActivity extends AppCompatActivity {
 
-    private TextView editProfile;
     private ImageView back;
     private Switch notifyNewPost;
 
@@ -40,21 +39,10 @@ public class NotificationActivity extends AppCompatActivity {
 
     private void findView() {
         notifyNewPost = findViewById(R.id.settings_notification_new_notification_switch);
-        editProfile = findViewById(R.id.settings_notification_profile_edit);
         back = findViewById(R.id.settings_notification_back_img);
     }
 
     private void listener() {
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (MSharedPreferences.get(NotificationActivity.this, "who", "").equals(Statics.PASSENGER)) {
-                    RegisterClientActivity.start(NotificationActivity.this, true);
-                } else if (MSharedPreferences.get(NotificationActivity.this, "who", "").equals(Statics.DRIVER)) {
-                    RegisterDriverActivity.start(NotificationActivity.this, true);
-                }
-            }
-        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

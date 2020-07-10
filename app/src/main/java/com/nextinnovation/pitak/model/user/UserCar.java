@@ -11,14 +11,14 @@ public class UserCar implements Serializable {
     private Car carModel;
     private String carNumber;
     private Car carType;
-    private List<ProfileRequest> carFiles;
     private int carryCapacity;
 
-    public UserCar(Car carBrand, Car carModel, String carNumber, Car carType) {
+    public UserCar(Car carBrand, Car carModel, String carNumber, Car carType, int carryCapacity) {
         this.carBrand = carBrand;
         this.carModel = carModel;
         this.carNumber = carNumber;
         this.carType = carType;
+        this.carryCapacity = carryCapacity;
     }
 
     public long getId() {
@@ -61,14 +61,6 @@ public class UserCar implements Serializable {
         this.carType = carType;
     }
 
-    public List<ProfileRequest> getCarFiles() {
-        return carFiles;
-    }
-
-    public void setCarFiles(List<ProfileRequest> carFiles) {
-        this.carFiles = carFiles;
-    }
-
     public int getCarryCapacity() {
         return carryCapacity;
     }
@@ -85,7 +77,6 @@ public class UserCar implements Serializable {
                 ", carModel=" + carModel +
                 ", carNumber='" + carNumber + '\'' +
                 ", carType=" + carType +
-                ", carFiles=" + carFiles +
                 ", carryCapacity=" + carryCapacity +
                 '}';
     }

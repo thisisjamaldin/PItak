@@ -2,11 +2,8 @@ package com.nextinnovation.pitak.fragment.profile;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
-import com.nextinnovation.pitak.fragment.main.MainFragment;
-import com.nextinnovation.pitak.model.user.ProfileRequest;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.register.RegisterActivity;
 import com.nextinnovation.pitak.register.RegisterClientActivity;
@@ -43,7 +36,7 @@ import com.nextinnovation.pitak.utils.Statics;
 
 public class ProfileFragment extends Fragment {
 
-    private RelativeLayout settings;
+//    private RelativeLayout settings;
     private RelativeLayout notification;
     private RelativeLayout promotionCode;
     private RelativeLayout pay;
@@ -53,6 +46,7 @@ public class ProfileFragment extends Fragment {
     private RelativeLayout about;
     private RelativeLayout agreement;
     private RelativeLayout signOut;
+    private RelativeLayout edit;
     private TextView name;
     private TextView email;
     private ImageView profile;
@@ -68,7 +62,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initAllView(View view) {
-        settings = view.findViewById(R.id.profile_fragment_my_settings_rl);
+//        settings = view.findViewById(R.id.profile_fragment_my_settings_rl);
         notification = view.findViewById(R.id.profile_fragment_my_notification_rl);
         promotionCode = view.findViewById(R.id.profile_fragment_promotional_code_rl);
         pay = view.findViewById(R.id.profile_fragment_my_pay_rl);
@@ -81,6 +75,7 @@ public class ProfileFragment extends Fragment {
         agreement = view.findViewById(R.id.profile_fragment_my_agreement_rl);
         signOut = view.findViewById(R.id.profile_fragment_my_sign_out_rl);
         profile = view.findViewById(R.id.profile_fragment_profile);
+        edit = view.findViewById(R.id.profile_fragment_my_edit_rl);
     }
 
     private void listener() {
@@ -96,9 +91,9 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-        settings.setOnClickListener(new View.OnClickListener() {
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
                     RegisterClientActivity.start(getContext(), true);
                 } else if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
@@ -106,6 +101,16 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+//        settings.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
+//                    RegisterClientActivity.start(getContext(), true);
+//                } else if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
+//                    RegisterDriverActivity.start(getContext(), true);
+//                }
+//            }
+//        });
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,19 +178,12 @@ public class ProfileFragment extends Fragment {
         UserWhenSignedIn user = new Gson().fromJson(MSharedPreferences.get(getContext(), Statics.USER, ""), UserWhenSignedIn.class);
         name.setText(user.getName());
         email.setText(user.getEmail());
-        setProfile(user.getProfilePhoto());
+        if (user.getProfilePhoto() != null)
+            Statics.loadImage(profile, user.getProfilePhoto().getUrl(), true);
         if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.PASSENGER)) {
             myCar.setVisibility(View.GONE);
         } else if (MSharedPreferences.get(getContext(), "who", "").equals(Statics.DRIVER)) {
             myCar.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void setProfile(ProfileRequest profileModel) {
-        if (profileModel != null) {
-            byte[] decodedString = Base64.decode(profileModel.getContent(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Glide.with(profile.getContext()).load(decodedByte).apply(RequestOptions.circleCropTransform()).into(profile);
         }
     }
 

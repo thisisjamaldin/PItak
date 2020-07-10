@@ -1,9 +1,17 @@
 package com.nextinnovation.pitak.model.post;
 
 public class PostSingle {
-    private Post result;
+    private AppAdvertModel result;
 
-    public Post getResult() {
+    public PostSingle(AppAdvertModel result) {
+        this.result = result;
+    }
+
+    public AppAdvertModel getResult() {
         return result;
+    }
+
+    public void setResult(AppAdvertModel result) {
+        this.result = result;
     }
 }

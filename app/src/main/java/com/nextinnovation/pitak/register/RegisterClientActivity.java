@@ -3,10 +3,14 @@ package com.nextinnovation.pitak.register;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +23,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
@@ -41,6 +47,7 @@ import com.nextinnovation.pitak.utils.Statics;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +76,7 @@ public class RegisterClientActivity extends AppCompatActivity {
     private Spinner country, city;
     private CarResponse countryResponse, cityResponse;
     private Context context;
+    private int maxSize = 1000;
 
     public static void start(Context context, boolean edit) {
         context.startActivity(new Intent(context, RegisterClientActivity.class).putExtra("edit", edit));
@@ -127,8 +135,7 @@ public class RegisterClientActivity extends AppCompatActivity {
                     cityModel = new Car(1, null);
                 }
                 if (edit) {
-                    UserCar userCar = new UserCar(new Car(1, null), new Car(1, null), "string", new Car(1, null));
-                    final EditUser editUser = new EditUser(userCar, cityModel, countryModel, Statics.getString(email), userToEdit.getId(), Statics.getString(name), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "patronymic", "surname", codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit));
+                    final EditUser editUser = new EditUser(null, cityModel, countryModel, Statics.getString(email), userToEdit.getId(), Statics.getString(name), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "patronymic", "surname", Statics.PASSENGER, codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit));
                     final UserWhenSignedIn userWhenSignedIn = new UserWhenSignedIn(userToEdit.getId(), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), "surname", "patronymic", Statics.getString(name), Statics.getString(email), null, Statics.getToken(context).substring(7), codeEdit.getSelectedItem().toString().replace("+", "") + Statics.getString(phoneEdit), countryModel, cityModel);
                     if (userToEdit.getUsername().equals(editUser.getUsername())) {
                         MainRepository.getService().editClient(editUser, Statics.getToken(RegisterClientActivity.this)).enqueue(new Callback<Void>() {
@@ -140,7 +147,7 @@ public class RegisterClientActivity extends AppCompatActivity {
                                             @Override
                                             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                                                 if (response.isSuccessful()) {
-                                                    userWhenSignedIn.setProfilePhoto(new ProfileRequest(response.body().getResult().getContent()));
+                                                    userWhenSignedIn.setProfilePhoto(new ProfileRequest(response.body().getResult().getUrl()));
                                                     MSharedPreferences.set(RegisterClientActivity.this, Statics.USER, new Gson().toJson(userWhenSignedIn));
                                                     finish();
                                                 } else {
@@ -205,7 +212,8 @@ public class RegisterClientActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
                             if (response.isSuccessful()) {
-                                MainRepository.getService().signIn(new UserSignIn(phone, phone)).enqueue(new Callback<UserWhenSignedIn>() {
+                                MSharedPreferences.set(RegisterClientActivity.this, Statics.REGISTERED, true);
+                                MainRepository.getService().signIn(new UserSignIn(phone, phone, Statics.PASSENGER)).enqueue(new Callback<UserWhenSignedIn>() {
                                     @Override
                                     public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
                                         if (response.isSuccessful()) {
@@ -214,7 +222,6 @@ public class RegisterClientActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onResponse(Call<User> call, Response<User> response) {
                                                     MSharedPreferences.set(RegisterClientActivity.this, Statics.USER, new Gson().toJson(response.body().getResult()));
-                                                    MSharedPreferences.set(RegisterClientActivity.this, Statics.REGISTERED, true);
                                                     if (response.body().getResult().getUserType().equals("PASSENGER")) {
                                                         MSharedPreferences.set(RegisterClientActivity.this, "who", Statics.PASSENGER);
                                                     }
@@ -224,8 +231,9 @@ public class RegisterClientActivity extends AppCompatActivity {
                                                             @Override
                                                             public void onResponse(Call<NewCarResponse> call, Response<NewCarResponse> response) {
                                                                 UserWhenSignedIn uws = new Gson().fromJson(MSharedPreferences.get(RegisterClientActivity.this, Statics.USER, ""), UserWhenSignedIn.class);
-                                                                if (response.body().getResult().isEmpty()) return;
-                                                                uws.setCarCommonModel(response.body().getResult().get(0));
+                                                                if (response.body().getResult().isEmpty())
+                                                                    return;
+                                                                uws.setCarCommonModel(response.body().getResult().get(0).getCarCommonModel());
                                                                 MSharedPreferences.set(RegisterClientActivity.this, Statics.USER, new Gson().toJson(uws));
                                                             }
 
@@ -342,8 +350,11 @@ public class RegisterClientActivity extends AppCompatActivity {
         email.setText(user.getEmail());
         phoneEdit.setText(userPhone.replace("+7", "+996").replace("+996", ""));
         if (user.getProfilePhoto() != null) {
-            Glide.with(profile.getContext()).load(Base64.decode(user.getProfilePhoto().getContent(), Base64.DEFAULT)).apply(RequestOptions.circleCropTransform()).into(profile);
-            createFile(null, Base64.decode(user.getProfilePhoto().getContent(), Base64.DEFAULT));
+            Statics.loadImage(profile, user.getProfilePhoto().getUrl(), true);
+            try {
+                profile.invalidate();
+                createFile(((BitmapDrawable)profile.getDrawable()).getBitmap());
+            } catch (Exception e){e.printStackTrace();}
         }
         if (userPhone.startsWith("+7")) {
             codeEdit.setSelection(1);
@@ -482,16 +493,20 @@ public class RegisterClientActivity extends AppCompatActivity {
                 }
             });
         }
-        }
+    }
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, @Nullable final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 29 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Glide.with(profile.getContext()).load(resizeImage(data.getData())).apply(RequestOptions.circleCropTransform()).into(profile);
-            createFile(resizeImage(data.getData()), null);
-        }
+        new Handler().post(new Thread() {
+            @Override
+            public void run() {
+                if (requestCode == 28 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    Glide.with(profile.getContext()).load(resizeImage(data.getData())).apply(RequestOptions.circleCropTransform()).into(profile);
+                }
+            }
+        });
     }
 
     private MultipartBody.Part getBody(File file) {
@@ -502,37 +517,43 @@ public class RegisterClientActivity extends AppCompatActivity {
 
     private Bitmap resizeImage(Uri uri) {
         try {
-            return Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri), 300, 300, true);
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+
+            float bitmapRatio = (float) width / (float) height;
+            if (bitmapRatio > 1) {
+                width = 1000;
+                height = (int) (width / bitmapRatio);
+            } else {
+                height = 1000;
+                width = (int) (height * bitmapRatio);
+            }
+            Bitmap result = Bitmap.createScaledBitmap(bitmap, width, height, true);
+            createFile(result);
+            return result;
         } catch (Exception e) {
             return null;
         }
     }
 
-    private void createFile(Bitmap bitmap, byte[] base64) {
+    private void createFile(Bitmap bitmap) {
         try {
             File f = new File(this.getCacheDir(), "filename");
             f.createNewFile();
-
-            if (bitmap != null) {
 //Convert bitmap to byte array
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 10, bos);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 10, bos);
-                byte[] bitmapdata = bos.toByteArray();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 10, bos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, bos);
+            byte[] bitmapdata = bos.toByteArray();
 
 //write the bytes in file
-                FileOutputStream fos = new FileOutputStream(f);
-                fos.write(bitmapdata);
-                fos.flush();
-                fos.close();
-                profileFile = f;
-            } else if (base64 != null) {
-                FileOutputStream fos = new FileOutputStream(f);
-                fos.write(base64);
-                fos.flush();
-                fos.close();
-                profileFile = f;
-            }
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+            profileFile = f;
         } catch (Exception e) {
             profileFile = null;
         }

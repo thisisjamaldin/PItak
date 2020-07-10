@@ -1,5 +1,6 @@
 package com.nextinnovation.pitak.model.post;
 
+import com.nextinnovation.pitak.model.car.Car;
 import com.nextinnovation.pitak.model.user.UserCar;
 
 import java.io.Serializable;
@@ -13,21 +14,20 @@ public class Post implements Serializable {
     private int numberOfSeat;
     private String fromPlace;
     private String toPlace;
-    private String advertType;
+    private Car typeService;
     private long createdBy;
     private UserCar carCommonModel;
     private String mobileNumber;
-    private List<PostImage> appFiles;
     private boolean isFavorite;
 
-    public Post(String title, String text, String amountPayment, int numberOfSeat, String fromPlace, String toPlace, String advertType, long createdBy, String mobileNumber, boolean isFavorite) {
+    public Post(String title, String text, String amountPayment, int numberOfSeat, String fromPlace, String toPlace, Car typeService, long createdBy, String mobileNumber, boolean isFavorite) {
         this.title = title;
         this.text = text;
         this.amountPayment = amountPayment;
         this.numberOfSeat = numberOfSeat;
         this.fromPlace = fromPlace;
         this.toPlace = toPlace;
-        this.advertType = advertType;
+        this.typeService = typeService;
         this.createdBy = createdBy;
         this.mobileNumber = mobileNumber;
         this.isFavorite = isFavorite;
@@ -89,12 +89,12 @@ public class Post implements Serializable {
         this.toPlace = toPlace;
     }
 
-    public String getAdvertType() {
-        return advertType;
+    public Car getTypeService() {
+        return typeService;
     }
 
-    public void setAdvertType(String advertType) {
-        this.advertType = advertType;
+    public void setTypeService(Car typeService) {
+        this.typeService = typeService;
     }
 
     public long getCreatedBy() {
@@ -113,14 +113,6 @@ public class Post implements Serializable {
         this.mobileNumber = mobileNumber;
     }
 
-    public List<PostImage> getImgFileList() {
-        return appFiles;
-    }
-
-    public void setImgFileList(List<PostImage> appFiles) {
-        this.appFiles = appFiles;
-    }
-
     public boolean isFavorite() {
         return isFavorite;
     }
@@ -137,14 +129,6 @@ public class Post implements Serializable {
         this.carCommonModel = carCommonModel;
     }
 
-    public List<PostImage> getAppFiles() {
-        return appFiles;
-    }
-
-    public void setAppFiles(List<PostImage> appFiles) {
-        this.appFiles = appFiles;
-    }
-
     @Override
     public String toString() {
         return "Post{" +
@@ -155,7 +139,7 @@ public class Post implements Serializable {
                 ", numberOfSeat=" + numberOfSeat +
                 ", fromPlace='" + fromPlace + '\'' +
                 ", toPlace='" + toPlace + '\'' +
-                ", advertType='" + advertType + '\'' +
+                ", advertType='" +  + '\'' +
                 ", createdBy=" + createdBy +
                 ", mobilePhone='" + mobileNumber + '\'' +
                 '}';

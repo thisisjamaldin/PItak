@@ -3,6 +3,7 @@ package com.nextinnovation.pitak.register;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +29,10 @@ import com.google.gson.Gson;
 import com.nextinnovation.pitak.R;
 import com.nextinnovation.pitak.data.MainRepository;
 import com.nextinnovation.pitak.main.MainActivity;
+import com.nextinnovation.pitak.model.car.NewCarResponse;
 import com.nextinnovation.pitak.model.user.EditUser;
+import com.nextinnovation.pitak.model.user.User;
+import com.nextinnovation.pitak.model.user.UserSignIn;
 import com.nextinnovation.pitak.model.user.UserWhenSignedIn;
 import com.nextinnovation.pitak.utils.MSharedPreferences;
 import com.nextinnovation.pitak.utils.MToast;
@@ -189,7 +193,56 @@ public class CodeAuthenticationActivity extends AppCompatActivity {
                                 }
                                 MainActivity.start(CodeAuthenticationActivity.this);
                                 finish();
-                            } else {
+                            } else if (MSharedPreferences.get(CodeAuthenticationActivity.this, "sign", "").equals(Statics.SIGN_IN)) {
+                                    next.setVisibility(View.GONE);
+                                    final UserSignIn signIn = new UserSignIn(phoneNumber.replace("+", ""), phoneNumber.replace("+", ""), MSharedPreferences.get(CodeAuthenticationActivity.this, "who", ""));
+                                    MainRepository.getService().signIn(signIn).enqueue(new Callback<UserWhenSignedIn>() {
+                                        @Override
+                                        public void onResponse(Call<UserWhenSignedIn> call, Response<UserWhenSignedIn> response) {
+                                            if (response.isSuccessful()) {
+                                                Statics.setToken(CodeAuthenticationActivity.this, response.body().getToken());
+                                                MainRepository.getService().getMe(Statics.getToken(CodeAuthenticationActivity.this)).enqueue(new Callback<User>() {
+                                                    @Override
+                                                    public void onResponse(Call<User> call, Response<User> response) {
+                                                        MSharedPreferences.set(CodeAuthenticationActivity.this, "phone", phoneNumber);
+                                                        MSharedPreferences.set(CodeAuthenticationActivity.this, Statics.USER, new Gson().toJson(response.body().getResult()));
+                                                        if (response.body().getResult().getUserType().equals("DRIVER")) {
+                                                            MainRepository.getService().getMyCars(Statics.getToken(CodeAuthenticationActivity.this)).enqueue(new Callback<NewCarResponse>() {
+                                                                @Override
+                                                                public void onResponse(Call<NewCarResponse> call, Response<NewCarResponse> response) {
+                                                                    UserWhenSignedIn uws = new Gson().fromJson(MSharedPreferences.get(CodeAuthenticationActivity.this, Statics.USER, ""), UserWhenSignedIn.class);
+                                                                    if (response.body().getResult().isEmpty()) return;
+                                                                    uws.setCarCommonModel(response.body().getResult().get(0).getCarCommonModel());
+                                                                    MSharedPreferences.set(CodeAuthenticationActivity.this, Statics.USER, new Gson().toJson(uws));
+                                                                }
+
+                                                                @Override
+                                                                public void onFailure(Call<NewCarResponse> call, Throwable t) {
+
+                                                                }
+                                                            });
+                                                        }
+                                                        MainActivity.start(CodeAuthenticationActivity.this);
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<User> call, Throwable t) {
+
+                                                    }
+                                                });
+                                            } else {
+                                                MToast.showResponseError(CodeAuthenticationActivity.this, response.errorBody());
+                                                Log.e("---------signIn", signIn.toString());
+                                                next.setVisibility(View.VISIBLE);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<UserWhenSignedIn> call, Throwable t) {
+                                            MToast.showInternetError(CodeAuthenticationActivity.this);
+                                        }
+                                    });
+                            } else if (MSharedPreferences.get(CodeAuthenticationActivity.this, "sign", "").equals(Statics.SIGN_UP)){
                                 switch (MSharedPreferences.get(CodeAuthenticationActivity.this, "who", "")) {
                                     case "PASSENGER":
                                         RegisterClientActivity.start(CodeAuthenticationActivity.this, false);

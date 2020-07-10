@@ -1,5 +1,7 @@
 package com.nextinnovation.pitak.model.post;
 
+import com.nextinnovation.pitak.model.car.Car;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,16 +9,16 @@ public class PostSearch {
     private String fromPlace;
     private String toPlace;
     private String title;
-    private List<String> type;
+    private List<Car> type;
 
     public PostSearch() {
     }
 
-    public List<String> getType() {
+    public List<Car> getType() {
         return type;
     }
 
-    public void setType(List<String> type) {
+    public void setType(List<Car> type) {
         this.type = type;
     }
 

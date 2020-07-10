@@ -41,14 +41,8 @@ public class WhoRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 client.setEnabled(false);
-                if (!MSharedPreferences.get(WhoRegisterActivity.this, "who", "").equals(Statics.UNAUTHORIZED)){
                     MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.PASSENGER);
-                }
-                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                    PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
-                } else {
-                    RegisterClientActivity.start(WhoRegisterActivity.this, false);
-                }
+                PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
             }
         });
 
@@ -56,14 +50,8 @@ public class WhoRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 driver.setEnabled(false);
-                if (!MSharedPreferences.get(WhoRegisterActivity.this, "who", "").equals(Statics.UNAUTHORIZED)){
                     MSharedPreferences.set(WhoRegisterActivity.this, "who", Statics.DRIVER);
-                }
-                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                    PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
-                } else {
-                    RegisterDriverActivity.start(WhoRegisterActivity.this, false);
-                }
+                PhoneAuthenticationActivity.start(WhoRegisterActivity.this);
             }
         });
     }

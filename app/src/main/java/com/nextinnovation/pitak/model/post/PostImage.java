@@ -3,22 +3,30 @@ package com.nextinnovation.pitak.model.post;
 import java.io.Serializable;
 
 public class PostImage implements Serializable {
-    private String content;
+    private String url;
     private String path;
     private String name;
 
-    public PostImage(String content, String name, String path) {
-        this.content = content;
+    public PostImage(String url, String name, String path) {
+        this.url = url;
         this.path = path;
         this.name = name;
     }
 
-    public String getContent() {
-        return content;
+    public String getPath() {
+        return path;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getImgType() {
@@ -40,7 +48,7 @@ public class PostImage implements Serializable {
     @Override
     public String toString() {
         return "PostImage{" +
-                "content='" + content + '\'' +
+                "content='" + url + '\'' +
                 ", imgType='" + path + '\'' +
                 ", name='" + name + '\'' +
                 '}';

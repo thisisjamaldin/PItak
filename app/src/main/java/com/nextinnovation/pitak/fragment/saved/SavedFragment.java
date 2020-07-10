@@ -30,7 +30,7 @@ import retrofit2.Response;
 public class SavedFragment extends Fragment implements RecyclerViewAdapter.onItemClick {
 
     private RecyclerView recyclerView;
-    private static RecyclerViewAdapter adapter;
+    public static RecyclerViewAdapter adapter;
     private View searchLayout;
     private boolean hide;
 
@@ -70,13 +70,13 @@ public class SavedFragment extends Fragment implements RecyclerViewAdapter.onIte
 
     @Override
     public void onCall(int pos) {
-        Statics.call("+" + adapter.getList().get(pos).getMobileNumber(), getContext());
+        Statics.call("+" + adapter.getList().get(pos).getAppAdvertModel().getMobileNumber(), getContext());
     }
 
     @Override
     public void onSave(final int pos, final boolean save) {
         if (save) {
-            MainRepository.getService().addToFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
+            MainRepository.getService().addToFavourite(adapter.getList().get(pos).getAppAdvertModel().getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     getData(getContext());
@@ -88,7 +88,7 @@ public class SavedFragment extends Fragment implements RecyclerViewAdapter.onIte
                 }
             });
         } else {
-            MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
+            MainRepository.getService().deleteFromFavourite(adapter.getList().get(pos).getAppAdvertModel().getId(), Statics.getToken(getContext())).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     getData(getContext());
@@ -104,14 +104,14 @@ public class SavedFragment extends Fragment implements RecyclerViewAdapter.onIte
             @Override
             public void run() {
                 for (int i = 0; i < MainFragment.adapter.getList().size(); i++) {
-                    if (MainFragment.adapter.getList().get(i).getId() == adapter.getList().get(pos).getId()) {
-                        MainFragment.adapter.getList().get(i).setFavorite(save);
+                    if (MainFragment.adapter.getList().get(i).getAppAdvertModel().getId() == adapter.getList().get(pos).getAppAdvertModel().getId()) {
+                        MainFragment.adapter.getList().get(i).getAppAdvertModel().setFavorite(save);
                         MainFragment.adapter.notifyItemChanged(i);
                     }
                 }
                 for (int i = 0; i < RoleFragment.adapter.getList().size(); i++) {
-                    if (RoleFragment.adapter.getList().get(i).getId() == adapter.getList().get(pos).getId()) {
-                        RoleFragment.adapter.getList().get(i).setFavorite(save);
+                    if (RoleFragment.adapter.getList().get(i).getAppAdvertModel().getId() == adapter.getList().get(pos).getAppAdvertModel().getId()) {
+                        RoleFragment.adapter.getList().get(i).getAppAdvertModel().setFavorite(save);
                         RoleFragment.adapter.notifyItemChanged(i);
                     }
                 }
@@ -121,12 +121,12 @@ public class SavedFragment extends Fragment implements RecyclerViewAdapter.onIte
 
     @Override
     public void onClick(int pos) {
-        ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getId(), false);
+        ItemDetailActivity.start(getContext(), adapter.getList().get(pos).getAppAdvertModel().getId(), false);
     }
 
     @Override
     public void openWhatsapp(int pos) {
-        Statics.openWhatsapp(adapter.getList().get(pos).getMobileNumber(), getContext());
+        Statics.openWhatsapp(adapter.getList().get(pos).getAppAdvertModel().getMobileNumber(), getContext());
     }
 
     public static void getData(final Context context) {

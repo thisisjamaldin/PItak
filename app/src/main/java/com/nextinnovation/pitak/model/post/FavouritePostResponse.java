@@ -3,9 +3,9 @@ package com.nextinnovation.pitak.model.post;
 import java.util.List;
 
 public class FavouritePostResponse {
-    private List<Post> result;
+    private List<AppAdvertModel> result;
 
-    public List<Post> getResult() {
+    public List<AppAdvertModel> getResult() {
         return result;
     }
 }

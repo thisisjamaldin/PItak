@@ -36,7 +36,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentTitle(getString(R.string.default_web_client_id))
-                .setSmallIcon(R.drawable.ic_main)
+                .setSmallIcon(R.mipmap.ic_notify)
                 .setContentText(messageBody)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)

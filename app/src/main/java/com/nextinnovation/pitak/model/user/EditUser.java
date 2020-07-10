@@ -1,9 +1,10 @@
 package com.nextinnovation.pitak.model.user;
 
 import com.nextinnovation.pitak.model.car.Car;
+import com.nextinnovation.pitak.model.car.CarCommonModel;
 
 public class EditUser {
-    private UserCar carCommonModel;
+    private CarCommonModel carCommonModel;
     private Car cityModel, countryModel;
     private String email;
     private long id;
@@ -11,9 +12,10 @@ public class EditUser {
     private String newPassword;
     private String patronymic;
     private String surname;
+    private String userType;
     private String username;
 
-    public EditUser(UserCar carCommonModel, Car cityModel, Car countryModel, String email, long id, String name, String newPassword, String patronymic, String surname, String username) {
+    public EditUser(CarCommonModel carCommonModel, Car cityModel, Car countryModel, String email, long id, String name, String newPassword, String patronymic, String surname,String userType, String username) {
         this.carCommonModel = carCommonModel;
         this.cityModel = cityModel;
         this.countryModel = countryModel;
@@ -23,14 +25,15 @@ public class EditUser {
         this.newPassword = newPassword;
         this.patronymic = patronymic;
         this.surname = surname;
+        this.userType = userType;
         this.username = username;
     }
 
-    public UserCar getCarCommonModel() {
+    public CarCommonModel getCarCommonModel() {
         return carCommonModel;
     }
 
-    public void setCarCommonModel(UserCar carCommonModel) {
+    public void setCarCommonModel(CarCommonModel carCommonModel) {
         this.carCommonModel = carCommonModel;
     }
 
@@ -96,6 +99,14 @@ public class EditUser {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public String getUsername() {
